@@ -7,7 +7,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
     if ($sql) {
         $hasil = mysql_fetch_assoc($sql);
-        ?>
+?>
 
         <div class="navbar">
             <div class="navbar-inner">
@@ -75,12 +75,11 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         </li>
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                <img class="nav-user-photo" src="../assets/img/b.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                <img class="nav-user-photo" src="../assets/img/a.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                 <span class="user-info">
                                     <small>Welcome,</small>
                                     <?php echo $hasil['pegawai_nama'];
-                                }
-                                ?>    
+                                } ?>    
                             </span>
 
                             <i class="icon-caret-down"></i>
@@ -116,7 +115,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
         </a>
 
         <?php
-        include '../template/sidebar.php';
+            include '../template/sidebar.php';
         ?>
 
         <div class="main-content">
@@ -137,112 +136,35 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             <i class="icon-angle-right arrow-icon"></i>
                         </span>
                     </li>
-                    <li class="active">Analisis Resiko Kebakaran</li>
+                    <li class="active">Peta</li>
                 </ul><!--.breadcrumb-->
             </div>
 
             <div class="page-content">
                 <div class="page-header position-relative">
                     <h1>
-                        Analisis Resiko
+                        Peta
                         <small>
                             <i class="icon-double-angle-right"></i>
-                            Analisis Resiko Kebakaran
+                            Kabupaten Sidoarjo
                         </small>
                     </h1>
                 </div><!--/.page-header-->
 
                 <div class="row-fluid">
                     <div class="span12">
-                        <!--PAGE CONTENT BEGINS-->
-                        <div class="tabbable">
-                            <ul class="nav nav-tabs" id="myTab">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#fire3">
-                                        <i class="icon-warning-sign red"></i>
-                                        Pasokan Air Total
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a data-toggle="tab" href="#fire4">
-                                        <i class="icon-warning-sign red"></i>
-                                        Laju Penerapan Air
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a data-toggle="tab" href="#fire5">
-                                        <i class="icon-warning-sign red"></i>
-                                        Potensi Pengangkutan Air
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content">
-                                <div id="fire3" class="tab-pane in active">
-                                    Form2 untuk perhitungaan Analisa Resiko
-                                </div>
-
-                                <div id="fire4" class="tab-pane">
-                                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th class="center">Peruntukan Bangunan</th>
-                                                <th class="center">Status</th>
-                                                <th class="center">Keterangan</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Pabrik tepung</td>
-                                                <td>
-                                                    <span class="label label-important">Sangat Tinggi</span>
-                                                </td>
-                                                <td> - </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div id="fire5" class="tab-pane"><table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th class="center">Peruntukan Bangunan</th>
-                                                <th class="center">Status</th>
-                                                <th class="center">Keterangan</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Pabrik tepung</td>
-                                                <td>
-                                                    <span class="label label-important">Sangat Tinggi</span>
-                                                </td>
-                                                <td> - </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        <p align="center"><img src="../assets/img/sda/kec.png" width="828" height="300"></p>
                         <!--PAGE CONTENT ENDS-->
                     </div><!--/.span-->
                 </div><!--/.row-fluid-->
             </div><!--/.page-content-->
 
-
-            <?php
-            include '../template/footer.php';
-        } else {
-            header("location:../login/login");
-        }
-        ?>  
-        </body>
-        </html>
+    
+    <?php
+     include '../template/footer.php';
+} else {
+    header("location:../login/login");
+}
+?>  
+</body>
+</html>

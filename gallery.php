@@ -12,21 +12,6 @@
 		<link href="assets/css-ace/bootstrap.min.css" rel="stylesheet" />
 		<link href="assets/css-ace/bootstrap-responsive.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="assets/css-ace/font-awesome.min.css" />
-                <style type="text/css">
-                .form-signin {
-                        max-width: 768px;
-                        padding: 19px 29px 29px;
-                        margin: 2px auto 20px;
-                        /*background-color: #fff;
-                        border: 1px solid #e5e5e5;*/
-                        -webkit-border-radius: 5px;
-                           -moz-border-radius: 5px;
-                                border-radius: 5px;
-                        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                      }
-                </style>
                 
                 <link rel="shortcut icon" href="assets/img/favicon.ico">
 
@@ -41,16 +26,12 @@
 		<link rel="stylesheet" href="assets/css-ace/ace-skins.min.css" />
 		<style type="text/css">
 		body,td,th {
-	font-family: "Open Sans";
-}
-        </style>
-
-		<!--[if lte IE 8]>
-		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
-		<![endif]-->
+                    font-family: "Open Sans";
+                }
+                </style>
 
 		<!--inline styles related to this page-->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
         <?php
             session_start();
@@ -61,11 +42,11 @@
                     $hasil = mysql_fetch_assoc($sql);
         ?>
         
-	<body tracingsrc="assets/img/sda/kecamatan.png" tracingopacity="50">
+	<body onload="setInterval('displayServerTime()', 1000);">
             <div class="navbar">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a href="index.php" class="brand">
+            <a href="index" class="brand">
                 <small>
                     <i class="icon-fire-extinguisher"></i>
                     SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
@@ -128,10 +109,10 @@
                 </li>
                             <li class="light-blue">
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                            <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="<?php echo $hasil['pegawai_nama'];?>" />
+                                            <img class="nav-user-photo" src="assets/img/a.jpg" alt="<?php echo $hasil['pegawai_nama'];?>" />
                                             <span class="user-info">
                                                     <small>Welcome,</small>
-                                                           <?php echo $hasil['pegawai_nama'];}   ?>    
+                <?php echo $hasil['pegawai_nama'];  } ?>    
                                             </span>
 
                                             <i class="icon-caret-down"></i>
@@ -140,7 +121,7 @@
                                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
                                             
                                             <li>
-                                                    <a href="#">
+                                                    <a href="anggota/profile">
                                                             <i class="icon-user"></i>
                                                             Profile
                                                     </a>
@@ -182,7 +163,7 @@
 
             <ul class="nav nav-list">
                     <li class="active">
-                            <a href="index.php">
+                            <a href="index">
                                     <i class="icon-dashboard"></i>
                                     <span class="menu-text"> Dashboard </span>
                             </a>
@@ -190,7 +171,7 @@
 
 
                     <li>
-                            <a href="resiko/analisis.php" class="dropdown-toggle">
+                            <a href="resiko/analisis" class="dropdown-toggle">
                                     <i class="icon-edit"></i>
                                     <span class="menu-text"> Analisis Resiko </span>
 
@@ -198,28 +179,38 @@
                             </a>
 
                             <ul class="submenu">
-                                    <li>
-                                            <a href="resiko/analisis.php">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Analisis Resiko Kebakaran
-                                            </a>
-                                    </li>
-
-                                    <li>
-                                            <a href="form-wizard.html">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Wizard &amp; Validation
-                                            </a>
-                                    </li>
-
-                                    <li>
-                                            <a href="wysiwyg.html">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Wysiwyg &amp; Markdown
-                                            </a>
-                                    </li>
+                                
+                                <li>
+                                    <a href="resiko/peta">
+                                        <i class="icon-double-angle-right"></i>
+                                        Peta Kab. Sidoarjo
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="resiko/analisis">
+                                        <i class="icon-double-angle-right"></i>
+                                        Analisis Resiko Kebakaran
+                                    </a>
+                                </li>
+                                    
+                                <li>
+                                    <a href="resiko/bangunan">
+                                        <i class="icon-double-angle-right"></i>
+                                        Daftar Bangunan
+                                    </a>
+                                </li>
                             </ul>
                     </li>
+                    
+                    <li>
+                        <a href="pasca/pasca" class="dropdown-toggle">
+                                <i class="icon-desktop"></i>
+                                <span class="menu-text"> Pasca Kebakaran </span>
+                        </a>
+                    </li>
+
+                       
                     
                     <li>
                         <a href="anggota/list">
@@ -229,20 +220,20 @@
                     </li>
 
                     <li>
-                            <a href="kalendar/kalendar">
+                            <a href="kalendar">
                                     <i class="icon-calendar"></i>
 
                                     <span class="menu-text">
                                             Kalendar
                                             <span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
-                                                    <i class="icon-warning-sign red bigger-130"></i>
+                                                    <i class="icon-info-sign red bigger-130"></i>
                                             </span>
                                     </span>
                             </a>
                     </li>
 
                     <li>
-                            <a href="gallery.html">
+                            <a href="gallery">
                                     <i class="icon-picture"></i>
                                     <span class="menu-text"> Gallery </span>
                             </a>
@@ -259,32 +250,25 @@
                                     <b class="arrow icon-angle-down"></b>
                             </a>
 
-                            <ul class="submenu">
+                           <ul class="submenu">
                                     <li>
-                                            <a href="error-404.html">
+                                            <a href="gallery">
                                                     <i class="icon-double-angle-right"></i>
-                                                    Error 404
+                                                    Manajemen Proteksi Kebakaran Kota
                                             </a>
                                     </li>
 
                                     <li>
-                                            <a href="error-500.html">
+                                            <a href="gallery">
                                                     <i class="icon-double-angle-right"></i>
-                                                    Error 500
+                                                    Manajemen Proteksi Kebakaran Lingkungan
                                             </a>
                                     </li>
 
                                     <li>
-                                            <a href="grid.html">
+                                            <a href="gallery">
                                                     <i class="icon-double-angle-right"></i>
-                                                    Grid
-                                            </a>
-                                    </li>
-
-                                    <li>
-                                            <a href="blank.html">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Blank Page
+                                                    Manajemen Proteksi Kebakaran Bangunan Gedung
                                             </a>
                                     </li>
                             </ul>
@@ -301,29 +285,20 @@
                     <ul class="breadcrumb">
                             <li>
                                     <i class="icon-home home-icon"></i>
-                                    <a href="index.php">Home</a>
+                                    <a href="index">Home</a>
 
                                     <span class="divider">
                                             <i class="icon-angle-right arrow-icon"></i>
                                     </span>
                             </li>
-                            <li class="active">Dashboard</li>
+                            <li class="active">Gallery</li>
                     </ul><!--.breadcrumb-->
-
-<!--                    <div class="nav-search" id="nav-search">
-                            <form class="form-search" />
-                                    <span class="input-icon">
-                                            <input type="text" placeholder="Search ..." class="input-small nav-search-input" id="nav-search-input" autocomplete="off" />
-                                            <i class="icon-search nav-search-icon"></i>
-                                    </span>
-                            </form>
-                    </div>#nav-search-->
             </div>
 
             <div class="page-content">
                     <div class="page-header position-relative">
                             <h1>
-                                    Dashboard
+                                    Gallery
                                     <small>
                                             <i class="icon-double-angle-right"></i>
                                             Overview
@@ -333,12 +308,71 @@
 
                     <div class="row-fluid">
                             <div class="span12">
-                                <!--<div class="form-signin">
-                           	  <p align="center"><img src="assets/img/sda/kec.png" width="828" height="300"></p>-->
-<!--                              <map name="kec">
-                                <area shape="poly" coords="32,202,42,204,48,204,51,207,55,209,59,208,60,206,65,210,70,212,72,206,71,200,74,197,80,196,86,196,92,201,101,202,108,202,162,200,173,200,171,205,178,210,185,206,197,206,200,199,206,195,208,183,216,183,218,177,212,174,211,168,211,157,194,157,184,158,181,156,182,150,196,146,195,139,193,138,182,141,117,167,113,170,109,173,103,174,97,172,94,169,90,172,86,169,82,168,76,171,71,173,68,177,62,178,57,178,53,180,51,181,47,181,42,181,42,188,40,190,36,194,33,196,31,200" href="#">
-                              </map>-->
-                              <!--</div>-->
+                                <!--PAGE CONTENT BEGINS-->
+                                
+                                <div class="error-container">
+        <div class="well">
+                <h1 class="grey lighter smaller">
+                        <span class="blue bigger-125">
+                                <i class="icon-sitemap"></i>
+                                404
+                        </span>
+                        Page Not Found
+                </h1>
+
+                <hr />
+                <h3 class="lighter smaller">We looked everywhere but we couldn't find it!</h3>
+
+                <div>
+                        <form class="form-search" />
+                                <span class="input-icon">
+                                        <i class="icon-search"></i>
+
+                                        <input type="text" class="input-medium search-query" placeholder="Give it a search..." />
+                                </span>
+                                <button class="btn btn-small" onclick="return false;">Go!</button>
+                        </form>
+
+                        <div class="space"></div>
+                        <h4 class="smaller">Try one of the following:</h4>
+
+                        <ul class="unstyled spaced inline bigger-110">
+                                <li>
+                                        <i class="icon-hand-right blue"></i>
+                                        Re-check the url for typos
+                                </li>
+
+                                <li>
+                                        <i class="icon-hand-right blue"></i>
+                                        Read the faq
+                                </li>
+
+                                <li>
+                                        <i class="icon-hand-right blue"></i>
+                                        Tell us about it
+                                </li>
+                        </ul>
+                </div>
+
+                <hr />
+                <div class="space"></div>
+
+                <div class="row-fluid">
+                        <div class="center">
+                                <a href="javascript:history.back()" class="btn btn-grey">
+                                        <i class="icon-arrow-left"></i>
+                                        Go Back
+                                </a>
+
+                                <a href="index" class="btn btn-primary">
+                                        <i class="icon-dashboard"></i>
+                                        Dashboard
+                                </a>
+                        </div>
+                </div>
+        </div>
+</div>
+                                
                                 <!--PAGE CONTENT ENDS-->
                             </div><!--/.span-->
                     </div><!--/.row-fluid-->
@@ -361,21 +395,6 @@
                                     </div>
                                     <span>&nbsp; Choose Skin</span>
                             </div>
-
-<!--                            <div>
-                                    <input type="checkbox" class="ace-checkbox-2" id="ace-settings-header" />
-                                    <label class="lbl" for="ace-settings-header"> Fixed Header</label>
-                            </div>
-
-                            <div>
-                                    <input type="checkbox" class="ace-checkbox-2" id="ace-settings-sidebar" />
-                                    <label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
-                            </div>
-
-                            <div>
-                                    <input type="checkbox" class="ace-checkbox-2" id="ace-settings-breadcrumbs" />
-                                    <label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
-                            </div>-->
 
                             <div>
                                     <input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
@@ -616,10 +635,42 @@
 			
 			})
 		</script>
+                
+                <script type="text/javascript">
+                    //set timezone
+                    <?php date_default_timezone_set('Asia/Jakarta'); ?>
+                    //buat object date berdasarkan waktu di server
+                    var serverTime = new Date(<?php print date('Y, m, d, H, i, s, 0'); ?>);
+                    //buat object date berdasarkan waktu di client
+                    var clientTime = new Date();
+                    //hitung selisih
+                    var Diff = serverTime.getTime() - clientTime.getTime();    
+                    //fungsi displayTime yang dipanggil di bodyOnLoad dieksekusi tiap 1000ms = 1detik
+                    function displayServerTime(){
+                        //buat object date berdasarkan waktu di client
+                        var clientTime = new Date();
+                        //buat object date dengan menghitung selisih waktu client dan server
+                        var time = new Date(clientTime.getTime() + Diff);
+                        //ambil nilai jam
+                        var sh = time.getHours().toString();
+                        //ambil nilai menit
+                        var sm = time.getMinutes().toString();
+                        //ambil nilai detik
+                        var ss = time.getSeconds().toString();
+                        //tampilkan jam:menit:detik dengan menambahkan angka 0 jika angkanya cuma satu digit (0-9)
+                        document.getElementById("clock").innerHTML = (sh.length==1?"0"+sh:sh) + ":" + (sm.length==1?"0"+sm:sm) + ":" + (ss.length==1?"0"+ss:ss);
+                    }
+                </script>
+                <script>
+                    function goBack()
+                      {
+                      window.history.back()
+                      }
+                </script>
 <?php
                 }else{
         header("location:login/login");
     }
-?>  
+?>
 	</body>
 </html>

@@ -8,18 +8,53 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<!--basic styles-->
+                
+<!--                <script type='text/javascript' src="../assets/js-boot/jquery.js"></script>
+                <script type="text/javascript" src="../assets/js-boot/bootstrap-progressbar.js"></script>
+                <link rel="stylesheet" type="text/css" href="../assets/css-boot/bootstrap-progressbar.css">
+                <link rel="stylesheet" type="text/css" href="../assets/css-boot/bootstrap.css">-->
 
 		<link href="../assets/css-ace/bootstrap.min.css" rel="stylesheet" />
 		<link href="../assets/css-ace/bootstrap-responsive.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../assets/css-ace/font-awesome.min.css" />
 
-		<!--[if IE 7]>
-		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
+<!--		<style type="text/css">
+                    .progress .bar.six-sec-ease-in-out {
+                        -webkit-transition: width 6s ease-in-out;
+                        -moz-transition: width 6s ease-in-out;
+                        -ms-transition: width 6s ease-in-out;
+                        -o-transition: width 6s ease-in-out;
+                        transition: width 6s ease-in-out;
+                    }
+                    .progress.vertical .bar.six-sec-ease-in-out {
+                        -webkit-transition: height 6s ease-in-out;
+                        -moz-transition: height 6s ease-in-out;
+                        -ms-transition: height 6s ease-in-out;
+                        -o-transition: height 6s ease-in-out;
+                        transition: height 6s ease-in-out;
+                    }
+                    .progress.wide {
+                        width: 60px;
+                    }
+                    .vertical-progressbar-span {
+                        height: 100px;
+                    }
+                </style>-->
 
-		<!--page specific plugin styles-->
+<!--                <script>
+                    $(document).ready(function() {
 
-		<!--fonts-->
+
+                            $('.progress .bar.text-filled-1').progressbar({
+                                display_text: 1,
+                                refresh_speed: 200,
+                               transition_delay: 500,
+
+                        });
+
+                        });
+
+                </script>-->
 
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
@@ -34,7 +69,6 @@
 		<![endif]-->
 
 		<!--inline styles related to this page-->
-	
                 
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
@@ -97,7 +131,18 @@
 																Login
 															</button>
 														</div>
-
+                                                                                                                
+                                                                                                                <div class="space"></div>
+                                                                                                                
+                                                                                                                <!-- Progress bar holder
+                                                                                                                <div id="prog" class="progress progress-info progress-striped"></div>
+                                                                                                                <!-- Progress information 
+                                                                                                                <div id="information" style="width"></div> -->
+                                                                                                                
+<!--                                                                                                                <div id="prog" class="progress progress-info progress-striped">
+                                                                                                                    <div class="bar text-filled-1" data-amount-part="1337" data-amount-total="9000" data-percentage="100"></div>
+                                                                                                                </div>-->
+                                                                                                                
 														<div class="space-4"></div>
 													</fieldset>
 												</form>
@@ -209,5 +254,12 @@
 			 $('#'+id).addClass('visible');
 			}
 		</script>
+<!--                <script type="text/javascript">
+                        $(document).ready(function()
+                                {
+                                 var delay = 2000;
+                                setTimeout(function(){ window.location = '../index';}, delay);  
+                    });
+                 </script>-->
 	</body>
 </html>
