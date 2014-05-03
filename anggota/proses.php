@@ -1,6 +1,6 @@
 <?php
 
-include "../login/koneksi.php";
+include "../config/koneksi.php";
 
 $nip = $_POST['nomor'];
 $nama = $_POST['nama'];
@@ -12,8 +12,9 @@ $phone = $_POST['phone'];
 $jabatan = $_POST['jabatan'];
 $gender = $_POST['gender'];
 $email = $_POST['email'];
-$pass1 = $_POST['password'];
+$pass1 = md5($_POST['password']);
 $pass2 = $_POST['password2'];
+ 
 
 $sql=mysql_query("SELECT pegawai_nip FROM pegawai WHERE pegawai_nip ='".$nip."'")or die(mysql_error());
 $check=mysql_num_rows($sql);
@@ -27,7 +28,7 @@ $fileName = $_FILES['foto']['name']; //get the file name
 $fileSize = $_FILES['foto']['size']; //get the size
 $fileError = $_FILES['foto']['error']; //get the error when upload
 if($fileSize > 0 || $fileError == 0){ //check if the file is corrupt or error
-$move = move_uploaded_file($_FILES['foto']['tmp_name'], 'D:\2. Program Files\xampp\htdocs\SIM_Proteksi\assets\img\img-anggota'.$fileName); //save image to the folder
+$move = move_uploaded_file($_FILES['foto']['tmp_name'], 'D:/2. Program Files/xampp/htdocs/SIM_Proteksi/assets/img/img-anggota'.$fileName); //save image to the folder
 if($move){
     echo "<h3>Success! </h3>";
     $add = "INSERT into pegawai VALUES('".$nip."','".$nama."','".$tempat."','".$tgl_format."','".$gender."','".$alamat."','".$phone."','".$jabatan."','".$email."','".$pass1."','img-anggota/$fileName')"; //insert image property to database

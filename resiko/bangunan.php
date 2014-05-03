@@ -1,7 +1,7 @@
 <?php
 include '../template/header.php';
 session_start();
-include ("../login/koneksi.php");
+include ("../config/koneksi.php");
 if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
     if ($sql) {

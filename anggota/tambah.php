@@ -1,14 +1,14 @@
 <?php
 include '../template/header.php';
 session_start();
-include ("../login/koneksi.php");
+include ("../config/koneksi.php");
 if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
     if ($sql) {
         $hasil = mysql_fetch_assoc($sql);
         ?>
 
-        <body tracingsrc="../assets/img/sda/kecamatan.png" tracingopacity="50">
+        <body>
             <div class="navbar">
                 <div class="navbar-inner">
                     <div class="container-fluid">
@@ -158,202 +158,175 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
                                 <div class="widget-body">
                                     <div class="widget-main">
-                                        <form class="form-horizontal" id="validation-form" method="post" action="proses">
-                                            <div class="row-fluid">
-                                                <div id="fuelux-wizard" class="row-fluid hide" data-target="#step-container">
-                                                    <ul class="wizard-steps">
-                                                        <li data-target="#step1" class="active">
-                                                            <span class="step">1</span>
-                                                            <span class="title">Basic Info</span>
-                                                        </li>
+                                        <div class="row-fluid">
+                                            <form class="form-horizontal" id="validation-form" method="post" action="proses.php" >
+                                                <div id="user-profile-3" class="user-profile">
+                                                    <h3 class="lighter block green">Mohon untuk mengisi form berikut</h3>
+                                                    
+                                                    <div class="row-fluid">
 
-                                                        <li data-target="#step4">
-                                                            <span class="step">2</span>
-                                                            <span class="title">Finish</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                        <div class="span4">
+                                                            <input type="file" name="foto" />
+                                                        </div>
 
-                                                <hr />
+                                                        <div class="vspace"></div>
 
-                                                <div class="step-content row-fluid position-relative" id="step-container">
-                                                    <div class="step-pane active" id="step1">
-                                                        <div id="user-profile-3" class="user-profile">
-                                                            <h3 class="lighter block green">Mohon untuk mengisi form berikut</h3>
-
-
-                                                            <div class="row-fluid">
-
-                                                                <div class="span4">
-                                                                    <input type="file" name="foto" />
-                                                                </div>
-
-                                                                <div class="vspace"></div>
-
-                                                                <div class="span8">
-                                                                    <div class="control-group">
-                                                                        <label class="control-label" for="nomor">Nomor Induk:</label>
-
-                                                                        <div class="controls">
-                                                                            <input type="text" name="nomor" id="nomor" placeholder="Nomor Induk Pegawai" value=""/>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="control-group">
-                                                                        <label class="control-label" for="nama">Nama:</label>
-
-                                                                        <div class="controls">
-                                                                            <input class="span8" type="text" name="nama" id="nama" placeholder="Nama Lengkap" value="" />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class='space-6'></div>
-
+                                                        <div class="span8">
                                                             <div class="control-group">
-                                                                <label class="control-label">Jenis Kelamin:</label>
+                                                                <label class="control-label" for="nomor">Nomor Induk:</label>
 
                                                                 <div class="controls">
-                                                                    <label class="inline">
-                                                                        <input name="gender" value="Laki-laki" type="radio" />
-                                                                        <span class="lbl"> Laki-laki</span>
-                                                                    </label>
-
-                                                                    <label class="inline">
-                                                                        <input name="gender" value="Perempuan" type="radio" />
-                                                                        <span class="lbl"> Perempuan</span>
-                                                                    </label>
+                                                                    <input type="text" name="nomor" id="nomor" placeholder="Nomor Induk Pegawai" value=""/>
                                                                 </div>
                                                             </div>
 
                                                             <div class="control-group">
-                                                                <label class="control-label" for="tempat">Tempat Lahir:</label>
+                                                                <label class="control-label" for="nama">Nama:</label>
 
                                                                 <div class="controls">
-                                                                    <input type="text" name="tempat" id="tempat" placeholder="Tempat Lahir" value="" />
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="tanggal">Tanggal Lahir:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="input-prepend">
-                                                                        <span class="add-on">
-                                                                            <i class="icon-calendar"></i>
-                                                                        </span>
-                                                                        <input class="input-small date-picker" name="tanggal" id="tanggal" type="text" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="alamat">Alamat:</label>
-
-                                                                <div class="controls">
-                                                                    <textarea class="span6" id="alamat" name="alamat"></textarea>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="space"></div>
-
-                                                            <h4 class="header blue bolder smaller">Password</h4>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="password">Password:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="span12">
-                                                                        <input type="password" name="password" id="password" class="span4" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="password2">Confirm Password:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="span12">
-                                                                        <input type="password" name="password2" id="password2" class="span4" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="space"></div>
-
-                                                            <h4 class="header blue bolder smaller">Kontak</h4>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="email">Email:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="span4 input-prepend">
-                                                                        <span class="add-on">
-                                                                            <i class="icon-envelope"></i>
-                                                                        </span>
-                                                                        <input class="span12" type="email" name="email" id="email" class="span6" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="phone">No. Handphone:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="span3 input-prepend">
-                                                                        <span class="add-on">
-                                                                            <i class="icon-phone"></i>
-                                                                        </span>
-                                                                        <input class="span12" type="tel" id="phone" name="phone" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="state">Jabatan:</label>
-
-                                                                <div class="controls">
-                                                                    <span class="span10">
-                                                                        <select id="jabatan" name="jabatan">
-                                                                            <option value="" />------------------------------------
-                                                                            <option value="1" />Kepala Bidang PMK
-                                                                            <option value="2" />Kepala Seksi Oprasional
-                                                                            <option value="3" />Kepala Seksi Sarana
-                                                                            <option value="4" />Staff Administrasi Umum
-                                                                            <option value="5" />Komandan Pleton
-                                                                            <option value="6" />Komandan Regu
-                                                                            <option value="7" />Operator
-                                                                            <option value="8" />Anggota
-                                                                        </select>
-                                                                    </span>
+                                                                    <input class="span8" type="text" name="nama" id="nama" placeholder="Nama Lengkap" value="" />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="step-pane" id="step4">
-                                                        <div class="center">
-                                                            <h3 class="green">Selamat!</h3>
-                                                            Identitas Anda siap untuk disimpan! Klik finish untuk melanjutkan!
+                                                    <div class='space-6'></div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Jenis Kelamin:</label>
+
+                                                        <div class="controls">
+                                                            <label class="inline">
+                                                                <input name="gender" value="Laki-laki" type="radio" />
+                                                                <span class="lbl"> Laki-laki</span>
+                                                            </label>
+
+                                                            <label class="inline">
+                                                                <input name="gender" value="Perempuan" type="radio" />
+                                                                <span class="lbl"> Perempuan</span>
+                                                            </label>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <hr />
-                                                <div class="row-fluid wizard-actions">
-                                                    <button class="btn  btn-primary" onClick="document.location.reload(true)">
-                                                        <i class="icon-refresh"></i>
-                                                        Refresh
-                                                    </button>
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="tempat">Tempat Lahir:</label>
 
-                                                    <button type="submit" class="btn btn-success btn-next" data-last="Finish">
-                                                        Next
-                                                        <i class="icon-arrow-right icon-on-right"></i>
-                                                    </button>
+                                                        <div class="controls">
+                                                            <input type="text" name="tempat" id="tempat" placeholder="Tempat Lahir" value="" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="tanggal">Tanggal Lahir:</label>
+
+                                                        <div class="controls">
+                                                            <div class="input-prepend">
+                                                                <span class="add-on">
+                                                                    <i class="icon-calendar"></i>
+                                                                </span>
+                                                                <input class="input-small date-picker" name="tanggal" id="tanggal" type="text" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="alamat">Alamat:</label>
+
+                                                        <div class="controls">
+                                                            <textarea class="span6" id="alamat" name="alamat"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space"></div>
+
+                                                    <h4 class="header blue bolder smaller">Password</h4>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="password">Password:</label>
+
+                                                        <div class="controls">
+                                                            <div class="span12">
+                                                                <input type="password" name="password" id="password" class="span4" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="password2">Confirm Password:</label>
+
+                                                        <div class="controls">
+                                                            <div class="span12">
+                                                                <input type="password" name="password2" id="password2" class="span4" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space"></div>
+
+                                                    <h4 class="header blue bolder smaller">Kontak</h4>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="email">Email:</label>
+
+                                                        <div class="controls">
+                                                            <div class="span4 input-prepend">
+                                                                <span class="add-on">
+                                                                    <i class="icon-envelope"></i>
+                                                                </span>
+                                                                <input class="span12" type="email" name="email" id="email" class="span6" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="phone">No. Handphone:</label>
+
+                                                        <div class="controls">
+                                                            <div class="span3 input-prepend">
+                                                                <span class="add-on">
+                                                                    <i class="icon-phone"></i>
+                                                                </span>
+                                                                <input class="span12" type="tel" id="phone" name="phone" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="state">Jabatan:</label>
+
+                                                        <div class="controls">
+                                                            <span class="span10">
+                                                                <select id="jabatan" name="jabatan">
+                                                                    <option value="" />------------------------------------
+                                                                    <option value="1" />Kepala Bidang PMK
+                                                                    <option value="2" />Kepala Seksi Oprasional
+                                                                    <option value="3" />Kepala Seksi Sarana
+                                                                    <option value="4" />Staff Administrasi Umum
+                                                                    <option value="5" />Komandan Pleton
+                                                                    <option value="6" />Komandan Regu
+                                                                    <option value="7" />Operator
+                                                                    <option value="8" />Anggota
+                                                                </select>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row-fluid wizard-actions">
+                                                        <button class="btn  btn-primary" onClick="document.location.reload(true)">
+                                                            <i class="icon-refresh"></i>
+                                                            Reset
+                                                        </button>
+
+                                                        <input type="submit" name="submit" class="btn btn-success" value="Simpan" />
+
+                                                        <!--<button class="btn btn-success btn-next" data-last="Finish">
+                                                            Next
+                                                            <i class="icon-arrow-right icon-on-right"></i>
+                                                        </button>-->
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div><!--/widget-main-->
                                 </div><!--/widget-body-->
                             </div><!--/widget-box-->
@@ -398,7 +371,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
         <!--[if !IE]>-->
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
 
         <!--<![endif]-->
 
@@ -409,7 +382,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
         <!--[if !IE]>-->
 
         <script type="text/javascript">
-                                                        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                                                    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
         </script>
 
         <!--<![endif]-->
@@ -426,7 +399,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
           <script src="assets/js/excanvas.min.js"></script>
         <![endif]-->
 
-        <script src="../assets/js-ace/additional-methods.min.js"></script>
+                            <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
         <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
         <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
         <script src="../assets/js-ace/jquery.gritter.min.js"></script>
@@ -594,6 +567,24 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             error.insertAfter(element);
                     },
                     submitHandler: function(form) {
+                        var url = "proses.php";
+
+                        // mengambil nilai dari inputbox, textbox dan select
+                        var v_no = $('input:text[name=nomor]').val();
+                        var v_nama = $('input:text[name=nama]').val();
+                        var v_tempat = $('input:text[name=tempat]').val();
+                        var v_ttl = $('input:text[name=tanggal]').val();
+                        var v_alamat = $('textarea[name=alamat]').val();
+                        var v_phone = $('input:text[name=alamat]').val();
+                        var v_gender = $('input:radio[name=gender]').val();
+                        var v_email = $('input:email[name=email]').val();
+                        var v_pass1 = $('input:password[name=pass1]').val();
+                        var v_jabatan = $('select[name=jabatan]').val();
+
+                        $.post(url, {nomor: v_no, nama: v_nama, tempat: v_tempat, ttl: v_ttl, alamat: v_alamat, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, jabatan: v_jabatan}, function() {
+
+                        })
+
                     },
                     invalidHandler: function(form) {
                     }
@@ -614,18 +605,18 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
                  $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>' +
                  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
-                 
+                     
                  //editables 
                  $('#username').editable({
                  type: 'text',
                  name: 'username'
                  });
-                 
+                     
                  var countries = [];
                  $.each({"CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function(k, v) {
                  countries.push({id: k, text: v});
                  });
-                 
+                     
                  var cities = [];
                  cities["CA"] = [];
                  $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"], function(k, v) {
@@ -647,7 +638,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"], function(k, v) {
                  cities["US"].push({id: v, text: v});
                  });
-                 
+                     
                  var currentValue = "NL";
                  $('#country').editable({
                  type: 'select2',
@@ -664,15 +655,15 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  }).editable('setValue', null);
                  }
                  });
-                 
+                     
                  $('#city').editable({
                  type: 'select2',
                  value: 'Amsterdam',
                  source: cities[currentValue]
                  });
-                 
-                 
-                 
+                     
+                     
+                     
                  $('#signup').editable({
                  type: 'date',
                  format: 'yyyy-mm-dd',
@@ -681,14 +672,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  weekStart: 1
                  }
                  });
-                 
+                     
                  $('#age').editable({
                  type: 'spinner',
                  name: 'age', spinner: {
                  min: 16, max: 99, step: 1
                  }
                  });
-                 
+                     
                  //var $range = document.createElement("INPUT");
                  //$range.type = 'range';
                  $('#login').editable({
@@ -704,7 +695,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $(this).html(newValue + " hours ago");
                  }
                  });
-                 
+                     
                  $('#about').editable({
                  mode: 'inline',
                  type: 'wysiwyg',
@@ -715,18 +706,18 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  success: function(response, newValue) {
                  }
                  });
-                 
-                 
-                 
+                     
+                     
+                     
                  // *** editable avatar *** //
                  try {//ie8 throws some harmless exception, so let's catch it
-                 
+                     
                  //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
                  //so let's have a fake appendChild for it!
                  if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()))
                  Image.prototype.appendChild = function(el) {
                  }
-                 
+                     
                  var last_gritter
                  $('#avatar').editable({
                  type: 'image',
@@ -771,10 +762,10 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  url: function(params) {
                  // ***UPDATE AVATAR HERE*** //
                  //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
-                 
-                 
+                     
+                     
                  var deferred = new $.Deferred
-                 
+                     
                  //if value is empty, means no valid files were selected
                  //but it may still be submitted by the plugin, because "" (empty string) is different from previous non-empty value whatever it was
                  //so we return just here to prevent problems
@@ -783,8 +774,8 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  deferred.resolve();
                  return deferred.promise();
                  }
-                 
-                 
+                     
+                     
                  //dummy upload
                  setTimeout(function() {
                  if ("FileReader" in window) {
@@ -793,9 +784,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  if (thumb)
                  $('#avatar').get(0).src = thumb;
                  }
-                 
+                     
                  deferred.resolve({'status': 'OK'});
-                 
+                     
                  if (last_gritter)
                  $.gritter.remove(last_gritter);
                  last_gritter = $.gritter.add({
@@ -803,9 +794,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  text: 'Uploading to server can be easily implemented. A working example is included with the template.',
                  class_name: 'gritter-info gritter-center'
                  });
-                 
+                     
                  }, parseInt(Math.random() * 800 + 800))
-                 
+                     
                  return deferred.promise();
                  },
                  success: function(response, newValue) {
@@ -813,9 +804,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  })
                  } catch (e) {
                  }
-                 
-                 
-                 
+                     
+                     
+                     
                  //another option is using modals
                  $('#avatar2').on('click', function() {
                  var modal =
@@ -836,14 +827,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
                  </div>\
                  </form>\                             </div>';
-                 
-                 
+                     
+                     
                  var modal = $(modal);
                  modal.modal("show").on("hidden", function() {
                  modal.remove();
                  });
                  var working = false;
-                 
+                     
                  var form = modal.find('form:eq(0)');
                  var file = form.find('input[type=file]').eq(0);
                  file.ace_file_input({
@@ -869,60 +860,60 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  || (type.length == 0 && !(/\.(jpe?g|png|gif)$/i).test(file.name))//for android default browser!
                  )
                  return false;
-                 
+                     
                  if (file.size > 110000) {//~100Kb
                  return false;
                  }
                  }
-                 
+                     
                  return true;
                  }
                  });
-                 
+                     
                  form.on('submit', function() {
                  if (!file.data('ace_input_files'))
                  return false;
-                 
+                     
                  file.ace_file_input('disable');
                  form.find('button').attr('disabled', 'disabled');
                  form.find('.modal-body').append("<div class='center'><i class='icon-spinner icon-spin bigger-150 orange'></i></div>");
-                 
+                     
                  var deferred = new $.Deferred;
                  working = true;
                  deferred.done(function() {
                  form.find('button').removeAttr('disabled');
                  form.find('input[type=file]').ace_file_input('enable');
                  form.find('.modal-body > :last-child').remove();
-                 
+                     
                  modal.modal("hide");
-                 
+                     
                  var thumb = file.next().find('img').data('thumb');
                  if (thumb)
                  $('#avatar2').get(0).src = thumb;
-                 
+                     
                  working = false;
                  });
-                 
-                 
+                     
+                     
                  setTimeout(function() {
                  deferred.resolve();
                  }, parseInt(Math.random() * 800 + 800));
-                 
+                     
                  return false;
                  });
-                 
+                     
                  });
-                 
-                 
-                 
+                     
+                     
+                     
                  //////////////////////////////
                  /*$('#profile-feed-1').slimScroll({
                  height: '250px',
                  alwaysVisible: true
                  });
-                 
+                     
                  $('.profile-social-links > a').tooltip();
-                 
+                     
                  $('.easy-pie-chart.percentage').each(function() {
                  var barColor = $(this).data('color') || '#555';
                  var trackColor = '#E2E2E2';
@@ -946,14 +937,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  var $parent = $this.closest('.tab-pane');
                  var off1 = $parent.offset();
                  var w1 = $parent.width();
-                 
+                     
                  var off2 = $this.offset();
                  var w2 = $this.width();
-                 
+                     
                  var place = 'left';
                  if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
                  place = 'right';
-                 
+                     
                  $this.find('.popover').removeClass('right left').addClass(place);
                  }).on('click', function() {
                  return false;
@@ -1015,6 +1006,12 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     } else {
         header("location:../login/login");
     }
+
+    /* $nip = $_GET['nomor'];
+      $nama = $_GET['nama'];
+      echo $nip;
+      echo "<br />";
+      echo $nama; */
     ?>
 </body>
 </html>

@@ -13,7 +13,7 @@ $year = date('Y');
 ?>
 <?php
 session_start();
-include ("../login/koneksi.php");
+include ("../config/koneksi.php");
 if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
     if ($sql) {
@@ -164,7 +164,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                 ?>,</h4>
                             <p>
                                 <?php
-                                echo 'Sekarang ini hari ' . $hari[$days] . ' , tanggal ' . $tgl_angka . ' - ' . $bulan[$month] . ' - ' . $year . '.';
+                                echo 'Sekarang ini hari ' . $hari[$days] . ', tanggal ' . $tgl_angka . ' ' . $bulan[$month] . ' ' . $year . '.';
                                 ?>
                                 Pukul <span id="clock"> <?php print date('H:i:s'); ?></span>
                             </p>

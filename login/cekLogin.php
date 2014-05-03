@@ -1,6 +1,5 @@
 <?php
-session_start();
-include ("koneksi.php");
+include ("../config/koneksi.php");
 if (!$_SESSION['pegawai_nip'] && !$_SESSION['pegawai_password']){
 
 $nip = $_POST['nip'];
@@ -13,6 +12,7 @@ $password = md5($_POST['pass']);
         $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip= '".$nip."' AND pegawai_password= '".$password."'");
         $tes = mysql_num_rows($sql);
             if ($tes == 1){
+                session_start();
                 $hasil = mysql_fetch_assoc($sql);
                 $_SESSION['pegawai_nip'] = $hasil['pegawai_nip'];
                 $_SESSION['pegawai_password'] = $hasil['pegawai_password'];

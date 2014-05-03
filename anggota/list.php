@@ -1,7 +1,16 @@
 <?php
 include '../template/header.php';
 session_start();
-include ("../login/koneksi.php");
+include ("../config/koneksi.php");
+include_once ('../config/function.php');
+
+$page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
+$limit = 10;
+$startpoint = ($page * $limit) - $limit;
+
+//to make pagination
+$statement = "`pegawai`,`jabatan`";
+
 if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
     if ($sql) {
@@ -146,7 +155,15 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                 <div class="row-fluid">
                     <div class="span12">
                         <!--PAGE CONTENT BEGINS-->
-                        <div class="span10"></div>
+                        <div class="span10">
+                            <?php
+                            $query = mysql_query("SELECT pegawai.pegawai_nip, pegawai.pegawai_nama, pegawai.pegawai_alamat, pegawai.pegawai_no_telp, jabatan.jabatan_nama
+                                              FROM {$statement}
+                                              WHERE jabatan.jabatan_id = pegawai.jabatan_id
+                                              LIMIT {$startpoint} , {$limit}");
+                            echo info_paging($statement, $limit, $page);
+                            ?>
+                        </div>
                         <div class="span2">
                             <a href="tambah">
                                 <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Pegawai">
@@ -173,53 +190,42 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
                             <tbody>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>3,330</td>
-                                    <td>Feb 12</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                    <?php
+                                    $no = 1;
+                                    while ($data = mysql_fetch_array($query)) {
+                                        ?>
+                                        <td><?php echo $no; ?></td>
+                                        <td><?php echo $data['pegawai_nip']; ?></td>
+                                        <td><?php echo $data['pegawai_nama']; ?></td>
+                                        <td><?php echo $data['pegawai_alamat']; ?></td>
+                                        <td><?php echo $data['pegawai_no_telp']; ?></td>
+                                        <td><?php echo $data['jabatan_nama']; ?></td>
+                                        <td>
+                                            <div class="hidden-phone visible-desktop btn-group">
+                                                <a href="profile?nip=<?php echo $data['pegawai_nip'] ?>"><button class="btn btn-mini btn-success tooltip-info" title="View">
+                                                        <i class="icon-ok bigger-120"></i>
+                                                    </button></a>
 
-                                <tr>
-                                    <td class="center">
+                                                <a href=""><button class="btn btn-mini btn-info tooltip-info" title="Edit">
+                                                        <i class="icon-edit bigger-120"></i>
+                                                    </button></a>
 
-                                    </td>
+                                                <button class="btn btn-mini btn-danger tooltip-info" title="Delete">
+                                                    <i class="icon-trash bigger-120"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <?php
+                                $no++;
+                            }
+                            ?>
+                        </table>
+                        <?php
+                        echo pagination($statement, $limit, $page);
+                        ?>
 
-                                    <td>
-                                        <a href="#">pro.com</a>
-                                    </td>
-                                    <td>$55</td>
-                                    <td class="hidden-480">4,250</td>
-                                    <td class="hidden-phone">Jan 21</td>
-
-                                    <td class="hidden-480">
-                                        <span class="label label-success">Registered</span>
-                                    </td>
-
-                                    <td>
-                                        <div class="hidden-phone visible-desktop btn-group">
-                                            <button class="btn btn-mini btn-success">
-                                                <i class="icon-ok bigger-120"></i>
-                                            </button>
-
-                                            <button class="btn btn-mini btn-info">
-                                                <i class="icon-edit bigger-120"></i>
-                                            </button>
-
-                                            <button class="btn btn-mini btn-danger">
-                                                <i class="icon-trash bigger-120"></i>
-                                            </button>
-
-                                            <button class="btn btn-mini btn-warning">
-                                                <i class="icon-flag bigger-120"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>  
                         <!--PAGE CONTENT ENDS-->
                     </div><!--/.span-->
                 </div><!--/.row-fluid-->
