@@ -75,7 +75,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             </li>
                             <li class="light-blue">
                                 <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                    <img class="nav-user-photo" src="../assets/img/b.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                    <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $hasil['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                     <span class="user-info">
                                         <small>Welcome,</small>
                                         <?php
@@ -90,7 +90,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                 <li>
-                                    <a href="profile">
+                                    <a href="profile?nip=<?= $hasil['pegawai_nip']; ?>">
                                         <i class="icon-user"></i>
                                         Profile
                                     </a>
@@ -129,7 +129,15 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                 <i class="icon-angle-right arrow-icon"></i>
                             </span>
                         </li>
-                        <li class="active">Anggota Pemadam</li>
+
+                        <li>
+                            <a href="list">Anggota Pemadam</a>
+
+                            <span class="divider">
+                                <i class="icon-angle-right arrow-icon"></i>
+                            </span>
+                        </li>
+                        <li class="active">Tambah Data</li>
                     </ul><!--.breadcrumb-->
 
                 </div>
@@ -140,7 +148,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             Anggota Pemadam
                             <small>
                                 <i class="icon-double-angle-right"></i>
-                                Tambah
+                                Tambah Data
                             </small>
                         </h1>
                     </div><!--/.page-header-->
@@ -149,24 +157,22 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         <div class="span12">
                             <!--PAGE CONTENT BEGINS-->
 
-                            <!--<div class="row-fluid">
-                                <div class="span12">-->
                             <div class="widget-box">
-                                <div class="widget-header">
-
+                                <div class="widget-header widget-header-blue widget-header-flat">
+                                    <h4 class="lighter">Form Anggota Pemadam Kebakaran</h4>
                                 </div>
 
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div class="row-fluid">
-                                            <form class="form-horizontal" id="validation-form" method="post" action="proses.php" >
+                                            <form class="form-horizontal" id="validation-form" method="post" action="proses.php" enctype="multipart/form-data">
                                                 <div id="user-profile-3" class="user-profile">
                                                     <h3 class="lighter block green">Mohon untuk mengisi form berikut</h3>
-                                                    
+
                                                     <div class="row-fluid">
 
                                                         <div class="span4">
-                                                            <input type="file" name="foto" />
+                                                            <input type="file" name="foto" required/>
                                                         </div>
 
                                                         <div class="vspace"></div>
@@ -291,6 +297,10 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                                         </div>
                                                     </div>
 
+                                                    <div class="space"></div>
+
+                                                    <h4 class="header blue bolder smaller">Level User</h4>
+
                                                     <div class="control-group">
                                                         <label class="control-label" for="state">Jabatan:</label>
 
@@ -308,6 +318,32 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                                                     <option value="8" />Anggota
                                                                 </select>
                                                             </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Level:</label>
+
+                                                        <div class="controls">
+                                                            <label>
+                                                                <input name="level" value="1" type="radio" />
+                                                                <span class="lbl"> Admin (Staff Administrasi Umum)</span>
+                                                            </label>
+
+                                                            <label>
+                                                                <input name="level" value="2" type="radio" />
+                                                                <span class="lbl"> Kepala Bidang</span>
+                                                            </label>
+
+                                                            <label>
+                                                                <input name="level" value="3" type="radio" />
+                                                                <span class="lbl"> Kepala Seksi Oprasional</span>
+                                                            </label>
+
+                                                            <label>
+                                                                <input name="level" value="4" type="radio" />
+                                                                <span class="lbl"> Kepala Seksi Sarana</span>
+                                                            </label>
                                                         </div>
                                                     </div>
 
@@ -371,7 +407,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
         <!--[if !IE]>-->
 
-        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
+                        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
 
         <!--<![endif]-->
 
@@ -382,7 +418,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
         <!--[if !IE]>-->
 
         <script type="text/javascript">
-                                                    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                                                            window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
         </script>
 
         <!--<![endif]-->
@@ -399,7 +435,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
           <script src="assets/js/excanvas.min.js"></script>
         <![endif]-->
 
-                            <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
+                                            <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
         <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
         <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
         <script src="../assets/js-ace/jquery.gritter.min.js"></script>
@@ -472,7 +508,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
 
                 $.mask.definitions['~'] = '[+-]';
-                $('#phone').mask('9999 9999 9999');
+                $('#phone').mask('999999999999');
                 /*jQuery.validator.addMethod("phone", function(value, element) {
                  return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
                  }, "Enter a valid phone number.");*/
@@ -523,6 +559,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             required: true
                         },
                         gender: 'required',
+                        level: 'required',
                         jabatan: 'required',
                         foto: 'required'
                     },
@@ -539,6 +576,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         gender: "Mohon untuk memilih",
                         jabatan: "Mohon untuk memilih"
                     },
+                    
                     invalidHandler: function(event, validator) { //display error alert on form submit   
                         $('.alert-error', $('.login-form')).show();
                     },
@@ -595,7 +633,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
 
                 $('#modal-wizard .modal-header').ace_wizard();
                 $('#modal-wizard .wizard-actions .btn[data-dismiss=modal]').removeAttr('disabled');
-            })
+            });
 
 
             $(function() {
@@ -605,18 +643,18 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
                  $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>' +
                  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
-                     
+                 
                  //editables 
                  $('#username').editable({
                  type: 'text',
                  name: 'username'
                  });
-                     
+                 
                  var countries = [];
                  $.each({"CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function(k, v) {
                  countries.push({id: k, text: v});
                  });
-                     
+                 
                  var cities = [];
                  cities["CA"] = [];
                  $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"], function(k, v) {
@@ -638,7 +676,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"], function(k, v) {
                  cities["US"].push({id: v, text: v});
                  });
-                     
+                 
                  var currentValue = "NL";
                  $('#country').editable({
                  type: 'select2',
@@ -655,15 +693,15 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  }).editable('setValue', null);
                  }
                  });
-                     
+                 
                  $('#city').editable({
                  type: 'select2',
                  value: 'Amsterdam',
                  source: cities[currentValue]
                  });
-                     
-                     
-                     
+                 
+                 
+                 
                  $('#signup').editable({
                  type: 'date',
                  format: 'yyyy-mm-dd',
@@ -672,14 +710,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  weekStart: 1
                  }
                  });
-                     
+                 
                  $('#age').editable({
                  type: 'spinner',
                  name: 'age', spinner: {
                  min: 16, max: 99, step: 1
                  }
                  });
-                     
+                 
                  //var $range = document.createElement("INPUT");
                  //$range.type = 'range';
                  $('#login').editable({
@@ -695,7 +733,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  $(this).html(newValue + " hours ago");
                  }
                  });
-                     
+                 
                  $('#about').editable({
                  mode: 'inline',
                  type: 'wysiwyg',
@@ -706,18 +744,18 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  success: function(response, newValue) {
                  }
                  });
-                     
-                     
-                     
+                 
+                 
+                 
                  // *** editable avatar *** //
                  try {//ie8 throws some harmless exception, so let's catch it
-                     
+                 
                  //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
                  //so let's have a fake appendChild for it!
                  if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()))
                  Image.prototype.appendChild = function(el) {
                  }
-                     
+                 
                  var last_gritter
                  $('#avatar').editable({
                  type: 'image',
@@ -762,10 +800,10 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  url: function(params) {
                  // ***UPDATE AVATAR HERE*** //
                  //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
-                     
-                     
+                 
+                 
                  var deferred = new $.Deferred
-                     
+                 
                  //if value is empty, means no valid files were selected
                  //but it may still be submitted by the plugin, because "" (empty string) is different from previous non-empty value whatever it was
                  //so we return just here to prevent problems
@@ -774,8 +812,8 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  deferred.resolve();
                  return deferred.promise();
                  }
-                     
-                     
+                 
+                 
                  //dummy upload
                  setTimeout(function() {
                  if ("FileReader" in window) {
@@ -784,9 +822,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  if (thumb)
                  $('#avatar').get(0).src = thumb;
                  }
-                     
+                 
                  deferred.resolve({'status': 'OK'});
-                     
+                 
                  if (last_gritter)
                  $.gritter.remove(last_gritter);
                  last_gritter = $.gritter.add({
@@ -794,9 +832,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  text: 'Uploading to server can be easily implemented. A working example is included with the template.',
                  class_name: 'gritter-info gritter-center'
                  });
-                     
+                 
                  }, parseInt(Math.random() * 800 + 800))
-                     
+                 
                  return deferred.promise();
                  },
                  success: function(response, newValue) {
@@ -804,9 +842,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  })
                  } catch (e) {
                  }
-                     
-                     
-                     
+                 
+                 
+                 
                  //another option is using modals
                  $('#avatar2').on('click', function() {
                  var modal =
@@ -827,14 +865,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
                  </div>\
                  </form>\                             </div>';
-                     
-                     
+                 
+                 
                  var modal = $(modal);
                  modal.modal("show").on("hidden", function() {
                  modal.remove();
                  });
                  var working = false;
-                     
+                 
                  var form = modal.find('form:eq(0)');
                  var file = form.find('input[type=file]').eq(0);
                  file.ace_file_input({
@@ -860,60 +898,60 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  || (type.length == 0 && !(/\.(jpe?g|png|gif)$/i).test(file.name))//for android default browser!
                  )
                  return false;
-                     
+                 
                  if (file.size > 110000) {//~100Kb
                  return false;
                  }
                  }
-                     
+                 
                  return true;
                  }
                  });
-                     
+                 
                  form.on('submit', function() {
                  if (!file.data('ace_input_files'))
                  return false;
-                     
+                 
                  file.ace_file_input('disable');
                  form.find('button').attr('disabled', 'disabled');
                  form.find('.modal-body').append("<div class='center'><i class='icon-spinner icon-spin bigger-150 orange'></i></div>");
-                     
+                 
                  var deferred = new $.Deferred;
                  working = true;
                  deferred.done(function() {
                  form.find('button').removeAttr('disabled');
                  form.find('input[type=file]').ace_file_input('enable');
                  form.find('.modal-body > :last-child').remove();
-                     
+                 
                  modal.modal("hide");
-                     
+                 
                  var thumb = file.next().find('img').data('thumb');
                  if (thumb)
                  $('#avatar2').get(0).src = thumb;
-                     
+                 
                  working = false;
                  });
-                     
-                     
+                 
+                 
                  setTimeout(function() {
                  deferred.resolve();
                  }, parseInt(Math.random() * 800 + 800));
-                     
+                 
                  return false;
                  });
-                     
+                 
                  });
-                     
-                     
-                     
+                 
+                 
+                 
                  //////////////////////////////
                  /*$('#profile-feed-1').slimScroll({
                  height: '250px',
                  alwaysVisible: true
                  });
-                     
+                 
                  $('.profile-social-links > a').tooltip();
-                     
+                 
                  $('.easy-pie-chart.percentage').each(function() {
                  var barColor = $(this).data('color') || '#555';
                  var trackColor = '#E2E2E2';
@@ -937,14 +975,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                  var $parent = $this.closest('.tab-pane');
                  var off1 = $parent.offset();
                  var w1 = $parent.width();
-                     
+                 
                  var off2 = $this.offset();
                  var w2 = $this.width();
-                     
+                 
                  var place = 'left';
                  if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
                  place = 'right';
-                     
+                 
                  $this.find('.popover').removeClass('right left').addClass(place);
                  }).on('click', function() {
                  return false;
@@ -973,7 +1011,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                     )
                                 return false;
 
-                            if (file.size > 110000) {//~100Kb
+                            if (file.size > 5500000) {//~5Mb
                                 return false;
                             }
                         }
@@ -987,7 +1025,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         .end().find('.date-picker').datepicker().next().on(ace.click_event, function() {
                     $(this).prev().focus();
                 })
-                $('.input-mask-phone').mask('9999 9999 9999');
+                $('.input-mask-phone').mask('999999999999');
 
 
 
@@ -1002,16 +1040,9 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
             });
         </script>
         <?php
-        //include '../template/footer.php';
     } else {
         header("location:../login/login");
     }
-
-    /* $nip = $_GET['nomor'];
-      $nama = $_GET['nama'];
-      echo $nip;
-      echo "<br />";
-      echo $nama; */
     ?>
 </body>
 </html>

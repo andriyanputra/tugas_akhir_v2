@@ -1,213 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>SIM Proteksi Kebakaran Perkotaan</title>
 
-		<meta name="description" content="User login page" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- NEW CODE -->
+<?php
+include '../config/functions.php'; //includes the functions.php - very important
 
-		<!--basic styles-->
+if (loggedin()) { //check if the user is logged in, if it is, it will skip this page and jump to the 'user-loggedin.php' page.
+    header("Location: ../beranda/index.php");
+    exit();
+}
+?>
+<!-- END NEW CODE -->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+    <!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>SIM Proteksi Kebakaran Perkotaan</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
 
-		<link href="../assets/css-ace/bootstrap.min.css" rel="stylesheet" />
-		<link href="../assets/css-ace/bootstrap-responsive.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../assets/css-ace/font-awesome.min.css" />
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+        <link href="../assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+        <!-- END GLOBAL MANDATORY STYLES -->
+        <!-- BEGIN PAGE LEVEL STYLES -->
+        <link rel="stylesheet" type="text/css" href="../assets/plugins/select2/select2.css"/>
+        <link rel="stylesheet" type="text/css" href="../assets/plugins/select2/select2-metronic.css"/>
+        <!-- END PAGE LEVEL SCRIPTS -->
+        <!-- BEGIN THEME STYLES -->
+        <link href="../assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/css/plugins.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+        <link href="../assets/css/pages/login-soft.css" rel="stylesheet" type="text/css"/>
+        <link href="../assets/css/custom.css" rel="stylesheet" type="text/css"/>
+        <!-- END THEME STYLES -->
+        <link rel="shortcut icon" href="../assets/img/favicon.ico"/>
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <body class="login">
+        <!-- BEGIN LOGO -->
+        <div class="logo">
+            <a href="index.html">
+                <img src="../assets/img/logo-big.png" alt=""/>
+            </a>
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN LOGIN -->
+        <div class="content">
+            <!-- BEGIN LOGIN FORM -->
+            <form class="login-form" action="../config/check.php" method="post">
+                <h3 class="form-title">Silahkan Login</h3>
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <span>
+                        Masukkan Nomor Induk dan Password.
+                    </span>
+                </div>
+                <?php
+                //echo isset($_COOKIE['pesan']) ? '<p class="alert" id="alert" onclick="hide()">' . $_COOKIE['pesan'] . '</p>' : '';
+                ?>
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Nomor Induk</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Nomor Induk" name="nomor"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password"/>
+                    </div>
+                </div>
 
-		<!--[if IE 7]>
-		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
+                <div class="form-actions">
+                    <div class="input-icon right">
+                        <i class="fa fa-arrow-right"></i>
+                        <label class="checkbox">
+                            <input type="checkbox" name="remember" value="1"/> Remember me
+                        </label>
+                        <input type="submit" class="btn blue pull-right" name="login" value="LOG IN"/>
+                    </div>
+                </div>
+                <!--<div class="form-actions">
+                    <!--<button type="submit" class="btn blue pull-right">
+                        Login <i class="m-icon-swapright m-icon-white"></i>
+                    </button>
+                </div>-->
+                <div class="forget-password">
+                    <h4>Lupa password ?</h4>
+                    <p>
+                        no worries, klik
+                        <a href="javascript:;" id="forget-password">
+                            disini
+                        </a>
+                        untuk reset passwordmu.
+                    </p>
+                </div>
+                <!--<div class="create-account">
+                    <p>
+                        Don't have an account yet ?&nbsp;
+                        <a href="javascript:;" id="register-btn">
+                            Create an account
+                        </a>
+                    </p>
+                </div>-->
+            </form>
+            <!-- END LOGIN FORM -->
+            <!-- BEGIN FORGOT PASSWORD FORM -->
+            <form class="forget-form" method="post" action="../config/rePass.php">
+                <h3>Lupa Password ?</h3>
+                <p>
+                    Masukkan Nomor Induk Anda di bawah untuk reset password.
+                </p>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa fa-envelope"></i>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Nomor Induk" name="renomor"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="back-btn" class="btn">
+                        <i class="m-icon-swapleft"></i> Kembali </button>
+                    <!--<button type="submit" class="btn blue pull-right" name="submit">
+                        Submit <i class="m-icon-swapright m-icon-white"></i>
+                    </button>-->
+                    <input type="submit" class="btn blue pull-right" name="submit" value="Submit"/>
+                </div>
+            </form>
+            <!-- END FORGOT PASSWORD FORM -->
 
-		<!--page specific plugin styles-->
-
-		<!--fonts-->
-
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
-
-		<!--ace styles-->
-
-		<link rel="stylesheet" href="../assets/css-ace/ace.min.css" />
-		<link rel="stylesheet" href="../assets/css-ace/ace-responsive.min.css" />
-		<link rel="stylesheet" href="../assets/css-ace/ace-skins.min.css" />
-                <link rel="shortcut icon" href="../assets/img/favicon.ico">
-		<!--[if lte IE 8]>
-		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
-		<![endif]-->
-
-		<!--inline styles related to this page-->
-	
-                
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
-
-	<body class="login-layout">
-		<div class="main-container container-fluid">
-			<div class="main-content">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="login-container">
-							<div class="row">
-								<div class="center">
-									<h3>
-										<i class="icon-fire-extinguisher red"></i>
-										<span class="white">SIM Proteksi Kebakaran Perkotaan</span>
-									</h3>
-									<h4 class="blue">&copy; Instansi Pemadam Kebakaran</h4>
-								</div>
-							</div>
-
-							<div class="space-6"></div>
-
-							<div class="row-fluid">
-								<div class="position-relative">
-									<div id="login-box" class="login-box visible widget-box no-border">
-										<div class="widget-body">
-											<div class="widget-main">
-												<h4 class="header blue lighter bigger">
-													<i class="icon-coffee green"></i>
-													Silahkan Login
-												</h4>
-
-												<div class="space-6"></div>
-
-												<form method="post" action="cekLogin.php">
-													<fieldset>
-														<label>
-															<span class="block input-icon input-icon-right">
-																<input type="text" class="span12" placeholder="Nomor Induk Pegawai" name="nip" required oninvalid="this.setCustomValidity('Enter NIP Here')" oninput="setCustomValidity('')" />
-																<i class="icon-user"></i>
-															</span>
-														</label>
-
-														<label>
-															<span class="block input-icon input-icon-right">
-																<input type="password" class="span12" placeholder="Password" name="pass" required oninvalid="this.setCustomValidity('Enter Password Here')" oninput="setCustomValidity('')" />
-																<i class="icon-lock"></i>
-															</span>
-														</label>
-
-														<div class="space"></div>
-
-														<div class="clearfix">
-<!--															<label class="inline">
-																<input type="checkbox" name="setcookie" value="true" id="setcookie" />
-																<span class="lbl"> Remember Me</span>
-															</label>-->
-
-															<button class="width-35 pull-right btn btn-small btn-primary" name="submit">
-																<i class="icon-key"></i>
-																Login
-															</button>
-														</div>
-
-														<div class="space-4"></div>
-													</fieldset>
-												</form>
-
-											</div><!--/widget-main-->
-
-											<div class="toolbar clearfix">
-												<div>
-													<a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
-														<i class="icon-arrow-left"></i>
-														Lupa password ?
-													</a>
-												</div>
-											</div>
-										</div><!--/widget-body-->
-									</div><!--/login-box-->
-
-									<div id="forgot-box" class="forgot-box widget-box no-border">
-										<div class="widget-body">
-											<div class="widget-main">
-												<h4 class="header red lighter bigger">
-													<i class="icon-key"></i>
-													Memulihkan Password
-												</h4>
-
-												<div class="space-6"></div>
-												<p>
-													Masukkan NIP Anda &amp; ikuti petunjuk selanjutnya
-												</p>
-
-												<form />
-													<fieldset>
-														<label>
-															<span class="block input-icon input-icon-right">
-																<input type="text" name="nip" class="span12" placeholder="Nomor Induk Pegawai" />
-																<i class="icon-user"></i>
-															</span>
-														</label>
-
-														<div class="clearfix">
-															<button onclick="return false;" class="width-35 pull-right btn btn-small btn-danger">
-																<i class="icon-lightbulb"></i>
-																Next
-															</button>
-														</div>
-													</fieldset>
-												</form>
-											</div><!--/widget-main-->
-
-											<div class="toolbar center">
-												<a href="#" onclick="show_box('login-box'); return false;" class="back-to-login-link">
-                                                                                                    <i class="icon-arrow-left"></i>
-                                                                                                    Kembali ke login
-												</a>
-											</div>
-										</div><!--/widget-body-->
-									</div><!--/forgot-box-->
-								</div><!--/position-relative-->
-							</div>
-						</div>
-					</div><!--/.span-->
-				</div><!--/.row-fluid-->
-			</div> 
-		</div><!--/.main-container-->
-
-		<!--basic scripts-->
-
-		<!--[if !IE]>-->
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-		<!--<![endif]-->
-
-		<!--[if IE]>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<![endif]-->
-
-		<!--[if !IE]>-->
-
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>"+"<"+"/script>");
-		</script>
-
-		<!--<![endif]-->
-
-		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
-
-		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='../assets/js-ace/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<script src="../assets/js-ace/bootstrap.min.js"></script>
-
-		<!--page specific plugin scripts-->
-
-		<!--ace scripts-->
-
-		<script src="../assets/js-ace/ace-elements.min.js"></script>
-		<script src="../assets/js-ace/ace.min.js"></script>
-
-		<!--inline scripts related to this page-->
-
-		<script type="text/javascript">
-			function show_box(id) {
-			 $('.widget-box.visible').removeClass('visible');
-			 $('#'+id).addClass('visible');
-			}
-		</script>
-	</body>
+        </div>
+        <!-- END LOGIN -->
+        <!-- BEGIN COPYRIGHT -->
+        <div class="copyright">
+            2014 &copy; Instansi Pemadam Kebakaran, Kabupaten Sidoarjo.
+        </div>
+        <!-- END COPYRIGHT -->
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        <!-- BEGIN CORE PLUGINS -->
+        <!--[if lt IE 9]>
+                <script src="assets/plugins/respond.min.js"></script>
+                <script src="assets/plugins/excanvas.min.js"></script> 
+                <![endif]-->
+        <script src="../assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+        <!-- END CORE PLUGINS -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <script src="../assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="../assets/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="../assets/plugins/select2/select2.min.js"></script>
+        <!-- END PAGE LEVEL PLUGINS -->
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script src="../assets/scripts/core/app.js" type="text/javascript"></script>
+        <script src="../assets/scripts/custom/login-soft.js" type="text/javascript"></script>
+        <script>
+            jQuery(document).ready(function() {
+                App.init();
+                Login.init();
+            });
+        </script>
+        <!-- END JAVASCRIPTS -->
+    </body>
+    <!-- END BODY -->
 </html>

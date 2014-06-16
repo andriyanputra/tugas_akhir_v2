@@ -1,6 +1,24 @@
 <?php
-
 include "../config/koneksi.php";
+
+$nama_gambar = $_FILES['foto'] ['name']; // Mendapatkan nama gambar
+$lokasi = $_FILES['foto'] ['tmp_name'];
+
+// Menyiapkan tempat nemapung gambar yang diupload
+$lokasitujuan = "../assets/img/img-anggota";
+
+if (file_exists("../assets/img/img-anggota" . $_FILES["file"]["name"])) {
+    echo $_FILES["foto"]["name"] . " already exists. ";
+} else {
+    move_uploaded_file($lokasi, $lokasitujuan . "/" . $nama_gambar);
+}
+
+//$query=mysql_query("insert into upload (nama_gambar) values ('".$nama_gambar."')");
+//echo "Gambar berhasil diuplaod";
+// Merefresh halaman
+//echo "<meta http-equiv='refresh' content=3;url='./'>";
+
+
 
 $nip = $_POST['nomor'];
 $nama = $_POST['nama'];
@@ -12,49 +30,52 @@ $phone = $_POST['phone'];
 $jabatan = $_POST['jabatan'];
 $gender = $_POST['gender'];
 $email = $_POST['email'];
+$level = $_POST['level'];
 $pass1 = md5($_POST['password']);
-$pass2 = $_POST['password2'];
- 
 
-$sql=mysql_query("SELECT pegawai_nip FROM pegawai WHERE pegawai_nip ='".$nip."'")or die(mysql_error());
-$check=mysql_num_rows($sql);
-    
-if ($check !=0){
-    die("<script language=JavaScript>alert('Maaf Nomor Induk Pegawai : ".$nip." sudah digunakan.!!');
+
+$sql = mysql_query("SELECT pegawai_nip FROM pegawai WHERE pegawai_nip ='" . $nip . "'") or die(mysql_error());
+$check = mysql_num_rows($sql);
+
+if ($check != 0) {
+    die("<script language=JavaScript>alert('Maaf Nomor Induk Pegawai : " . $nip . " sudah digunakan.!!');
 document.location='tambah.php'</script>");
 }
 
-$fileName = $_FILES['foto']['name']; //get the file name
-$fileSize = $_FILES['foto']['size']; //get the size
-$fileError = $_FILES['foto']['error']; //get the error when upload
-if($fileSize > 0 || $fileError == 0){ //check if the file is corrupt or error
-$move = move_uploaded_file($_FILES['foto']['tmp_name'], 'D:/2. Program Files/xampp/htdocs/SIM_Proteksi/assets/img/img-anggota'.$fileName); //save image to the folder
-if($move){
-    echo "<h3>Success! </h3>";
-    $add = "INSERT into pegawai VALUES('".$nip."','".$nama."','".$tempat."','".$tgl_format."','".$gender."','".$alamat."','".$phone."','".$jabatan."','".$email."','".$pass1."','img-anggota/$fileName')"; //insert image property to database
-    $result = mysql_query($add);
-
-    //$q1 = "SELECT location from tb_image where filename = '$fileName' limit 1 "; //get the image that have been uploaded
-    //$result = mysql_query($q1);
-    //while ($data = mysql_fetch_array($result)) {
-    //$loc = $data['location']; 
-    //<!--<br/>
-    //<h2> This is the Image : </h2>
-    //<img src="<?php //echo $loc;  />  show the image using img src -->
-
-    if ($add) {
-    }else{
-	?><script language="JavaScript">alert('Terjadi Kesalahan Entry Data Pegawai..!!');
-document.location='tambah.php'</script><?php
-}
-
-
-} else{
-echo "<h3>Failed! </h3>";
-}
+$query = "INSERT INTO pegawai 
+                (pegawai_nip, 
+                id_level_user, 
+                pegawai_nama, 
+                pegawai_tempat, 
+                pegawai_tanggal, 
+                pegawai_kelamin, 
+                pegawai_alamat, 
+                pegawai_no_telp, 
+                jabatan_id, 
+                pegawai_email, 
+                pegawai_password, 
+                pegawai_foto
+                )
+                VALUES
+                ('$nip', 
+                '$level', 
+                '$nama', 
+                '$tempat', 
+                '$tgl_format', 
+                '$gender', 
+                '$alamat', 
+                '$phone', 
+                '$jabatan', 
+                '$email', 
+                '$pass1', 
+                '$nama_gambar'
+                )";
+$result = mysql_query($query);
+if ($result) {
+    ?><script language="JavaScript">alert('Data Berhasil Di Simpan..!!');
+            document.location = 'list.php'</script><?php
 } else {
-echo "Failed to Upload : ".$fileError;
+    ?><script language="JavaScript">alert('Terjadi Kesalahan Entry Data Pegawai..!!');
+            document.location = 'tambah.php'</script><?php
 }
-
-
 ?>

@@ -74,7 +74,8 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             </li>
                             <li class="light-blue">
                                 <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                    <img class="nav-user-photo" src="../assets/img/b.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                    <?php ?>
+                                    <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $hasil['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                     <span class="user-info">
                                         <small>Welcome,</small>
                                         <?php
@@ -89,7 +90,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                 <li>
-                                    <a href="profile">
+                                    <a href="profile?nip=<?= $hasil['pegawai_nip']; ?>">
                                         <i class="icon-user"></i>
                                         Profile
                                     </a>
@@ -115,7 +116,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                 <span class="menu-text"></span>
             </a>
 
-    <?php include '../template/sidebar.php'; ?>
+            <?php include '../template/sidebar.php'; ?>
 
             <div class="main-content">
                 <div class="breadcrumbs" id="breadcrumbs">
@@ -128,7 +129,14 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                 <i class="icon-angle-right arrow-icon"></i>
                             </span>
                         </li>
-                        <li class="active">Profil User</li>
+                        <li>
+                            <a href="list">Anggota Pemadam</a>
+
+                            <span class="divider">
+                                <i class="icon-angle-right arrow-icon"></i>
+                            </span>
+                        </li>
+                        <li class="active">Profil Anggota</li>
                     </ul><!--.breadcrumb-->
                 </div>
 
@@ -147,96 +155,153 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         <div class="span12">
                             <!--PAGE CONTENT BEGINS-->
 
-                            <div>
-                                <div id="user-profile-1" class="user-profile row-fluid">
-                                    <div class="span3 center">
-                                        <div>
-                                            <span class="profile-picture">
-                                                <img id="avatar" class="editable" alt="Andri's Avatar" src="../assets/img/a.jpg" />
-                                            </span>
+                            <?php
+                            if ($_GET['nip']) {
+                                $qry = mysql_query("SELECT * FROM pegawai,jabatan
+                                                    WHERE jabatan.jabatan_id = pegawai.jabatan_id AND pegawai_nip = '" . $_GET['nip'] . "'");
+                                $d = mysql_fetch_assoc($qry);
+                                ?>
 
-                                            <div class="space-4"></div>
+                                <div>
+                                    <div id="user-profile-1" class="user-profile row-fluid">
+                                        <div class="span3 center">
+                                            <div>
+                                                <span class="profile-picture">
+                                                    <img id="avatar" src="../assets/img/img-anggota/<?= $d['pegawai_foto']; ?>" />
+                                                </span>
 
-                                            <div class="width-80 label label-info label-large arrowed-in arrowed-in-right">
-                                                <div class="inline position-relative">
-                                                    <a href="#">
-                                                        <span class="white middle bigger-120">Andriyan D. Putranto</span>
+                                                <div class="space-4"></div>
+
+                                                <div class="width-80 label label-info label-large arrowed-in arrowed-in-right">
+                                                    <div class="inline position-relative">
+                                                        <a href="#">
+                                                            <span class="white middle bigger-120"><?= $d['pegawai_nama']; ?></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-6"></div>
+
+                                            <div class="profile-contact-info">
+                                                <div class="profile-contact-links align-left">
+
+                                                    <a class="btn btn-link" href="#">
+                                                        <i class="icon-user bigger-120 blue"></i>
+                                                        <?= $d['jabatan_nama']; ?>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="space-6"></div>
+                                        <div class="span9">
 
-                                        <div class="profile-contact-info">
-                                            <div class="profile-contact-links align-left">
-                                                <a class="btn btn-link" href="#">
-                                                    <i class="icon-circle bigger-120 green"></i>
-                                                    Status : Aktif
+                                            <div class="space-12"></div>
+                                            <div class="center">
+                                                <span class="hidden btn btn-app btn-small btn-light no-hover">
+                                                    <span class="bigger-150 blue"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-light no-hover">
+                                                    <span class="bigger-150 blue"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-light no-hover">
+                                                    <span class="bigger-150 blue"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-light no-hover">
+                                                    <span class="bigger-150 blue"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-yellow no-hover">
+                                                    <span class="bigger-175"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-pink no-hover">
+                                                    <span class="bigger-175"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-grey no-hover">
+                                                    <span class="bigger-175"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <span class="hidden btn btn-app btn-small btn-success no-hover">
+                                                    <span class="bigger-175"></span>
+                                                    <span class="smaller-90"></span>
+                                                </span>
+
+                                                <a href="edit?nip=<?= $d['pegawai_nip'];?>">
+                                                    <button class="btn btn-small btn-primary" data-rel="tooltip" title="Edit Pegawai">
+                                                        <i class="icon-edit"></i>
+                                                        <strong>Edit Data</strong>
+                                                    </button>
                                                 </a>
-
-                                                <a class="btn btn-link" href="#">
-                                                    <i class="icon-user bigger-120 blue"></i>
-                                                    Administrator
-                                                </a>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="span9">
+                                            <div class="space-6"></div>
 
-                                        <div class="space-12"></div>
+                                            <div class="profile-user-info profile-user-info-striped">
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Nomor Induk </div>
 
-                                        <div class="profile-user-info profile-user-info-striped">
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> Nama </div>
-
-                                                <div class="profile-info-value">
-                                                    <span class="editable" id="username">Andriyan Dwi Putranto</span>
+                                                    <div class="profile-info-value">
+                                                        <span id="nomor"><?= $d['pegawai_nip']; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> Alamat </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Nama Lengkap </div>
 
-                                                <div class="profile-info-value">
-                                                    <i class="icon-map-marker light-orange bigger-110"></i>
-                                                    <span class="editable" id="country">Indonesia</span>
-                                                    <span class="editable" id="city">Kab. Sidoarjo</span>
+                                                    <div class="profile-info-value">
+                                                        <span id="username"><?= $d['pegawai_nama']; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> Umur </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Jenis Kelamin </div>
 
-                                                <div class="profile-info-value">
-                                                    <span class="editable" id="age">21</span>
+                                                    <div class="profile-info-value">
+                                                        <span id="gender"><?= $d['pegawai_kelamin']; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> Joined </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> TTL </div>
 
-                                                <div class="profile-info-value">
-                                                    <span class="editable" id="signup">20/06/2010</span>
+                                                    <div class="profile-info-value">
+                                                        <i class="icon-map-marker light-orange bigger-110"></i>
+                                                        <span id="age"><?= $d['pegawai_tempat']; ?></span>
+                                                        <?php $tgl_format = date("d-m-Y", strtotime($d['pegawai_tanggal'])); ?>
+                                                        <span id="age"><?= $tgl_format; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> Last Online </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Alamat </div>
 
-                                                <div class="profile-info-value">
-                                                    <span class="editable" id="login">3 hours ago</span>
+                                                    <div class="profile-info-value">
+                                                        <i class="icon-map-marker light-orange bigger-110"></i>
+                                                        <span id="country"><?= $d['pegawai_alamat']; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="profile-info-row">
-                                                <div class="profile-info-name"> About Me </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Kontak </div>
 
-                                                <div class="profile-info-value">
-                                                    <span class="editable" id="about">Editable as WYSIWYG</span>
+                                                    <div class="profile-info-value">
+                                                        <span id="age"><?= $d['pegawai_no_telp']; ?></span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            <?php } ?>
+
                                         </div>
 
                                         <div class="space-20"></div>

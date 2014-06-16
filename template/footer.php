@@ -29,6 +29,8 @@
     <i class="icon-double-angle-up icon-only bigger-110"></i>
 </a>
 
+<script type="text/javascript" src="../assets/js-ace/ajax.js"></script>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -73,6 +75,7 @@
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
+
 
 <script type="text/javascript">
     $(function() {
@@ -514,23 +517,23 @@
         $('#avatar2').on('click', function() {
             var modal =
                     '<div class="modal hide fade">\
-                                        <div class="modal-header">\
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                <h4 class="blue">Change Avatar</h4>\
-                                        </div>\
-                                        \
-                                        <form class="no-margin">\
-                                        <div class="modal-body">\
-                                                <div class="space-4"></div>\
-                                                <div style="width:75%;margin-left:12%;"><input type="file" name="file-input" /></div>\
-                                        </div>\
-                                        \
-                                        <div class="modal-footer center">\
-                                                <button type="submit" class="btn btn-small btn-success"><i class="icon-ok"></i> Submit</button>\
-                                                <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
-                                        </div>\
-                                        </form>\
-                                </div>';
+                                                <div class="modal-header">\
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                        <h4 class="blue">Change Avatar</h4>\
+                                                </div>\
+                                                \
+                                                <form class="no-margin">\
+                                                <div class="modal-body">\
+                                                        <div class="space-4"></div>\
+                                                        <div style="width:75%;margin-left:12%;"><input type="file" name="file-input" /></div>\
+                                                </div>\
+                                                \
+                                                <div class="modal-footer center">\
+                                                        <button type="submit" class="btn btn-small btn-success"><i class="icon-ok"></i> Submit</button>\
+                                                        <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
+                                                </div>\
+                                                </form>\
+                                        </div>';
 
 
             var modal = $(modal);

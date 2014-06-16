@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="../assets/css-ace/select2.css" />
         <link rel="stylesheet" href="../assets/css-ace/bootstrap-editable.css" />
         <link rel="stylesheet" href="../assets/css-ace/fullcalendar.css" />
+        
 
         <!--fonts-->
 
@@ -37,7 +38,7 @@
                 font-family: "Open Sans";
             }
         </style>
-
+        
         <!--inline styles related to this page-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 

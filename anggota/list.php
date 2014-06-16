@@ -4,12 +4,11 @@ session_start();
 include ("../config/koneksi.php");
 include_once ('../config/function.php');
 
-$page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
-$limit = 10;
-$startpoint = ($page * $limit) - $limit;
-
+//$page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
+//$limit = 5;
+//$startpoint = ($page * $limit) - $limit;
 //to make pagination
-$statement = "`pegawai`,`jabatan`";
+//$statement = "`pegawai`,`jabatan`";
 
 if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
@@ -82,7 +81,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         </li>
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                <img class="nav-user-photo" src="../assets/img/b.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                <img class="nav-user-photo" src="../assets/img/img-anggota/<?=$hasil['pegawai_foto'];?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                 <span class="user-info">
                                     <small>Welcome,</small>
                                     <?php
@@ -97,7 +96,7 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                             <li>
-                                <a href="profile">
+                                <a href="profile?nip=<?=$hasil['pegawai_nip'];?>">
                                     <i class="icon-user"></i>
                                     Profile
                                 </a>
@@ -157,18 +156,19 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                         <!--PAGE CONTENT BEGINS-->
                         <div class="span10">
                             <?php
-                            $query = mysql_query("SELECT pegawai.pegawai_nip, pegawai.pegawai_nama, pegawai.pegawai_alamat, pegawai.pegawai_no_telp, jabatan.jabatan_nama
-                                              FROM {$statement}
-                                              WHERE jabatan.jabatan_id = pegawai.jabatan_id
-                                              LIMIT {$startpoint} , {$limit}");
-                            echo info_paging($statement, $limit, $page);
+                            /* $query = mysql_query("SELECT pegawai.pegawai_nip, pegawai.pegawai_nama, pegawai.pegawai_alamat, pegawai.pegawai_no_telp, jabatan.jabatan_nama
+                              FROM {$statement}
+                              WHERE jabatan.jabatan_id = pegawai.jabatan_id
+                              LIMIT {$startpoint} , {$limit}");
+                              echo info_paging($statement, $limit, $page);
+                              $query = mysql_query("SELECT * FROM pegawai"); */
                             ?>
                         </div>
                         <div class="span2">
                             <a href="tambah">
                                 <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Pegawai">
                                     <i class="icon-plus bigger-130"></i>
-                                    <strong>Tambah</strong>
+                                    <strong>Tambah Data</strong>
                                 </button>
                             </a>
                         </div>
@@ -192,7 +192,25 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                 <tr>
                                     <?php
                                     $no = 1;
-                                    while ($data = mysql_fetch_array($query)) {
+                                    $dataPerPage = 5; //Tentukan data per halaman
+                                    // apabila $_GET['page'] sudah didefinisikan, gunakan nomor halaman tersebut,
+                                    // sedangkan apabila belum, nomor halamannya 1.
+                                    if (isset($_GET['page'])) {
+                                        $noPage = $_GET['page'];
+                                    }
+                                    else
+                                        $noPage = 1;
+                                    // perhitungan offset
+                                    $offset = ($noPage - 1) * $dataPerPage;
+                                    // query SQL untuk menampilkan data perhalaman sesuai offset
+                                    $query = "SELECT * FROM pegawai,jabatan
+                                                WHERE jabatan.jabatan_id = pegawai.jabatan_id
+                                                ORDER BY pegawai_nip ASC
+                                                LIMIT $offset, $dataPerPage";
+                                    $r = mysql_query($query) or die('Error');
+
+                                    //$jum = mysql_num_rows($a);
+                                    while ($data = mysql_fetch_array($r)) {
                                         ?>
                                         <td><?php echo $no; ?></td>
                                         <td><?php echo $data['pegawai_nip']; ?></td>
@@ -202,17 +220,18 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                                         <td><?php echo $data['jabatan_nama']; ?></td>
                                         <td>
                                             <div class="hidden-phone visible-desktop btn-group">
-                                                <a href="profile?nip=<?php echo $data['pegawai_nip'] ?>"><button class="btn btn-mini btn-success tooltip-info" title="View">
+                                                <a href="profile?nip=<?php echo $data['pegawai_nip']; ?>"><button class="btn btn-mini btn-success tooltip-info" title="View">
                                                         <i class="icon-ok bigger-120"></i>
                                                     </button></a>
 
-                                                <a href=""><button class="btn btn-mini btn-info tooltip-info" title="Edit">
+                                                <a href="edit?nip=<?php echo $data['pegawai_nip']; ?>"><button class="btn btn-mini btn-info tooltip-info" title="Edit">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </button></a>
-
-                                                <button class="btn btn-mini btn-danger tooltip-info" title="Delete">
-                                                    <i class="icon-trash bigger-120"></i>
-                                                </button>
+                                                 
+                                                <a href="prosesHapus?nip=<?php echo $data['pegawai_nip']; ?>" onclick="return confirm('Are you sure you want to delete?')">
+                                                    <button class="btn btn-mini btn-danger tooltip-info" title="Delete">
+                                                        <i class="icon-trash bigger-120"></i>
+                                                    </button></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -223,7 +242,40 @@ if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
                             ?>
                         </table>
                         <?php
-                        echo pagination($statement, $limit, $page);
+                        //echo pagination($statement, $limit, $page);
+                        // mencari jumlah semua data dalam tabel guestbook
+
+                        $q = "SELECT COUNT(*) AS jumData FROM pegawai";
+                        $hasil = mysql_query($q);
+                        $d = mysql_fetch_array($hasil);
+
+                        $jumData = $d['jumData'];
+
+                        // menentukan jumlah halaman yang muncul berdasarkan jumlah semua data
+                        $jumPage = ceil($jumData / $dataPerPage);
+
+                        // menampilkan link previous
+                        if ($noPage > 1)
+                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($noPage - 1) . "'>&lt;&lt; Prev</a>";
+
+                        // memunculkan nomor halaman dan linknya
+                        for ($page = 1; $page <= $jumPage; $page++) {
+                            if ((($page >= $noPage - 3) && ($page <= $noPage + 3)) || ($page == 1) || ($page == $jumPage)) {
+                                if (($showPage == 1) && ($page != 2))
+                                    echo "...";
+                                if (($showPage != ($jumPage - 1)) && ($page == $jumPage))
+                                    echo "...";
+                                if ($page == $noPage)
+                                    echo " <b>" . $page . "</b> ";
+                                else
+                                    echo " <a href='" . $_SERVER['PHP_SELF'] . "?page=" . $page . "'>" . $page . "</a> ";
+                                $showPage = $page;
+                            }
+                        }
+
+                        // menampilkan link next
+                        if ($noPage < $jumPage)
+                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($noPage + 1) . "'>Next &gt;&gt;</a>";
                         ?>
 
                         <!--PAGE CONTENT ENDS-->
