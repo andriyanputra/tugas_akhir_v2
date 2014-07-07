@@ -246,7 +246,7 @@ var Login = function () {
         	
             handleLogin();
             handleForgetPassword();
-            handleRegister();        
+            //handleRegister();        
 	       
 	       	$.backstretch([
 		        "../assets/img/bg/1.jpg",

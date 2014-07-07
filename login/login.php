@@ -87,18 +87,18 @@ if (loggedin()) { //check if the user is logged in, if it is, it will skip this 
 
                 <div class="form-actions">
                     <div class="input-icon right">
-                        <i class="fa fa-arrow-right"></i>
+                        <i class="m-icon-swapright"></i>
                         <label class="checkbox">
                             <input type="checkbox" name="remember" value="1"/> Remember me
                         </label>
-                        <input type="submit" class="btn blue pull-right" name="login" value="LOG IN"/>
+                        <input type="submit" class="btn blue pull-right" name="login" value="Login"/>
                     </div>
                 </div>
                 <!--<div class="form-actions">
-                    <!--<button type="submit" class="btn blue pull-right">
-                        Login <i class="m-icon-swapright m-icon-white"></i>
-                    </button>
-                </div>-->
+                <!--<button type="submit" class="btn blue pull-right">
+                    Login <i class="m-icon-swapright m-icon-white"></i>
+                </button>
+            </div>-->
                 <div class="forget-password">
                     <h4>Lupa password ?</h4>
                     <p>
@@ -132,12 +132,15 @@ if (loggedin()) { //check if the user is logged in, if it is, it will skip this 
                     </div>
                 </div>
                 <div class="form-actions">
+                    <div class="input-icon right">
+                        <i class="m-icon-swapright"></i>
+                        <input type="submit" class="btn blue pull-right" name="submit" value="Submit"/>
+                    </div>
                     <button type="button" id="back-btn" class="btn">
                         <i class="m-icon-swapleft"></i> Kembali </button>
                     <!--<button type="submit" class="btn blue pull-right" name="submit">
                         Submit <i class="m-icon-swapright m-icon-white"></i>
                     </button>-->
-                    <input type="submit" class="btn blue pull-right" name="submit" value="Submit"/>
                 </div>
             </form>
             <!-- END FORGOT PASSWORD FORM -->

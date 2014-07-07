@@ -1,332 +1,301 @@
 <?php
 include '../template/header.php';
+
 session_start();
 include ("../config/koneksi.php");
-if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']) {
-    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nip'] . "' AND pegawai_password='" . $_SESSION['pegawai_password'] . "'");
-    if ($sql) {
-        $hasil = mysql_fetch_assoc($sql);
-        ?>
-        <body>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                        <a href="../beranda/index" class="brand">
-                            <small>
-                                <i class="icon-fire-extinguisher"></i>
-                                SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
-                            </small>
-                        </a><!--/.brand-->
+include '../config/functions.php'; //include function.php - very important
 
-                        <ul class="nav ace-nav pull-right">
+if (!loggedin()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
+    header("Location: ../login/login.php");
+    exit();
+}
 
-                            <li class="grey">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-bell-alt icon-animated-bell"></i>
-                                    <span class="badge badge-important">8</span>
-                                </a>
-
-                                <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-closer">
-                                    <li class="nav-header">
-                                        <i class="icon-warning-sign"></i>
-                                        8 Notifications
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <div class="clearfix">
-                                                <span class="pull-left">
-                                                    <i class="btn btn-mini no-hover btn-pink icon-comment"></i>
-                                                    Comment Regu Pemadam
-                                                </span>
-                                                <span class="pull-right badge badge-info">+5</span>
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <i class="btn btn-mini btn-primary icon-user"></i>
-                                            Ricky just signed up as an admin ...
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <div class="clearfix">
-                                                <span class="pull-left">
-                                                    <i class="btn btn-mini no-hover btn-success icon-shopping-cart"></i>
-                                                    Inventaris Barang
-                                                </span>
-                                                <span class="pull-right badge badge-success">+2</span>
-                                            </div>
-                                        </a>
-                                    </li>
-
-
-                                    <li>
-                                        <a href="#">
-                                            See all notifications
-                                            <i class="icon-arrow-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="light-blue">
-                                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                    <img class="nav-user-photo" src="../assets/img/a.jpg" alt="<?php echo $hasil['pegawai_nama']; ?>" />
-                                    <span class="user-info">
-                                        <small>Welcome,</small>
-                                        <?php
-                                        echo $hasil['pegawai_nama'];
-                                    }
-                                    ?>    
-                                </span>
-
-                                <i class="icon-caret-down"></i>
-                            </a>
-
-                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-
-                                <li>
-                                    <a href="../anggota/profile">
-                                        <i class="icon-user"></i>
-                                        Profile
-                                    </a>
-                                </li>
-
-                                <li class="divider"></li>
-
-                                <li>
-                                    <a href="../login/logout">
-                                        <i class="icon-off"></i>
-                                        Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul><!--/.ace-nav-->
-                </div><!--/.container-fluid-->
-            </div><!--/.navbar-inner-->
-        </div>
-
-        <div class="main-container container-fluid">
-            <a class="menu-toggler" id="menu-toggler" href="#">
-                <span class="menu-text"></span>
-            </a>
-
-            <?php
-            include '../template/sidebar.php';
+if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
+    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
+    $query = mysql_query("select * from bangunan") or die("Query failed: " . mysql_error());
+    if ($sql == false) {
+        die(mysql_error());
+        header('Location: ../login/login.php');
+        exit();
+    } else if (mysql_num_rows($sql)) {
+        while ($row = mysql_fetch_assoc($sql)) {
             ?>
+            <body>
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="container-fluid">
+                            <a href="../beranda/index" class="brand">
+                                <small>
+                                    <i class="icon-fire-extinguisher"></i>
+                                    SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
+                                </small>
+                            </a><!--/.brand-->
 
-            <div class="main-content">
-                <div class="breadcrumbs" id="breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="icon-home home-icon"></i>
-                            <a href="../beranda/index">Home</a>
+                            <ul class="nav ace-nav pull-right">
 
-                            <span class="divider">
-                                <i class="icon-angle-right arrow-icon"></i>
-                            </span>
-                        </li>
-                        <li>
-                            <a href="">Analisis Resiko</a>
+                                <li class="grey">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        <i class="icon-bell-alt icon-animated-bell"></i>
+                                        <span class="badge badge-important">8</span>
+                                    </a>
 
-                            <span class="divider">
-                                <i class="icon-angle-right arrow-icon"></i>
-                            </span>
-                        </li>
-                        <li class="active">Daftar Bangunan</li>
-                    </ul><!--.breadcrumb-->
+                                    <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-closer">
+                                        <li class="nav-header">
+                                            <i class="icon-warning-sign"></i>
+                                            8 Notifications
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                <div class="clearfix">
+                                                    <span class="pull-left">
+                                                        <i class="btn btn-mini no-hover btn-pink icon-comment"></i>
+                                                        Comment Regu Pemadam
+                                                    </span>
+                                                    <span class="pull-right badge badge-info">+5</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                <i class="btn btn-mini btn-primary icon-user"></i>
+                                                Ricky just signed up as an admin ...
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                <div class="clearfix">
+                                                    <span class="pull-left">
+                                                        <i class="btn btn-mini no-hover btn-success icon-shopping-cart"></i>
+                                                        Inventaris Barang
+                                                    </span>
+                                                    <span class="pull-right badge badge-success">+2</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+
+                                        <li>
+                                            <a href="#">
+                                                See all notifications
+                                                <i class="icon-arrow-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="light-blue">
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?= $row['pegawai_nama']; ?>" />
+                                        <span class="user-info">
+                                            <small>Welcome,</small>
+                                            <?= $row['pegawai_nama']; ?>    
+                                        </span>
+
+                                        <i class="icon-caret-down"></i>
+                                    </a>
+
+                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+
+                                        <li>
+                                            <a href="../anggota/profile">
+                                                <i class="icon-user"></i>
+                                                Profile
+                                            </a>
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <li>
+                                            <a href="../login/logout">
+                                                <i class="icon-off"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul><!--/.ace-nav-->
+                        </div><!--/.container-fluid-->
+                    </div><!--/.navbar-inner-->
                 </div>
 
-                <div class="page-content">
-                    <div class="page-header position-relative">
-                        <h1>
-                            Daftar Bangunan
-                            <small>
-                                <i class="icon-double-angle-right"></i>
-                                Angka Klasifikasi Resiko Kebakaran
-                            </small>
-                        </h1>
-                    </div><!--/.page-header-->
+                <div class="main-container container-fluid">
+                    <a class="menu-toggler" id="menu-toggler" href="#">
+                        <span class="menu-text"></span>
+                    </a>
 
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <!--PAGE CONTENT-->
-                            <h3 class="header smaller lighter blue">Angka Klasifikasi Resiko Kebakaran</h3>
-                            <div class="tabbable">
-                                <ul class="nav nav-tabs" id="myTab">
-                                    <li class="active">
-                                        <a data-toggle="tab" href="#fire3">
-                                            <i class="icon-warning-sign red"></i>
-                                            Tingkat 3
-                                        </a>
-                                    </li>
+                    <?php
+                    include '../template/sidebar.php';
+                    ?>
 
-                                    <li>
-                                        <a data-toggle="tab" href="#fire4">
-                                            <i class="icon-warning-sign red"></i>
-                                            Tingkat 4
-                                        </a>
-                                    </li>
+                    <div class="main-content">
+                        <div class="breadcrumbs" id="breadcrumbs">
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="icon-home home-icon"></i>
+                                    <a href="../beranda/index">Home</a>
 
-                                    <li>
-                                        <a data-toggle="tab" href="#fire5">
-                                            <i class="icon-warning-sign red"></i>
-                                            Tingkat 5
-                                        </a>
-                                    </li>
+                                    <span class="divider">
+                                        <i class="icon-angle-right arrow-icon"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <a href="">Analisis Resiko</a>
 
-                                    <li>
-                                        <a data-toggle="tab" href="#fire6">
-                                            <i class="icon-warning-sign red"></i>
-                                            Tingkat 6
-                                        </a>
-                                    </li>
+                                    <span class="divider">
+                                        <i class="icon-angle-right arrow-icon"></i>
+                                    </span>
+                                </li>
+                                <li class="active">Daftar Bangunan</li>
+                            </ul><!--.breadcrumb-->
+                        </div>
 
-                                    <li>
-                                        <a data-toggle="tab" href="#fire7">
-                                            <i class="icon-warning-sign red"></i>
-                                            Tingkat 7
-                                        </a>
-                                    </li>
-                                </ul>
+                        <div class="page-content">
+                            <div class="page-header position-relative">
+                                <h1>
+                                    Daftar Bangunan
+                                    <small>
+                                        <i class="icon-double-angle-right"></i>
+                                        Angka Klasifikasi Resiko Kebakaran
+                                    </small>
+                                </h1>
+                            </div><!--/.page-header-->
 
-                                <div class="tab-content">
-                                    <div id="fire3" class="tab-pane in active">
-                                        <table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th class="center">Peruntukan Bangunan</th>
-                                                    <th class="center">Status</th>
-                                                    <th class="center">Keterangan</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Pabrik tepung</td>
-                                                    <td>
-                                                        <span class="label label-important">Sangat Tinggi</span>
-                                                    </td>
-                                                    <td> - </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div id="fire4" class="tab-pane">
-                                        <table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th class="center">Peruntukan Bangunan</th>
-                                                    <th class="center">Status</th>
-                                                    <th class="center">Keterangan</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Pabrik tepung</td>
-                                                    <td>
-                                                        <span class="label label-important">Sangat Tinggi</span>
-                                                    </td>
-                                                    <td> - </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div id="fire5" class="tab-pane"><table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th class="center">Peruntukan Bangunan</th>
-                                                    <th class="center">Status</th>
-                                                    <th class="center">Keterangan</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Pabrik tepung</td>
-                                                    <td>
-                                                        <span class="label label-important">Sangat Tinggi</span>
-                                                    </td>
-                                                    <td> - </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div id="fire6" class="tab-pane"><table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th class="center">Peruntukan Bangunan</th>
-                                                    <th class="center">Status</th>
-                                                    <th class="center">Keterangan</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Pabrik tepung</td>
-                                                    <td>
-                                                        <span class="label label-important">Sangat Tinggi</span>
-                                                    </td>
-                                                    <td> - </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div id="fire7" class="tab-pane">
-                                        <table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th class="center">Peruntukan Bangunan</th>
-                                                    <th class="center">Status</th>
-                                                    <th class="center">Keterangan</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Pabrik tepung</td>
-                                                    <td>
-                                                        <span class="label label-important">Sangat Tinggi</span>
-                                                    </td>
-                                                    <td>&nbsp;&dash;&nbsp;</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                            <div class="row-fluid">
+                                <!--PAGE CONTENT-->
+                                <div class="table-header">
+                                    Angka Klasifikasi Resiko Kebakaran
                                 </div>
-                            </div>
 
-                            <h5 class="header smaller lighter blue">Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan</h5>
-                            <!--PAGE CONTENT ENDS-->
-                        </div><!--/.span-->
-                    </div><!--/.row-fluid-->
-                </div><!--/.page-content-->
+                                <table id="bangunan" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Nama</th>
+                                            <th>Tingkat Bahaya</th>
+                                            <th>Keterangan</th>
+                                    </thead>
+
+                                    <tbody>
+                                        <?php
+                                        $no = 1;
+                                        while ($row = mysql_fetch_array($query)) {
+                                            ?>
+                                            <tr>
+                                                <td><?= $no ?></td>
+                                                <td><?= $row['NAMA_BANGUNAN'] ?></td>
+                                                <td><?= $row['TINGKAT_BANGUNAN'] ?></td>
+                                                <td><?= $row['KET_BANGUNAN'] ?></td>
+                                            </tr>
+                                            <?php $no++;
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <dl>
+                                    <dt class="light-red">Note :</dt>
+                                    <dd><i class="icon-warning-sign red"></i>&nbsp;&nbsp;<b>Semakin rendah</b> Tingkat Bahaya <b>semakin berbahaya</b> bahaya kebakaran yang terjadi.</dd>
+                                </dl>
+                                <h5 class="header smaller">Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.</h5>
+                                <!--PAGE CONTENT ENDS-->
+                                <!--/.span-->
+                            </div><!--/.row-fluid-->
+                        </div><!--/.page-content-->
 
 
-                <?php
-                include '../template/footer.php';
-            } else {
-                header("location:../login/login");
+                        <?php
+                        //include '../template/footer.php';
+                    }
+                }
             }
-            ?>  
-            </body>
-            </html>
+            ?>
+            <div class="ace-settings-container" id="ace-settings-container">
+                <div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
+                    <i class="icon-cog bigger-150"></i>
+                </div>
+
+                <div class="ace-settings-box" id="ace-settings-box">
+                    <div>
+                        <div class="pull-left">
+                            <select id="skin-colorpicker" class="hide">
+                                <option data-class="default" value="#438EB9" />#438EB9
+                                <option data-class="skin-1" value="#222A2D" />#222A2D
+                                <option data-class="skin-2" value="#C6487E" />#C6487E
+                                <option data-class="skin-3" value="#D0D0D0" />#D0D0D0
+                            </select>
+                        </div>
+                        <span>&nbsp; Choose Skin</span>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" class="ace-checkbox-2" id="ace-settings-header" />
+                        <label class="lbl" for="ace-settings-header"> Fixed Header</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" class="ace-checkbox-2" id="ace-settings-sidebar" />
+                        <label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" class="ace-checkbox-2" id="ace-settings-breadcrumbs" />
+                        <label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
+                        <label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+                    </div>
+                </div>
+            </div><!--/#ace-settings-container-->
+        </div><!--/.main-content-->
+    </div><!--/.main-container-->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+
+    <!--basic scripts-->
+
+    <!--[if !IE]>-->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    <!--<![endif]-->
+
+    <!--[if IE]>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <![endif]-->
+
+    <!--[if !IE]>-->
+
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!--<![endif]-->
+
+    <script type="text/javascript">
+        if ("ontouchend" in document)
+            document.write("<script src='../assets/js-ace/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+    <script src="../assets/js-ace/bootstrap.min.js"></script>
+
+    <!--page specific plugin scripts-->
+    <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
+    <script src="../assets/js-ace/jquery.dataTables.min.js"></script>
+    <script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+    <script src="../assets/js-ace/ace-elements.min.js"></script>
+    <script src="../assets/js-ace/ace.min.js"></script>
+
+    <!--inline scripts related to this page-->
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#bangunan').DataTable();
+        });
+    </script>
+</body>
+</html>

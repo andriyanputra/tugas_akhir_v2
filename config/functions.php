@@ -12,11 +12,18 @@ function loggedin() {
     }
 }
 
-//ganti password chech function
+//ganti password check function
 function repass() {
     if (isset($_COOKIE['rePass'])) {
         $repass = TRUE;
         return $repass;
+    }
+}
+
+function relock() {
+    if (isset($_COOKIE['reLock'])) {
+        $relock = TRUE;
+        return $relock;
     }
 }
 

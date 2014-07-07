@@ -1,14 +1,25 @@
+<?php
+include '../config/functions.php';
+include '../config/koneksi.php';
+
+if (!relock()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
+    header("Location: ../login/login.php");
+    exit();
+}
+
+if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['reLock'])) {
+    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['reLock'] . "' ");
+    if ($sql == false) {
+        die(mysql_error());
+        header('Location: ../login/login.php');
+        exit();
+    } else if (mysql_num_rows($sql)) {
+        while ($row = mysql_fetch_assoc($sql)) {
+?>
 <!DOCTYPE html>
 
 <!-- NEW CODE -->
-<?php
-/* include '../config/functions.php'; //includes the functions.php - very important
 
-  if (loggedin()) { //check if the user is logged in, if it is, it will skip this page and jump to the 'user-loggedin.php' page.
-  header("Location: ../beranda/index.php");
-  exit();
-  } */
-?>
 <!-- END NEW CODE -->
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -55,18 +66,18 @@
                 </a>
             </div>
             <div class="page-body">
-                <img class="page-lock-img" src="assets/img/profile/profile.jpg" alt="">
+                <img class="page-lock-img" src="../assets/img/img-anggota/<?=$row['pegawai_foto']; ?>" alt="">
                 <div class="page-lock-info">
-                    <h1>Bob Nilson</h1>
+                    <h1> <?php echo $row['pegawai_nama']; ?></h1>
                     <span class="email">
-                        <?php ?>
+                        <?php echo $row['pegawai_email'];?>
                     </span>
                     <span class="locked">
-                        Locked
+                        Terkunci
                     </span>
                     <form class="form-inline" method="post" action="../config/reLock.php">
                         <div class="input-group input-medium">
-                            <input type="text" class="form-control" name="lock" placeholder="Password" required oninvalid="this.setCustomValidity('Masukkan password !!')" oninput="setCustomValidity('')" />
+                            <input type="password" class="form-control" autocomplete="off" name="lock" placeholder="Password" required oninvalid="this.setCustomValidity('Masukkan password !!')" oninput="setCustomValidity('')" />
                             <span class="input-group-btn">
                                 <button type="submit" class="btn blue icn-only"><i class="m-icon-swapright m-icon-white"></i></button>
                             </span>
@@ -74,7 +85,7 @@
                         <!-- /input-group -->
                         <div class="relogin">
                             <a href="login">
-                                Bukan <?php ?> ?
+                                Bukan <?php echo $row['pegawai_nama']; }}}?> ?
                             </a>
                         </div>
                     </form>

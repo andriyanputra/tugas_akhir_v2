@@ -30,11 +30,32 @@
 </a>
 
 <script type="text/javascript" src="../assets/js-ace/ajax.js"></script>
+<!-- Zooming -->
+<script type="text/javascript" src="../assets/js-zoom/jquery.elevatezoom.js"></script>
+<script type="text/javascript" src="../assets/js-zoom/jquery-1.8.3.min.js"></script>
+<!-- END Zooming -->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <script type="text/javascript">
     window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+</script>
+
+<!-- Ganti gambar peta -->
+<script type="text/javascript">
+    function changeImage(url) {
+        var img = document.getElementById('gambar2');
+        img.src = url;
+
+        //var img2 = document.getElementById('gambar2');
+        img.setAttribute('data-zoom-image', url);
+
+        $(img).elevatedZoom({
+            zoomWindowFadeIn: 500,
+            zoomWindowFadeOut: 700,
+            scrollZoom: true
+        });
+    }
 </script>
 
 <script type="text/javascript">
@@ -43,17 +64,14 @@
 </script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script type="text/javascript" src="../assets/js-map/jquery.maphilight.min.js"></script>
-<script type="text/javascript">$(function() {
-        $('.map').maphilight();
-    });
-</script>
+
 
 <script src="../assets/js-ace/bootstrap.min.js"></script>
 
 <script src="../assets/js-ace/additional-methods.min.js"></script>
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
+<script src="../assets/js-ace/chosen.jquery.min.js"></script>
 <script src="../assets/js-ace/jquery.gritter.min.js"></script>
 <script src="../assets/js-ace/bootbox.min.js"></script>
 <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
@@ -75,6 +93,64 @@
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
+
+<!--<script src="../assets/plugins/bootstrap-sessiontimeout/jquery.sessionTimeout.min.js" type="text/javascript"></script>-->
+<!-- END PAGE LEVEL SCRIPTS -->
+<script src="../assets/scripts/core/app.js"></script>
+<!--<script>
+jQuery(document).ready(function() {    
+   App.init();
+   // initialize session timeout settings
+   $.sessionTimeout({
+    title: 'Session Timeout Notification',
+    message: 'Sesi Anda sudah hampir habis.',
+    keepAliveUrl: '../login/alive.php',
+    redirUrl: '../config/doLock.php',
+    logoutUrl: '../login/logout.php',
+    warnAfter: 360000, //warn after 1 hours
+    redirAfter: 10000, //redirect after 10 seconds
+   });
+});
+</script>-->
+
+<!--inline scripts related to this page-->
+
+<script type="text/javascript">
+    $(function() {
+
+        $('#simple-colorpicker-1').ace_colorpicker({pull_right: true}).on('change', function() {
+            var color_class = $(this).find('option:selected').data('class');
+            var new_class = 'widget-header';
+            if (color_class != 'default')
+                new_class += ' header-color-' + color_class;
+            $(this).closest('.widget-header').attr('class', new_class);
+        });
+
+
+        // scrollables
+        $('.slim-scroll').each(function() {
+            var $this = $(this);
+            $this.slimScroll({
+                height: $this.data('height') || 100,
+                railVisible: true
+            });
+        });
+
+
+        // Portlets (boxes)
+        $('.widget-container-span').sortable({
+            connectWith: '.widget-container-span',
+            items: '> .widget-box',
+            opacity: 0.8,
+            revert: true,
+            forceHelperSize: true,
+            placeholder: 'widget-placeholder',
+            forcePlaceholderSize: true,
+            tolerance: 'pointer'
+        });
+
+    });
+</script>
 
 
 <script type="text/javascript">
@@ -712,7 +788,7 @@
 </script>
 <!--PROFILE PAGE ENDS-->
 
-<!--PROFILE TAMBAH PAGE BEGINS-->
+<!--FORM WIZARD PAGE BEGINS-->
 
 <!--PROFILE TAMBAH PAGE ENDS-->
 

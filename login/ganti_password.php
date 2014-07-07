@@ -339,7 +339,7 @@ if (isset($_COOKIE['rePass'])) {
                   <script src="assets/js/excanvas.min.js"></script>
                 <![endif]-->
 
-                                                    <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
+                <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
                 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
                 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
                 <script src="../assets/js-ace/jquery.gritter.min.js"></script>
