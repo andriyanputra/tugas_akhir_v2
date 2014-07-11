@@ -283,101 +283,119 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             </div><!-- end row fliud -->
                                         </div><!-- end span12 -->
 
-                                        <form class="form-horizontal">
+                                        <form class="form-horizontal" method="POST" action="Fanalisis/analisisProses.php">
                                             <div class="row-fluid">
                                                 <div class="span12">
-                                                    <div class="span6">
-                                                        <div class="widget-box transparent">
-                                                            <div class="widget-header header-color-blue2">
-                                                                <h3>Lokasi Kejadian Kebakaran</h3>
-                                                                <div class="widget-toolbar">
+                                                    <form>
+                                                        <div class="span6">
+                                                            <div class="widget-box transparent">
+                                                                <div class="widget-header header-color-blue2">
+                                                                    <h3>Lokasi Kejadian Kebakaran</h3>
+                                                                    <div class="widget-toolbar">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div class="widget-body">
-                                                                <div class="widget-main padding-4">
-                                                                    <div class="content">
-                                                                        <div class="space-6"></div>
-                                                                        <form id="frm-lokasi" method="POST" action="">
-                                                                            <div class="control-group">
-                                                                                <label class="control-label" for="kecamatan">Pilih Kecamatan : </label>
-                                                                                <?php
-                                                                                $query_parent = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
-                                                                                ?>
-                                                                                <div class="controls">
-                                                                                    <span>
-                                                                                        <select name="kecamatan" id="kecamatan" class="chzn-select" data-placeholder="Pilih Kecamatan...">
-                                                                                            <option value="" />
-                                                                                            <?php while ($row = mysql_fetch_array($query_parent)): ?>
-                                                                                                <option value="<?php echo $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
-                                                                                            <?php endwhile; ?>
-                                                                                        </select>
-                                                                                    </span>
+                                                                <div class="widget-body">
+                                                                    <div class="widget-main padding-4">
+                                                                        <div class="content">
+                                                                            <div class="space-6"></div>
+                                                                            <div id="frm-lokasi">
+
+                                                                                <div class="control-group">
+                                                                                    <label class="control-label" for="kecamatan">Pilih Kecamatan : </label>
+                                                                                    <?php
+                                                                                    $query_parent = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
+                                                                                    ?>
+                                                                                    <div class="controls">
+                                                                                        <span>
+                                                                                            <select name="kecamatan" onchange="sumber();" id="kecamatan" class="chzn-select" data-placeholder="Pilih Kecamatan...">
+                                                                                                <option value="" />Pilih Kecamatan...
+                                                                                                <?php while ($row = mysql_fetch_array($query_parent)): ?>
+                                                                                                    <option value="<?php echo $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
+                                                                                                <?php endwhile; ?>
+                                                                                            </select>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="control-group">
+                                                                                    <label class="control-label" for="desa">Pilih Desa : </label>
+                                                                                    <div class="controls">
+                                                                                        <span>
+                                                                                            <select name="desa" id="desa">
+                                                                                                <option value=""  />PIlih Desa...
+                                                                                            </select>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="control-group">
+                                                                                    <label class="control-label" for="sumber_air">Sumber air : </label>
+                                                                                    <div class="controls">
+                                                                                        <span>
+                                                                                            <select name="sumber_air" id="sumber_air">
+                                                                                                <option value="" />Sumber Air...
+                                                                                            </select>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="control-group">
+                                                                                    <label class="control-label">Jumlah Kebutuhan Air :</label>
+
+                                                                                    <div class="controls">
+                                                                                        <span class="span12">
+                                                                                            <label>
+                                                                                                <input onchange='check_value();' name="exposure" value="1" type="radio"/>
+                                                                                                <span class="lbl"> 
+                                                                                                    <b class="text-error">Tanpa</b> resiko bangunan berdekatan. 
+                                                                                                    <a href="#tanpa" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="top" title="More details.">?</span></a>
+                                                                                                </span>
+                                                                                            </label>
+
+                                                                                            <label>
+                                                                                                <input onchange='check_value();' name="exposure" value="2" type="radio"/>
+                                                                                                <span class="lbl"> 
+                                                                                                    <b class="text-error">Dengan</b> resiko bangunan berdekatan. 
+                                                                                                    <a href="#dengan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
+                                                                                                </span>
+                                                                                            </label>
+                                                                                        </span>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-
-                                                                            <div class="control-group">
-                                                                                <label class="control-label" for="desa">Pilih Desa : </label>
-                                                                                <div class="controls">
-                                                                                    <span>
-                                                                                        <select name="desa" id="desa">
-                                                                                            <option value="" />PIlih Desa...
-                                                                                        </select>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="control-group">
-                                                                                <label class="control-label">Jumlah Kebutuhan Air :</label>
-
-                                                                                <div class="controls">
-                                                                                    <span class="span12">
-                                                                                        <label>
-                                                                                            <input name="exposure" value="1" type="radio"/>
-                                                                                            <span class="lbl"> 
-                                                                                                <b class="text-error">Tanpa</b> resiko bangunan berdekatan. 
-                                                                                                <a href="#tanpa" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="top" title="More details.">?</span></a>
-                                                                                            </span>
-                                                                                        </label>
-
-                                                                                        <label>
-                                                                                            <input name="exposure" value="2" type="radio"/>
-                                                                                            <span class="lbl"> 
-                                                                                                <b class="text-error">Dengan</b> resiko bangunan berdekatan. 
-                                                                                                <a href="#dengan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
-                                                                                            </span>
-                                                                                        </label>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="span6">
-                                                        <div class="widget-box transparent" id="widget">
-                                                            <div class="widget-body">
-                                                                <div class="widget-main padding-4">
-                                                                    <div class="content">
-                                                                        <div class="space-6"></div>
-                                                                        <form >
+                                                        <div class="span6">
+                                                            <div class="widget-box transparent" id="widget">
+                                                                <div class="widget-body">
+                                                                    <div class="widget-main padding-4">
+                                                                        <div class="content">
+                                                                            <div class="space-6"></div>
                                                                             <p align="center" class="text-error">
                                                                                 Pasokan Air Minuman Berdasarkan Resiko Bangunan Berdekatan.
                                                                             <hr>
                                                                             </p>
 
                                                                             <div class="control-group">
-                                                                                <label class="control-label" for="form-field-4">Pasokan Air Minuman :</label><br />
+                                                                                Rumus Pasokan Air Minimum :
+                                                                                <p align="center" id="rumus-tanpa">
+                                                                                    <img src="../assets/img/pam1.jpg">
+                                                                                </p>
+                                                                                <p align="center" id="rumus-dengan">
+                                                                                    <img src="../assets/img/pam2.jpg">
+                                                                                </p>
                                                                             </div>
                                                                             <div class="control-group">
                                                                                 <label class="control-label" for="volume">Volume Bangunan :</label>
                                                                                 <div class="controls">
-                                                                                    <input class="span2" type="text" placeholder="m" /> x
-                                                                                    <input class="span2" type="text" placeholder="m" /> x
-                                                                                    <input class="span2" type="text" placeholder="m" />
+                                                                                    <input class="span2" name="panjang" type="text" placeholder="Panjang" /> x
+                                                                                    <input class="span2" name="lebar" type="text" placeholder="Lebar" /> x
+                                                                                    <input class="span2" name="tinggi" type="text" placeholder="Tinggi" />&nbsp;&nbsp;(Satuan meter)
                                                                                 </div>
                                                                             </div>
 
@@ -387,8 +405,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 $bangunan = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
                                                                                 ?>
                                                                                 <div class="controls">
-                                                                                    <select name="bangunan" id="bangunan" class="chzn-select" data-placeholder="Pilih Bangunan...">
-                                                                                        <option value="" />
+                                                                                    <select name="bangunan" id="bangunan" onchange="run();" class="chzn-select" data-placeholder="Pilih Bangunan...">
+                                                                                        <option value="" />Pilih Bangunan...
                                                                                         <?php while ($r = mysql_fetch_array($bangunan)): ?>
                                                                                             <option value="<?php echo $r['ID_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
                                                                                         <?php endwhile; ?>
@@ -398,26 +416,37 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="control-group" id="faktor-bahaya">
-                                                                                <label class="control-label" for="faktor-bahaya">Faktor Bahaya :</label>
+                                                                            <div class="control-group">
+                                                                                <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
                                                                                 <div class="controls">
-                                                                                    <select name="faktor-bahaya">
+                                                                                    <select name="angka-kostruksi" id="angka-kostruksi" onchange="go();">
                                                                                         <option value="" />Pilih Faktor Bahaya...
-                                                                                        <option value="1"> Konstruksi tahan api
-                                                                                        <option value="2"> Konstruksi kayu berat (tidak mudah terbakar)
-                                                                                        <option value="3"> Konstruksi biasa
-                                                                                        <option value="4"> Konstruksi kayu (mudah terbakar)
+                                                                                        <option value="0.5"> Konstruksi tahan api
+                                                                                        <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                                                                                        <option value="1.0"> Konstruksi biasa
+                                                                                        <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
                                                                                     </select>
+
+                                                                                    <input class="span2" name="faktor-konstruksi" id="faktor-konstruksi" type="text" placeholder="" />
                                                                                 </div>
                                                                             </div>
-                                                                        </form>
+
+                                                                            <div class="control-group" id="faktor-bahaya">
+                                                                                <label for="faktor-bahaya">Faktor bahaya dari bangunan berdekatan bernilai : 1.5 kali </label>
+                                                                                <input type="hidden" name="faktor-bahaya" value="1.5" />
+                                                                            </div>
+
+                                                                            <div class="control-group">
+                                                                                <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                                                                                <div class="controls">
+                                                                                    <input class="span2" name="hasil" type="text" placeholder="" /> &nbsp;m<sup>3</sup>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-
-
                                                 </div><!-- end row fliud -->
                                             </div><!-- end span12 -->
                                             <div class="form-actions">
@@ -558,7 +587,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <!--[if !IE]>-->
 
         <script type="text/javascript">
-                                                                                    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                                        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
         </script>
 
         <!--<![endif]-->
@@ -583,8 +612,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <script type="text/javascript">
             $(document).ready(function() {
 
+                $("#desa").change(function() {
+                    $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
+                    $.get('sumberProses.php?sumber=' + $(this).val(), function(data) {
+                        $("#sumber_air").html(data);
+                        $('#loader').slideUp(200, function() {
+                            $(this).remove();
+                        });
+                    });
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+
                 $("#kecamatan").change(function() {
-                    $(this).before('<div id="loader" class="help-inline"><img src="../assets/img/loading.gif" alt="loading subcategory" /></div>');
+                    $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
                     $.get('kecamatan.php?kecamatan=' + $(this).val(), function(data) {
                         $("#desa").html(data);
                         $('#loader').slideUp(200, function() {
@@ -592,8 +635,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         });
                     });
                 });
-
             });
+
+            function run() {
+                document.getElementById("angka").value = document.getElementById("bangunan").value;
+            }
+
+            function sumber() {
+                //document.getElementById('kec_sumber').innerHTML = value;
+                //document.getElementById("kec_sumber").value = document.getElementById("kecamatan").value;
+
+            }
+
+            function go() {
+                document.getElementById("faktor-konstruksi").value = document.getElementById("angka-kostruksi").value;
+            }
+
             /*document.getElementById('kecamatan').addEventListener('change', function() {
              var style = this.value >= 1 ? 'block' : 'none';
              document.getElementById('hilang').style.display = style;
@@ -611,23 +668,30 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
             });
             function myFunction()
             {
-                document.getElementById('desa').reset();
+                document.getElementById('desa').refresh();
             }
 
             var radio = document.getElementsByName("exposure");
-            //var widget = document.getElementById("widget");
             var faktor = document.getElementById("faktor-bahaya");
-            faktor.style.display = "none";  // hide
+            var rumus_tanpa = document.getElementById("rumus-tanpa");
+            var rumus_dengan = document.getElementById("rumus-dengan");
+            faktor.style.visibility = "hidden";  // hide
+            rumus_tanpa.style.display = "none";  // hide
+            rumus_dengan.style.display = "none";  // hide
             for (var i = 0; i < radio.length; i++) {
                 radio[i].onclick = function() {
                     var val = this.value;
                     if (val == '1') {
-                        //widget.style.display = 'block';
-                        faktor.style.display = "none";
+                        rumus_tanpa.style.display = 'block';
+                        rumus_dengan.style.display = 'none';
+                        faktor.style.visibility = "hidden";
+                        //angka.style.visibility = "hidden";
                     }
                     else if (val == '2') {
-                        faktor.style.display = "block";
-                        //widget.style.display = 'block';
+                        rumus_tanpa.style.display = 'none';
+                        rumus_dengan.style.display = 'block';
+                        faktor.style.visibility = "visible";
+                        //angka.style.visibility = "visible";
                     }
 
                 }
@@ -637,15 +701,14 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
             function changeImage(url) {
                 var img = document.getElementById('gambar2');
                 img.src = url;
-
-                //var img2 = document.getElementById('gambar2');
-                img.setAttribute('data-zoom-image', url);
-
-                $(img).elevatedZoom({
-                    zoomWindowFadeIn: 500,
-                    zoomWindowFadeOut: 700,
-                    scrollZoom: true
-                });
+                /*var img2 = document.getElementById('gambar2');
+                 img.setAttribute('data-zoom-image', url);
+                 
+                 $(img).elevatedZoom({
+                 zoomWindowFadeIn: 500,
+                 zoomWindowFadeOut: 700,
+                 scrollZoom: true
+                 });*/
             }
         </script>
         <script type="text/javascript">

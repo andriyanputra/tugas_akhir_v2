@@ -163,43 +163,269 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             </div><!--/.page-header-->
 
                             <div class="row-fluid">
-                                <!--PAGE CONTENT-->
-                                <div class="table-header">
-                                    Angka Klasifikasi Resiko Kebakaran
-                                </div>
+                                <div class="span12">
+                                    <!--PAGE CONTENT-->
+                                    <div class="table-header">
+                                        Angka Klasifikasi Resiko Kebakaran.
+                                    </div>
 
-                                <table id="bangunan" class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Nama</th>
-                                            <th>Tingkat Bahaya</th>
-                                            <th>Keterangan</th>
-                                    </thead>
-
-                                    <tbody>
-                                        <?php
-                                        $no = 1;
-                                        while ($row = mysql_fetch_array($query)) {
-                                            ?>
+                                    <table id="bangunan" class="table table-striped table-bordered table-hover">
+                                        <thead>
                                             <tr>
-                                                <td><?= $no ?></td>
-                                                <td><?= $row['NAMA_BANGUNAN'] ?></td>
-                                                <td><?= $row['TINGKAT_BANGUNAN'] ?></td>
-                                                <td><?= $row['KET_BANGUNAN'] ?></td>
+                                                <th>No.</th>
+                                                <th>Peruntukan Bangunan</th>
+                                                <th><i class="icon-warning-sign red"></i>&nbsp;Tingkat Bahaya</th>
+                                                <th>Keterangan</th>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php
+                                            $no = 1;
+                                            while ($row = mysql_fetch_array($query)) {
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo '' . $no . '.'; ?></td>
+                                                    <td><?= $row['NAMA_BANGUNAN'] ?></td>
+                                                    <td class="center"><?= $row['TINGKAT_BANGUNAN'] ?></td>
+                                                    <td><?= $row['KET_BANGUNAN'] ?></td>
+                                                </tr>
+                                                <?php
+                                                $no++;
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                    <dl>
+                                        <dt class="light-red">Note :</dt>
+                                        <dd><i class="icon-warning-sign red"></i>&nbsp;&nbsp;<b>Semakin rendah</b> Tingkat Bahaya <b>semakin berbahaya</b> bahaya kebakaran yang terjadi.</dd>
+                                    </dl>
+
+                                    <div class="space-24"></div>
+
+                                    <div class="table-header">
+                                        Angka Klasifikasi Konstruksi Bangunan Gedung.
+                                    </div>
+
+                                    <table id="konstruksi" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Nama</th>
+                                                <th>Tipe Konstruksi</th>
+                                                <th>Angka Klasifikasi</th>
+                                                <th></th>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td>1.</td>
+                                                <td>Konstruksi tahan api</td>
+                                                <td>Tipe 1</td>
+                                                <td>0.5</td>
+                                                <td>
+                                                    <a href="#detail-1" role="button" class="blue" data-toggle="modal">
+                                                        More details...
+                                                    </a>
+                                                </td>
                                             </tr>
-                                            <?php $no++;
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                                <dl>
-                                    <dt class="light-red">Note :</dt>
-                                    <dd><i class="icon-warning-sign red"></i>&nbsp;&nbsp;<b>Semakin rendah</b> Tingkat Bahaya <b>semakin berbahaya</b> bahaya kebakaran yang terjadi.</dd>
-                                </dl>
-                                <h5 class="header smaller">Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.</h5>
-                                <!--PAGE CONTENT ENDS-->
-                                <!--/.span-->
+                                            <tr>
+                                                <td>2.</td>
+                                                <td>Konstruksi kayu berat (tidak mudah terbakar)</td>
+                                                <td>Tipe 2</td>
+                                                <td>0.75</td>
+                                                <td>
+                                                    <a href="#detail-2" role="button" class="blue" data-toggle="modal">
+                                                        More details...
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3.</td>
+                                                <td>Konstruksi biasa</td>
+                                                <td>Tipe 3</td>
+                                                <td>1.0</td>
+                                                <td>
+                                                    <a href="#detail-3" role="button" class="blue" data-toggle="modal">
+                                                        More details...
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4.</td>
+                                                <td>Konstruksi kerangka kayu</td>
+                                                <td>Tipe 4</td>
+                                                <td>1.5</td>
+                                                <td>
+                                                    <a href="#detail-4" role="button" class="blue" data-toggle="modal">
+                                                        More details...
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h5 class="header smaller">Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.</h5>
+
+                                    <div id="detail-1" class="modal hide fade" tabindex="-1">
+                                        <div class="modal-header no-padding">
+                                            <div class="table-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                <dd align="center">Klasifikasi Konstruksi Bangunan Gedung Tipe I</dd>
+                                                <dd align="center">(Konstruksi Tahan Api)</dd>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body no-padding">
+                                            <div class="row-fluid">
+                                                <div class="space-4"></div>
+                                                <p style="text-align:justify;text-justify:inter-word;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    Bangunan gedung yang dibuat dengan bahan tahan api (beton, batadan lain-lain dengan bahan logam yang dilindungi) dengan struktur yang dibuat sedemikian, sehingga tahan terhadap peruntukan dan perambatan api.
+                                                </p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <i class="icon-warning-sign red"></i>&nbsp;&nbsp;
+                                                    Angka klasifikasi konstruksi : 0.5
+                                                </p>
+                                                <br/>
+                                                <p align="left">
+                                                <blockquote>
+                                                    <small>
+                                                        Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                    </small>
+                                                </blockquote>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                <i class="icon-ok"></i>
+                                                Ok
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="detail-2" class="modal hide fade" tabindex="-1">
+                                        <div class="modal-header no-padding">
+                                            <div class="table-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                <dd align="center">Klasifikasi Konstruksi Bangunan Gedung Tipe II</dd>
+                                                <dd align="center">(Konstruksi Kayu Berat - Tidak Mudah Terbakar)</dd>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body no-padding">
+                                            <div class="row-fluid">
+                                                <div class="space-4"></div>
+                                                <p style="text-align:justify;text-justify:inter-word;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    Bangunan gedung yang seluruh bagian konstruksinya (termasuk dinding, lantai, dan atap) terdiri dari bahan yang tidak mudah terbakar yang tidak termasuk sebagai bahan tahan api, termasuk bangunan gedung konstruksi kayu dengan dinding bata, tiang kayu 20.3 cm, lantai kayu 76 mm, atap kayu 51 mm, balok kayu 15.2 x 25.4 cm.
+                                                </p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <i class="icon-warning-sign red"></i>&nbsp;&nbsp;
+                                                    Angka klasifikasi konstruksi : 0.75
+                                                </p>
+                                                <br/>
+                                                <p align="left">
+                                                <blockquote>
+                                                    <small>
+                                                        Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                    </small>
+                                                </blockquote>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                <i class="icon-ok"></i>
+                                                Ok
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="detail-3" class="modal hide fade" tabindex="-1">
+                                        <div class="modal-header no-padding">
+                                            <div class="table-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                <dd align="center">Klasifikasi Konstruksi Bangunan Gedung Tipe III</dd>
+                                                <dd align="center">(Konstruksi Biasa)</dd>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body no-padding">
+                                            <div class="row-fluid">
+                                               <p style="text-align:justify;text-justify:inter-word;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    Bangunan gedung dengan dinding luar bata atau bahan tidak mudah terbakar lainnya sedangkan bagian bangunan gedung lainnya terdiri dari kayu atau bahan yang mudah terbakar.
+                                                </p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <i class="icon-warning-sign red"></i>&nbsp;&nbsp;
+                                                    Angka klasifikasi konstruksi : 1.0
+                                                </p>
+                                                <br/>
+                                                <p align="left">
+                                                <blockquote>
+                                                    <small>
+                                                        Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                    </small>
+                                                </blockquote>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                <i class="icon-ok"></i>
+                                                Ok
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="detail-4" class="modal hide fade" tabindex="-1">
+                                        <div class="modal-header no-padding">
+                                            <div class="table-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                <dd align="center">Klasifikasi Konstruksi Bangunan Gedung Tipe IV</dd>
+                                                <dd align="center">(Konstruksi Kerangka Kayu)</dd>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body no-padding">
+                                            <div class="row-fluid">
+                                                <p style="text-align:justify;text-justify:inter-word;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    Bangunan gedung (kecuali bangunan gedung rumah tinggal) yang strukturnya sebagian atau seluruhnya terdiri dari kayu atau bahan mudah terbakar yang tidak tergolong dalam konstruksi bangunan gedung biasa (tipe III).
+                                                </p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <i class="icon-warning-sign red"></i>&nbsp;&nbsp;
+                                                    Angka klasifikasi konstruksi : 1.5
+                                                </p>
+                                                <br/>
+                                                <p align="left">
+                                                <blockquote>
+                                                    <small>
+                                                        Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                    </small>
+                                                </blockquote>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                <i class="icon-ok"></i>
+                                                Ok
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!--PAGE CONTENT ENDS-->
+                                </div><!--/.span-->
                             </div><!--/.row-fluid-->
                         </div><!--/.page-content-->
 
@@ -294,7 +520,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
     <script type="text/javascript">
         $(document).ready(function() {
-            var table = $('#bangunan').DataTable();
+            var bangunan = $('#bangunan').DataTable();
+            //var konstruksi = $('#konstruksi').DataTable();
         });
     </script>
 </body>

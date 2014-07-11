@@ -190,7 +190,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         while ($data = mysql_fetch_array($query)) {
                                             ?>
                                             <tr>
-                                                <td><?php echo $no; ?></td>
+                                                <td><?php echo ''.$no.'.';  ?></td>
                                                 <td><?php echo $data['pegawai_nip']; ?></td>
                                                 <td><?php echo $data['pegawai_nama']; ?></td>
                                                 <td><?php echo $data['pegawai_alamat']; ?></td>

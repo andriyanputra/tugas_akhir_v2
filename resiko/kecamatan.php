@@ -16,7 +16,7 @@ ON (desa.KECAMATAN_ID = kecamatan.KECAMATAN_ID)WHERE kecamatan.KECAMATAN_ID = $k
 $hasil =  mysql_query($b) or die("Query failed: " . mysql_error());
 
 while($w = mysql_fetch_array($hasil)) {
-    echo "<option value=$w[KECAMATAN_ID]>$w[DESA_NAMA]</option>";
+    echo "<option value=$w[KECAMATAN_ID] selected=selected>$w[DESA_NAMA]</option>";
 }
 
 ?>
