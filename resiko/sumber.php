@@ -169,10 +169,33 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT-->
-                                    <div class="span10">
-                                    </div>
-                                    <div class="span2">
-                                        <a href="Fsumber/sumberTambah">
+                                    <?php
+                                    if (isset($_GET['msg'])) {
+                                        if ($_GET['msg'] == 'success') {
+                                            ?>
+                                            <div class="widget-box transparent">
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-6">
+                                                        <div class="alert alert-block alert-success">
+                                                            <button type="button" class="close" data-dismiss="alert">
+                                                                <i class="icon-remove"></i>
+                                                            </button>
+
+                                                            <i class="icon-ok green"></i>&nbsp;
+                                                            Data berhasil ditambahkan.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }else if($_GET['msg'] == 'success1'){
+                                            
+                                        }
+                                    }
+                                    ?>
+                                    
+                                    <div class="pull-right">
+                                        <a href="sumberTambah">
                                             <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Sumber Air">
                                                 <i class="icon-plus bigger-130"></i>
                                                 <strong>Tambah Data</strong>
@@ -207,11 +230,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     <td><?php echo $data['KET_SUMBER']; ?></td>
                                                     <td class="td-actions">
                                                         <div class="hidden-phone visible-desktop action-buttons">
-                                                            <a class="green" href="Fsumber/sumberEdit?nip=<?php echo $data['ID_SUMBER']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                            <a class="green" href="sumberEdit?id=<?php echo $data['ID_SUMBER']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
 
-                                                            <a class="red" href="Fsumber/sumberHapus?nip=<?php echo $data['ID_SUMBER']; ?>" onclick="return confirm('Are you sure you want to delete?')" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                            <a class="red" href="sumberHapus?id=<?php echo $data['ID_SUMBER']; ?>" onclick="return confirm('Are you sure you want to delete?')" class="tooltip-error" data-rel="tooltip" title="Delete">
                                                                 <i class="icon-trash bigger-130"></i>
                                                             </a>
                                                         </div>
@@ -224,7 +247,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
@@ -298,7 +321,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <!--[if !IE]>-->
 
     <script type="text/javascript">
-                                                window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                                                                window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->
