@@ -283,7 +283,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             </div><!-- end row fliud -->
                                         </div><!-- end span12 -->
 
-                                        <form class="form-horizontal" id="validation-form" method="POST" action="Fanalisis/analisisProses.php">
+                                        <form class="form-horizontal" id="validation-form" method="POST" action="Fanalisis/kebProses.php">
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="span6">

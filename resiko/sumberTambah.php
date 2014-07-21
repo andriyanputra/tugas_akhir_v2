@@ -347,14 +347,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <script src="../assets/js-ace/bootstrap.min.js"></script>
                     <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
                     <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
-                    <script src="../assets/js-ace/jquery.gritter.min.js"></script>
-                    <script src="../assets/js-ace/bootbox.min.js"></script>
-                    <script src="../assets/js-ace/select2.min.js"></script>
-                    <script src="../assets/js-ace/jquery.maskedinput.min.js"></script>
                     <script src="../assets/js-ace/jquery.validate.min.js"></script>
                     <script src="../assets/js-ace/chosen.jquery.min.js"></script>
-                    <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
-                    <script src="../assets/js-ace/bootstrap-tag.min.js"></script>
 
                     <!--ace scripts-->
 

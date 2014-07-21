@@ -194,6 +194,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 Pukul <span id="clock"> <?php print date('H:i:s'); ?></span>
                             </p>
 
+
                             <!--PAGE CONTENT ENDS-->
                         </div><!--/.span-->
                     </div><!--/.row-fluid-->

@@ -8,35 +8,24 @@
 $kec = $_POST['kecamatan'];
 $desa = $_POST['desa'];
 $exposure = $_POST['exposure'];
+$sumber_air = $_POST['sumber_air'];
 
-$panjang = $_POST['panjang'];
-$lebar = $_POST['lebar'];
-$tinggi = $_POST['tinggi'];
+$hasil1 = $_POST['hasil1'] ;
+$hasil2 = $_POST['hasil2'];
 
-$angka_klasifikasi = $_POST['angka'];
-$faktor_konstruksi = $_POST['faktor-konstruksi'];
-$faktor_bahaya = $_POST['faktor-bahaya'];
+//$english_hasil1 = number_format($hasil1, 2, '.', '');
+//$english_hasil2 = number_format($hasil2, 2, '.', '');
 
-$hasil = $panjang * $lebar * $tinggi / $angka_klasifikasi * $faktor_konstruksi;
-$english_format_number = number_format($hasil, 2, '.', '');
-echo $kec;
+echo 'Kecamatan:'.$kec;
 echo '<br />';
-echo $desa;
+echo 'Desa:'.$desa;
 echo '<br />';
-echo $exposure;
+echo 'faktor exposure:'.$exposure;
 echo '<br />';
-echo $panjang;
-echo $lebar;
-echo $tinggi;
+echo 'sumber air:'.$sumber_air;
 echo '<br />';
-echo $angka_klasifikasi;
+echo 'Hasil 1 :'.$hasil1;
 echo '<br />';
-echo $faktor_konstruksi;
-echo '<br />';
-echo $faktor_bahaya;
-echo '<br />';
-echo $hasil;
-echo '<br />';
-echo $english_format_number;
+echo 'Hasil 2:'.$hasil2;
 
 ?>

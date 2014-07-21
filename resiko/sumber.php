@@ -182,18 +182,50 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                             </button>
 
                                                             <i class="icon-ok green"></i>&nbsp;
-                                                            Data berhasil ditambahkan.
+                                                            <strong>Selamat</strong>, data berhasil ditambahkan.
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <?php
-                                        }else if($_GET['msg'] == 'success1'){
-                                            
+                                        } else if ($_GET['msg'] == 'notif1') {
+                                            ?>
+                                            <div class="widget-box transparent">
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-6">
+                                                        <div class="alert alert-block alert-warning">
+                                                            <button type="button" class="close" data-dismiss="alert">
+                                                                <i class="icon-remove"></i>
+                                                            </button>
+
+                                                            <i class="icon-bullhorn bigger-110"></i>&nbsp;
+                                                            Tidak terjadi penambahan atau perubahan data.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        } else if ($_GET['msg'] == 'success_edit') {
+                                            ?>
+                                            <div class="widget-box transparent">
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-6">
+                                                        <div class="alert alert-block alert-success">
+                                                            <button type="button" class="close" data-dismiss="alert">
+                                                                <i class="icon-remove"></i>
+                                                            </button>
+
+                                                            <i class="icon-ok green"></i>&nbsp;
+                                                            <strong>Selamat</strong>, data berhasil diperbaharui.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
                                         }
                                     }
                                     ?>
-                                    
+
                                     <div class="pull-right">
                                         <a href="sumberTambah">
                                             <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Sumber Air">
@@ -234,7 +266,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
 
-                                                            <a class="red" href="sumberHapus?id=<?php echo $data['ID_SUMBER']; ?>" onclick="return confirm('Are you sure you want to delete?')" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                            <a class="red order-delete" id="<?php echo $data['ID_SUMBER']; ?>" href="" class="tooltip-error" data-rel="tooltip" title="Delete">
                                                                 <i class="icon-trash bigger-130"></i>
                                                             </a>
                                                         </div>
@@ -306,22 +338,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <i class="icon-double-angle-up icon-only bigger-110"></i>
     </a>
 
-    <!--basic scripts-->
-
-    <!--[if !IE]>-->
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-    <!--<![endif]-->
-
-    <!--[if IE]>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <![endif]-->
-
-    <!--[if !IE]>-->
-
     <script type="text/javascript">
-                                                                window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->
@@ -337,6 +357,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
     <script src="../assets/js-ace/jquery.dataTables.min.js"></script>
     <script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+    <script src="../assets/js-ace/bootbox.min.js"></script>
     <script src="../assets/js-ace/ace-elements.min.js"></script>
     <script src="../assets/js-ace/ace.min.js"></script>
 
@@ -346,6 +367,31 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         $(document).ready(function() {
             var sumber = $('#sumber').DataTable();
             //var konstruksi = $('#konstruksi').DataTable();
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(document).on(ace.click_event, ".order-delete", function(e){
+                var id = $(this).attr('id');
+                e.preventDefault();
+                bootbox.confirm("Apakah Anda yakin ?", function(result) {
+                    if (result) {
+                        //sent request to delete order with given id
+                        $.ajax({
+                            type: 'get',
+                            url: 'Fsumber/prosesHapus.php',
+                            data: 'hapusId=' + id,
+                            success: function(data) {
+                                if (data) {
+                                    bootbox.alert("Data berhasil dihapus!");
+                                } else {
+                                    bootbox.alert("Maaf terjadi kesalahan proses penghapusan data!");
+                                }
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 </body>
