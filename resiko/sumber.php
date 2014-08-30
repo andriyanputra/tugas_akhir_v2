@@ -6,17 +6,17 @@ include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 
 if (!loggedin()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
-    header("Location: ../login/login.php");
-    exit();
+header("Location: ../login/login.php");
+exit();
 }
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
     $query = mysql_query("SELECT a.NAMA_SUMBER,GROUP_CONCAT(KECAMATAN_NAMA SEPARATOR ', ') AS Kecamatan, a.KET_SUMBER, a.ID_SUMBER
-                            FROM sumber_air a 
-                            JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
-                            JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
-                            GROUP BY a.NAMA_SUMBER") or die("Query failed: " . mysql_error());
+        FROM sumber_air a 
+        JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
+        JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
+        GROUP BY a.NAMA_SUMBER") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -153,6 +153,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </li>
                                 <li class="active">Sumber Air</li>
                             </ul><!--.breadcrumb-->
+                            <div class="pull-right">
+                                <script>
+                                    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                    var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                    var date = new Date();
+                                    var day = date.getDate();
+                                    var month = date.getMonth();
+                                    var thisDay = date.getDay(),
+                                    thisDay = myDays[thisDay];
+                                    var yy = date.getYear();
+                                    var year = (yy < 1000) ? yy + 1900 : yy;
+                                    document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                </script>
+                                , Pukul <span id="clock"></span>
+                            </div>
                         </div>
 
                         <div class="page-content">
@@ -371,7 +386,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     </script>
     <script type="text/javascript">
         $(function() {
-            $(document).on(ace.click_event, ".order-delete", function(e){
+            $(document).on(ace.click_event, ".order-delete", function(e) {
                 var id = $(this).attr('id');
                 e.preventDefault();
                 bootbox.confirm("Apakah Anda yakin ?", function(result) {
@@ -394,5 +409,39 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
             });
         });
     </script>
+    <script type="text/javascript">
+        <!--
+        function showTime() {
+            var a_p = "";
+            var today = new Date();
+            var curr_hour = today.getHours();
+            var curr_minute = today.getMinutes();
+            var curr_second = today.getSeconds();
+            if (curr_hour < 12) {
+                a_p = "AM";
+            } else {
+                a_p = "PM";
+            }
+            if (curr_hour == 0) {
+                curr_hour = 12;
+            }
+            if (curr_hour > 12) {
+                curr_hour = curr_hour - 12;
+            }
+            curr_hour = checkTime(curr_hour);
+            curr_minute = checkTime(curr_minute);
+            curr_second = checkTime(curr_second);
+            document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+        }
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        setInterval(showTime, 500);
+//-->
+</script>
 </body>
 </html>

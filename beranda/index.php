@@ -152,6 +152,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </li>
                                 <li class="active">Dashboard</li>
                             </ul><!--.breadcrumb-->
+                            <div class="pull-right">
+                                <script>
+                                    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                    var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                    var date = new Date();
+                                    var day = date.getDate();
+                                    var month = date.getMonth();
+                                    var thisDay = date.getDay(),
+                                            thisDay = myDays[thisDay];
+                                    var yy = date.getYear();
+                                    var year = (yy < 1000) ? yy + 1900 : yy;
+                                    document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                </script>
+                                , Pukul <span id="clock1"></span>
+                            </div>
                         </div>
 
                         <div class="page-content">
@@ -188,10 +203,19 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
 
                             <p>
-                                <?php
-                                echo 'Sekarang ini hari ' . $hari[$days] . ', tanggal ' . $tgl_angka . ' ' . $bulan[$month] . ' ' . $year . '.';
-                                ?>
-                                Pukul <span id="clock"> <?php print date('H:i:s'); ?></span>
+                                <script>
+                                    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                    var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                    var date = new Date();
+                                    var day = date.getDate();
+                                    var month = date.getMonth();
+                                    var thisDay = date.getDay(),
+                                            thisDay = myDays[thisDay];
+                                    var yy = date.getYear();
+                                    var year = (yy < 1000) ? yy + 1900 : yy;
+                                    document.write('Sekarang ini tanggal : ' + thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                </script>
+                                , Pukul <span id="clock2"></span>
                             </p>
 
 

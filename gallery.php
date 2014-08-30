@@ -1,676 +1,1587 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>SIM Proteksi Kebakaran Perkotaan</title>
+<!--Tab halaman-->
+<div class="tabbable">
+    <div id="tabs">
+        <ul class="nav nav-tabs padding-18" >
+            <li class="active">
+                <a href="#lokasi">
+                    <i class="green icon-location-arrow bigger-120"></i>
+                    Lokasi dan Pasokan Air Minimum
+                </a>
+            </li>
 
-		<meta name="description" content="overview &amp; stats" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <li>
+                <a href="#laju">
+                    <i class="orange icon-bolt bigger-120"></i>
+                    Laju Penerapan Air
+                </a>
+            </li>
 
-		<!--basic styles-->
+            <li>
+                <a href="#potensi">
+                    <i class="blue icon-anchor bigger-120"></i>
+                    Potensi Pengangkutan Air
+                </a>
+            </li>
 
-		<link href="assets/css-ace/bootstrap.min.css" rel="stylesheet" />
-		<link href="assets/css-ace/bootstrap-responsive.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="assets/css-ace/font-awesome.min.css" />
-                
-                <link rel="shortcut icon" href="assets/img/favicon.ico">
-
-		<!--fonts-->
-
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
-
-		<!--ace styles-->
-
-		<link rel="stylesheet" href="assets/css-ace/ace.min.css" />
-		<link rel="stylesheet" href="assets/css-ace/ace-responsive.min.css" />
-		<link rel="stylesheet" href="assets/css-ace/ace-skins.min.css" />
-		<style type="text/css">
-		body,td,th {
-                    font-family: "Open Sans";
-                }
-                </style>
-
-		<!--inline styles related to this page-->
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
-
-        <?php
-            session_start();
-            include ("login/koneksi.php");
-            if ($_SESSION['pegawai_nip'] && $_SESSION['pegawai_password']){
-                $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='".$_SESSION['pegawai_nip']."' AND pegawai_password='".$_SESSION['pegawai_password']."'");
-                if($sql){
-                    $hasil = mysql_fetch_assoc($sql);
-        ?>
-        
-	<body onload="setInterval('displayServerTime()', 1000);">
-            <div class="navbar">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a href="index" class="brand">
-                <small>
-                    <i class="icon-fire-extinguisher"></i>
-                    SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
-                </small>
-            </a><!--/.brand-->
-            
-            <ul class="nav ace-nav pull-right">
-
-                <li class="grey">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-bell-alt icon-animated-bell"></i>
-                        <span class="badge badge-important">8</span>
-                    </a>
-
-                    <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-closer">
-                        <li class="nav-header">
-                            <i class="icon-warning-sign"></i>
-                            8 Notifications
-                        </li>
-                
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">
-                                        <i class="btn btn-mini no-hover btn-pink icon-comment"></i>
-                                        Comment Regu Pemadam
-                                    </span>
-                                    <span class="pull-right badge badge-info">+5</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="btn btn-mini btn-primary icon-user"></i>
-                                Ricky just signed up as an admin ...
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">
-                                        <i class="btn btn-mini no-hover btn-success icon-shopping-cart"></i>
-                                        Inventaris Barang
-                                    </span>
-                                    <span class="pull-right badge badge-success">+2</span>
-                                </div>
-                            </a>
-                        </li>
-                        
-
-                        <li>
-                            <a href="#">
-                                See all notifications
-                                <i class="icon-arrow-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                            <li class="light-blue">
-                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                            <img class="nav-user-photo" src="assets/img/a.jpg" alt="<?php echo $hasil['pegawai_nama'];?>" />
-                                            <span class="user-info">
-                                                    <small>Welcome,</small>
-                <?php echo $hasil['pegawai_nama'];  } ?>    
-                                            </span>
-
-                                            <i class="icon-caret-down"></i>
-                                    </a>
-
-                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-                                            
-                                            <li>
-                                                    <a href="anggota/profile">
-                                                            <i class="icon-user"></i>
-                                                            Profile
-                                                    </a>
-                                            </li>
-                                            
-                                            <li class="divider"></li>
-
-                                            <li>
-                                                    <a href="login/logout">
-                                                            <i class="icon-off"></i>
-                                                            Logout
-                                                    </a>
-                                            </li>
-                                    </ul>
-                            </li>
-                    </ul><!--/.ace-nav-->
-            </div><!--/.container-fluid-->
-    </div><!--/.navbar-inner-->
-</div>
-
-<div class="main-container container-fluid">
-    <a class="menu-toggler" id="menu-toggler" href="#">
-            <span class="menu-text"></span>
-    </a>
-
-    <div class="sidebar" id="sidebar">
-            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-
-                    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-                            <span class="btn btn-success"></span>
-
-                            <span class="btn btn-info"></span>
-
-                            <span class="btn btn-warning"></span>
-
-                            <span class="btn btn-danger"></span>
-                    </div>
-            </div><!--#sidebar-shortcuts-->
-
-            <ul class="nav nav-list">
-                    <li class="active">
-                            <a href="index">
-                                    <i class="icon-dashboard"></i>
-                                    <span class="menu-text"> Dashboard </span>
-                            </a>
-                    </li>
-
-
-                    <li>
-                            <a href="resiko/analisis" class="dropdown-toggle">
-                                    <i class="icon-edit"></i>
-                                    <span class="menu-text"> Analisis Resiko </span>
-
-                                    <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                
-                                <li>
-                                    <a href="resiko/peta">
-                                        <i class="icon-double-angle-right"></i>
-                                        Peta Kab. Sidoarjo
-                                    </a>
-                                </li>
-                                
-                                <li>
-                                    <a href="resiko/analisis">
-                                        <i class="icon-double-angle-right"></i>
-                                        Analisis Resiko Kebakaran
-                                    </a>
-                                </li>
-                                    
-                                <li>
-                                    <a href="resiko/bangunan">
-                                        <i class="icon-double-angle-right"></i>
-                                        Daftar Bangunan
-                                    </a>
-                                </li>
-                            </ul>
-                    </li>
-                    
-                    <li>
-                        <a href="pasca/pasca" class="dropdown-toggle">
-                                <i class="icon-desktop"></i>
-                                <span class="menu-text"> Pasca Kebakaran </span>
-                        </a>
-                    </li>
-
-                       
-                    
-                    <li>
-                        <a href="anggota/list">
-                            <i class="icon-group"></i>
-                            <span class="menu-text"> Anggota Pemadam </span>
-                        </a>
-                    </li>
-
-                    <li>
-                            <a href="kalendar">
-                                    <i class="icon-calendar"></i>
-
-                                    <span class="menu-text">
-                                            Kalendar
-                                            <span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
-                                                    <i class="icon-info-sign red bigger-130"></i>
-                                            </span>
-                                    </span>
-                            </a>
-                    </li>
-
-                    <li>
-                            <a href="gallery">
-                                    <i class="icon-picture"></i>
-                                    <span class="menu-text"> Gallery </span>
-                            </a>
-                    </li>
-
-                    <li>
-                            <a href="#" class="dropdown-toggle">
-                                    <i class="icon-file-alt"></i>
-
-                                    <span class="menu-text">
-                                            Laporan Kejadian
-                                    </span>
-
-                                    <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                           <ul class="submenu">
-                                    <li>
-                                            <a href="gallery">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Manajemen Proteksi Kebakaran Kota
-                                            </a>
-                                    </li>
-
-                                    <li>
-                                            <a href="gallery">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Manajemen Proteksi Kebakaran Lingkungan
-                                            </a>
-                                    </li>
-
-                                    <li>
-                                            <a href="gallery">
-                                                    <i class="icon-double-angle-right"></i>
-                                                    Manajemen Proteksi Kebakaran Bangunan Gedung
-                                            </a>
-                                    </li>
-                            </ul>
-                    </li>
-            </ul><!--/.nav-list-->
-
-            <div class="sidebar-collapse" id="sidebar-collapse">
-                    <i class="icon-double-angle-left"></i>
+            <li>
+                <a href="#result">
+                    <i class="pink icon-fire-extinguisher bigger-120"></i>
+                    Result
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content no-border padding-24">
+            <!--LOKASI-->
+            <div id="lokasi" class="tab-pane in active">
+                A
             </div>
-    </div>
+            <!--END LOKASI-->
+            <!--LAJU-->
+            <div id="laju" class="tab-pane">
+                B
+                <div class="hr hr10 hr-double"></div>
 
-    <div class="main-content">
-            <div class="breadcrumbs" id="breadcrumbs">
-                    <ul class="breadcrumb">
-                            <li>
-                                    <i class="icon-home home-icon"></i>
-                                    <a href="index">Home</a>
+                <ul class="pager pull-right">
+                    <li class="previous">
+                        <a class="prevtab" href="#lokasi">&larr; Prev</a>
+                    </li>
 
-                                    <span class="divider">
-                                            <i class="icon-angle-right arrow-icon"></i>
-                                    </span>
-                            </li>
-                            <li class="active">Gallery</li>
-                    </ul><!--.breadcrumb-->
+                    <li class="next">
+                        <a class="nexttab" href="#potensi">Next &rarr;</a>
+                    </li>
+                </ul>
             </div>
+            <!--END LAJU-->
+            <!--POTENSI-->
+            <div id="potensi" class="tab-pane">
+                C
 
-            <div class="page-content">
-                    <div class="page-header position-relative">
-                            <h1>
-                                    Gallery
-                                    <small>
-                                            <i class="icon-double-angle-right"></i>
-                                            Overview
-                                    </small>
-                            </h1>
-                    </div><!--/.page-header-->
+                <div class="hr hr10 hr-double"></div>
 
-                    <div class="row-fluid">
-                            <div class="span12">
-                                <!--PAGE CONTENT BEGINS-->
-                                
-                                <div class="error-container">
-        <div class="well">
-                <h1 class="grey lighter smaller">
-                        <span class="blue bigger-125">
-                                <i class="icon-sitemap"></i>
-                                404
-                        </span>
-                        Page Not Found
-                </h1>
+                <ul class="pager pull-right">
+                    <li class="previous">
+                        <a class="prevtab" href="#laju">&larr; Prev</a>
+                    </li>
 
-                <hr />
-                <h3 class="lighter smaller">We looked everywhere but we couldn't find it!</h3>
+                    <li class="next">
+                        <a class="nexttab" href="#result">Next &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+            <!--END POTENSI-->
+            <!--RESULT-->
+            <div id="result" class="tab-pane">
+                <form class="form-horizontal" id="" method="POST" action="Fanalisis/analisisProses.php">
 
-                <div>
-                        <form class="form-search" />
-                                <span class="input-icon">
-                                        <i class="icon-search"></i>
 
-                                        <input type="text" class="input-medium search-query" placeholder="Give it a search..." />
-                                </span>
-                                <button class="btn btn-small" onclick="return false;">Go!</button>
-                        </form>
+                    <div class="form-actions">
+                        <div class="pull-right">
+                            <button class="btn">
+                                <i class="icon-arrow-left bigger-110"></i>
+                                Kembali
+                            </button>
 
-                        <div class="space"></div>
-                        <h4 class="smaller">Try one of the following:</h4>
-
-                        <ul class="unstyled spaced inline bigger-110">
-                                <li>
-                                        <i class="icon-hand-right blue"></i>
-                                        Re-check the url for typos
-                                </li>
-
-                                <li>
-                                        <i class="icon-hand-right blue"></i>
-                                        Read the faq
-                                </li>
-
-                                <li>
-                                        <i class="icon-hand-right blue"></i>
-                                        Tell us about it
-                                </li>
-                        </ul>
-                </div>
-
-                <hr />
-                <div class="space"></div>
-
-                <div class="row-fluid">
-                        <div class="center">
-                                <a href="javascript:history.back()" class="btn btn-grey">
-                                        <i class="icon-arrow-left"></i>
-                                        Go Back
-                                </a>
-
-                                <a href="index" class="btn btn-primary">
-                                        <i class="icon-dashboard"></i>
-                                        Dashboard
-                                </a>
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-info" type="submit">
+                                <i class="icon-ok"></i>
+                                Submit
+                            </button>
                         </div>
-                </div>
+                    </div>
+                </form>
+            </div>
+            <!--END RESULT-->
         </div>
+    </div>
 </div>
-                                
-                                <!--PAGE CONTENT ENDS-->
-                            </div><!--/.span-->
-                    </div><!--/.row-fluid-->
-            </div><!--/.page-content-->
 
-            <div class="ace-settings-container" id="ace-settings-container">
-                    <div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
-                            <i class="icon-cog bigger-150"></i>
+<!--End tab halaman-->
+
+<form class="form-horizontal" id="validation-form">
+    <div class="row-fluid form-horizontal">
+        <div class="span12">
+            <div class="span6">
+                <div class="widget-box transparent">
+                    <div class="widget-header header-color-blue2">
+                        <h3>Lokasi Kejadian Kebakaran</h3>
                     </div>
 
-                    <div class="ace-settings-box" id="ace-settings-box">
-                            <div>
-                                    <div class="pull-left">
-                                            <select id="skin-colorpicker" class="hide">
-                                                    <option data-class="default" value="#438EB9" />#438EB9
-                                                    <option data-class="skin-1" value="#222A2D" />#222A2D
-                                                    <option data-class="skin-2" value="#C6487E" />#C6487E
-                                                    <option data-class="skin-3" value="#D0D0D0" />#D0D0D0
-                                            </select>
+                    <div class="widget-body">
+                        <div class="widget-main padding-4">
+                            <div class="content">
+                                <div class="space-6"></div>
+                                <div id="frm-lokasi">
+                                    <div class="control-group">
+                                        <label class="control-label" for="kecamatan">Pilih Kecamatan : </label>
+                                        <?php
+                                        $query_parent = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
+                                        ?>
+                                        <div class="controls">
+                                            <span>
+                                                <select name="kecamatan" id="kecamatan" data-placeholder="Pilih Kecamatan...">
+                                                    <option value="" />Pilih Kecamatan...
+                                                    <?php while ($row = mysql_fetch_array($query_parent)): ?>
+                                                        <option value="<?= $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
+                                                    <?php endwhile; ?>
+                                                </select>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <span>&nbsp; Choose Skin</span>
-                            </div>
 
-                            <div>
-                                    <input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
-                                    <label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+                                    <div class="control-group">
+                                        <label class="control-label" for="desa">Pilih Desa : </label>
+                                        <div class="controls">
+                                            <span>
+                                                <select name="desa" id="desa">
+                                                    <option value=""  />PIlih Desa...
+                                                </select>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label" for="sumber_air">Sumber Air : </label>
+                                        <div class="controls">
+                                            <span>
+                                                <input type="hidden" name="sumber_air" id="text_content" value="" />
+                                                <select id="sumber_air" name="sumber_air_" onchange="document.getElementById('text_content').value = this.options[this.selectedIndex].text">
+                                                    <option value="" />Sumber Air...
+                                                </select>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label" for="sumber_air">Tipe Proteksi Kebakaran : </label>
+                                        <div class="controls">
+                                            <span>
+                                                <select id="tipe_proteksi" name="tipe_proteksi">
+                                                    <option value="" />Tipe Proteksi...
+                                                    <option value="MPKP" >MPKP (Kota)
+                                                    <option value="MPKL" >MPKL (Lingkungan)
+                                                    <option value="MPKBG" >MPKBG (Bangunan Gedung)
+                                                </select>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">Jumlah Kebutuhan Air :</label>
+
+                                        <div class="controls">
+                                            <span class="span12">
+                                                <label>
+                                                    <input onchange='check_value();' name="exposure" value="1" type="radio"/>
+                                                    <span class="lbl"> 
+                                                        <b class="text-error">Tanpa</b> resiko bangunan berdekatan. 
+                                                        <a href="#tanpa" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="top" title="More details.">?</span></a>
+                                                    </span>
+                                                </label>
+
+                                                <label>
+                                                    <input onchange='check_value();' name="exposure" value="2" type="radio"/>
+                                                    <span class="lbl"> 
+                                                        <b class="text-error">Dengan</b> resiko bangunan berdekatan. 
+                                                        <a href="#dengan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label red">Penggunaan Bahan Khusus Pemadam Api: </label>
+
+                                        <div class="controls">
+                                            <span class="span12">
+                                                <label>
+                                                    <input name="tepol" value="Menggunkan Tepol (Cairan Basa)" type="radio"/>
+                                                    <span class="lbl">
+                                                        Ya
+                                                    </span>
+                                                </label>
+                                                <label>
+                                                    <input name="tepol" value="Tidak Menggunakan Tepol" type="radio"/>
+                                                    <span class="lbl">
+                                                        Tidak
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
                     </div>
-            </div><!--/#ace-settings-container-->
-    </div><!--/.main-content-->
-</div><!--/.main-container-->
+                </div>
+            </div>
 
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
-        <i class="icon-double-angle-up icon-only bigger-110"></i>
-</a>
+            <!-- Tanpa Faktor Bahaya -->
+            <div class="span6" id="widget_tanpa">
+                <div class="widget-box transparent">
+                    <div class="widget-body">
+                        <div class="widget-main padding-4">
+                            <div class="content">
+                                <div class="space-6"></div>
+                                <p align="center" class="text-error">
+                                    Pasokan Air Minuman Tanpa Resiko Bangunan Berdekatan.
+                                <hr>
+                                </p>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+                                <div class="control-group">
+                                    Rumus Pasokan Air Minimum :
+                                    <p align="center">
+                                        <img src="../assets/img/pam1.jpg">
+                                    </p>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="tipe-bangunan">Tipe Bangunan :<br /> <small>(Angka Klasifikasi Resiko Kebakaran)</small></label>
+                                    <?php
+                                    $bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                    ?>
+                                    <div class="controls">
+                                        <select id="bangunan_tanpa" onchange="run();
+                                                document.getElementById('nama_tipe1').value = this.options[this.selectedIndex].text" data-placeholder="Pilih Bangunan...">
+                                            <option value="" />Pilih Bangunan...
+                                            <?php while ($r = mysql_fetch_array($bangunan1)): ?>
+                                                <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                        <input type="hidden" name="nama_tipe1" id="nama_tipe1" value="" />
+                                        <input name="nilai_bangunan1" class="span2" id="angka_tanpa" type="number" value="" readonly="readonly"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class = "control-label">Tipe bangunan tidak terdapat dalam list ? </label>
+
+                                    <div class="controls">
+                                        <label class="inline">
+                                            <input name="check" type = "checkbox" onclick="showMe('tipe_baru')" class="ace-switch ace-switch-5"/>
+                                            <span class="lbl"></span>
+                                        </label><strong class="red">*</strong>
+                                    </div>
+                                </div>
+
+
+                                <div id="tipe_baru" style="display:none">
+                                    <div class = "control-group">
+                                        <label class = "control-label" for = "nama_tipe_baru">Tipe bangunan baru:</label>
+
+                                        <div class = "controls">
+                                            <input type = "text" id="nama_tipe_baru1" name = "nama_tipe_baru1" />
+                                            <select name = "nilai_tipe_baru1" id="nilai_tipe_baru1" class="span2">
+                                                <option value="">---
+                                                <option value="3"> 3
+                                                <option value="4"> 4
+                                                <option value="5"> 5
+                                                <option value="6"> 6
+                                                <option value="7"> 7
+                                            </select>
+                                            &nbsp;<strong class="red">*</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
+                                    <div class="controls">
+                                        <select name="angka_konstruksi1" id="angka-kostruksi_tanpa" onchange="go();">
+                                            <option value="" />Pilih Faktor Bahaya...
+                                            <option value="0.5"> Konstruksi tahan api
+                                            <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                                            <option value="1.0"> Konstruksi biasa
+                                            <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
+                                        </select>
+
+                                        <input class="span2" name="angka_kostruksi1" value="" id="faktor-konstruksi_tanpa" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="volume">Volume Bangunan :</label>
+                                    <div class="controls">
+                                        <input name="panjang1"class="span2" id="panjang_tanpa" type="text" placeholder="Panjang" value=""/> x
+                                        <input name="lebar1" class="span2" id="lebar_tanpa" type="text" placeholder="Lebar" value=""/> x
+                                        <input name="tinggi1" class="span2" id="tinggi_tanpa" type="text" placeholder="Tinggi" value=""/> (Satuan meter)&nbsp;<strong class="red">**</strong>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                                    <div class="controls">
+                                        <input class="span3" id="hasil_tanpa" name="hasil1" type="text" value="" readonly/> &nbsp;US Galon atau
+                                        <input class="span2" id="hasil_tanpa1" type="text" value="" readonly/> &nbsp;m<sup>3</sup>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="volume"><small><u><strong>Note :</strong></u></small></label>
+                                    <label for="note">&nbsp;&nbsp;<strong class="red">*</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.</small></label>
+                                    <label for="note">&nbsp;&nbsp;<strong class="red">**</strong>&nbsp;&nbsp; <small>Gunakan . (titik) untuk koma.</small></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Dengan Faktor Bahaya -->
+            <div class="span6" id="widget_dengan">
+                <div class="widget-box transparent">
+                    <div class="widget-body">
+                        <div class="widget-main padding-4">
+                            <div class="content">
+                                <div class="space-6"></div>
+                                <p align="center" class="text-error">
+                                    Pasokan Air Minuman Dengan Resiko Bangunan Berdekatan.
+                                <hr>
+                                </p>
+
+                                <div class="control-group">
+                                    Rumus Pasokan Air Minimum :
+                                    <p align="center">
+                                        <img src="../assets/img/pam2.jpg">
+                                    </p>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="tipe-bangunan">Tipe Bangunan :<br /> <small>(Angka Klasifikasi Resiko Kebakaran)</small></label>
+                                    <?php
+                                    $bangunan2 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                    ?>
+                                    <div class="controls">
+                                        <select id="bangunan_dengan" onchange="run();
+                                                document.getElementById('nama_tipe2').value = this.options[this.selectedIndex].text">
+                                            <option value="" />Pilih Bangunan...
+                                            <?php while ($r = mysql_fetch_array($bangunan2)): ?>
+                                                <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                        <input type="hidden" name="nama_tipe2" id="nama_tipe2" value="" />
+                                        <input class="span2" id="angka_dengan" name="nilai_bangunan2" type="text" value="" readonly="readonly"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class = "control-label">Tipe bangunan tidak terdapat dalam list ? </label>
+
+                                    <div class="controls">
+                                        <label class="inline">
+                                            <input name="check2" type = "checkbox" onclick="showMe_('tipe_baru2')" class="ace-switch ace-switch-5"/>
+                                            <span class="lbl"></span>
+                                        </label><strong class="red">*</strong>
+                                    </div>
+                                </div>
+
+                                <div id="tipe_baru2" style="display:none">
+                                    <div class = "control-group">
+                                        <label class = "control-label" for = "nama_tipe_baru2">Tipe bangunan baru:</label>
+
+                                        <div class = "controls">
+                                            <input type = "text" id="nama_tipe_baru2" name = "nama_tipe_baru2" />
+                                            <select name = "nilai_tipe_baru2" id="nilai_tipe_baru2" class="span2">
+                                                <option value="">---
+                                                <option value="3"> 3
+                                                <option value="4"> 4
+                                                <option value="5"> 5
+                                                <option value="6"> 6
+                                                <option value="7"> 7
+                                            </select>
+                                            &nbsp;<strong class="red">*</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
+                                    <div class="controls">
+                                        <select name="angka_konstruksi2" id="angka-kostruksi_dengan" onchange="go();">
+                                            <option value="" />Pilih Faktor Bahaya...
+                                            <option value="0.5"> Konstruksi tahan api
+                                            <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                                            <option value="1.0"> Konstruksi biasa
+                                            <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
+                                        </select>
+
+                                        <input name="angka_kostruksi2" class="span2" value="" id="faktor-konstruksi_dengan" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label for="faktor-bahaya">Faktor bahaya dari bangunan berdekatan bernilai : 1.5 kali </label>
+                                    <input class="span3" type="hidden" name="faktor-bahaya" id="faktor-bahaya_dengan" value="1.5" />
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="volume">Volume Bangunan :</label>
+                                    <div class="controls">
+                                        <input name="panjang2" class="span2" id="panjang_dengan" type="text" placeholder="Panjang" /> x
+                                        <input name="lebar2" class="span2" id="lebar_dengan" type="text" placeholder="Lebar" /> x
+                                        <input class="span2" name="tinggi2" id="tinggi_dengan" type="text" placeholder="Tinggi" /> (Satuan meter)&nbsp;<strong class="red">**</strong>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                                    <div class="controls">
+                                        <input class="span3" id="hasil_dengan" name="hasil2" type="text" value="" readonly/> &nbsp;US Galon atau
+                                        <input class="span2" id="hasil_dkubik"  type="text" value="" readonly/> &nbsp;m<sup>3</sup>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="volume"><small><u><strong>Note :</strong></u></small></label>
+                                    <label for="note">&nbsp;&nbsp;<strong class="red">*</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.</small></label>
+                                    <label for="note">&nbsp;&nbsp;<strong class="red">**</strong>&nbsp;&nbsp; <small>Gunakan . (titik) untuk koma.</small></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end row fliud -->
+    </div>
+</form>
+<!-- Lokasi -->
+<div class="row-fluid form-horizontal">
+    <div class="span12">
+        <div class="span6">
+            <div class="widget-box transparent">
+                <div class="widget-header header-color-blue2">
+                    <h3>Lokasi Kejadian Kebakaran</h3>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="content">
+                            <div class="space-6"></div>
+                            <div id="frm-lokasi">
+                                <div class="control-group">
+                                    <label class="control-label" for="kecamatan">Pilih Kecamatan : </label>
+                                    <?php
+                                    $query_parent = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
+                                    ?>
+                                    <div class="controls">
+                                        <span>
+                                            <select name="kecamatan" id="kecamatan" data-placeholder="Pilih Kecamatan...">
+                                                <option value="" />Pilih Kecamatan...
+                                                <?php while ($row = mysql_fetch_array($query_parent)): ?>
+                                                    <option value="<?= $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="desa">Pilih Desa : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <select name="desa" id="desa">
+                                                <option value=""  />PIlih Desa...
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="sumber_air">Sumber Air : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <input type="hidden" name="sumber_air" id="text_content" value="" />
+                                            <select id="sumber_air" name="sumber_air_" onchange="document.getElementById('text_content').value = this.options[this.selectedIndex].text">
+                                                <option value="" />Sumber Air...
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="sumber_air">Tipe Proteksi Kebakaran : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <select id="tipe_proteksi" name="tipe_proteksi">
+                                                <option value="" />Tipe Proteksi...
+                                                <option value="MPKP" >MPKP (Kota)
+                                                <option value="MPKL" >MPKL (Lingkungan)
+                                                <option value="MPKBG" >MPKBG (Bangunan Gedung)
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">Jumlah Kebutuhan Air :</label>
+
+                                    <div class="controls">
+                                        <span class="span12">
+                                            <label>
+                                                <input onchange='check_value();' name="exposure" value="1" type="radio"/>
+                                                <span class="lbl"> 
+                                                    <b class="text-error">Tanpa</b> resiko bangunan berdekatan. 
+                                                    <a href="#tanpa" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="top" title="More details.">?</span></a>
+                                                </span>
+                                            </label>
+
+                                            <label>
+                                                <input onchange='check_value();' name="exposure" value="2" type="radio"/>
+                                                <span class="lbl"> 
+                                                    <b class="text-error">Dengan</b> resiko bangunan berdekatan. 
+                                                    <a href="#dengan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
+                                                </span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label red">Penggunaan Bahan Khusus Pemadam Api: </label>
+
+                                    <div class="controls">
+                                        <span class="span12">
+                                            <label>
+                                                <input name="tepol" value="Menggunkan Tepol (Cairan Basa)" type="radio"/>
+                                                <span class="lbl">
+                                                    Ya
+                                                </span>
+                                            </label>
+                                            <label>
+                                                <input name="tepol" value="Tidak Menggunakan Tepol" type="radio"/>
+                                                <span class="lbl">
+                                                    Tidak
+                                                </span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tanpa Faktor Bahaya -->
+        <div class="span6" id="widget_tanpa">
+            <div class="widget-box transparent">
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="content">
+                            <div class="space-6"></div>
+                            <p align="center" class="text-error">
+                                Pasokan Air Minuman Tanpa Resiko Bangunan Berdekatan.
+                            <hr>
+                            </p>
+
+                            <div class="control-group">
+                                Rumus Pasokan Air Minimum :
+                                <p align="center">
+                                    <img src="../assets/img/pam1.jpg">
+                                </p>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="tipe-bangunan">Tipe Bangunan :<br /> <small>(Angka Klasifikasi Resiko Kebakaran)</small></label>
+                                <?php
+                                $bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                ?>
+                                <div class="controls">
+                                    <select id="bangunan_tanpa" onchange="run();
+                                            document.getElementById('nama_tipe1').value = this.options[this.selectedIndex].text" data-placeholder="Pilih Bangunan...">
+                                        <option value="" />Pilih Bangunan...
+                                        <?php while ($r = mysql_fetch_array($bangunan1)): ?>
+                                            <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                    <input type="hidden" name="nama_tipe1" id="nama_tipe1" value="" />
+                                    <input name="nilai_bangunan1" class="span2" id="angka_tanpa" type="number" value="" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class = "control-label">Tipe bangunan tidak terdapat dalam list ? </label>
+
+                                <div class="controls">
+                                    <label class="inline">
+                                        <input name="check" type = "checkbox" onclick="showMe('tipe_baru')" class="ace-switch ace-switch-5"/>
+                                        <span class="lbl"></span>
+                                    </label><strong class="red">*</strong>
+                                </div>
+                            </div>
+
+
+                            <div id="tipe_baru" style="display:none">
+                                <div class = "control-group">
+                                    <label class = "control-label" for = "nama_tipe_baru">Tipe bangunan baru:</label>
+
+                                    <div class = "controls">
+                                        <input type = "text" id="nama_tipe_baru1" name = "nama_tipe_baru1" />
+                                        <select name = "nilai_tipe_baru1" id="nilai_tipe_baru1" class="span2">
+                                            <option value="">---
+                                            <option value="3"> 3
+                                            <option value="4"> 4
+                                            <option value="5"> 5
+                                            <option value="6"> 6
+                                            <option value="7"> 7
+                                        </select>
+                                        &nbsp;<strong class="red">*</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
+                                <div class="controls">
+                                    <select name="angka_konstruksi1" id="angka-kostruksi_tanpa" onchange="go();">
+                                        <option value="" />Pilih Faktor Bahaya...
+                                        <option value="0.5"> Konstruksi tahan api
+                                        <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                                        <option value="1.0"> Konstruksi biasa
+                                        <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
+                                    </select>
+
+                                    <input class="span2" name="angka_kostruksi1" value="" id="faktor-konstruksi_tanpa" type="text" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Volume Bangunan :</label>
+                                <div class="controls">
+                                    <input name="panjang1"class="span2" id="panjang_tanpa" type="text" placeholder="Panjang" value=""/> x
+                                    <input name="lebar1" class="span2" id="lebar_tanpa" type="text" placeholder="Lebar" value=""/> x
+                                    <input name="tinggi1" class="span2" id="tinggi_tanpa" type="text" placeholder="Tinggi" value=""/> (Satuan meter)&nbsp;<strong class="red">**</strong>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                                <div class="controls">
+                                    <input class="span3" id="hasil_tanpa" name="hasil1" type="text" value="" readonly/> &nbsp;US Galon atau
+                                    <input class="span2" id="hasil_tanpa1" type="text" value="" readonly/> &nbsp;m<sup>3</sup>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="volume"><small><u><strong>Note :</strong></u></small></label>
+                                <label for="note">&nbsp;&nbsp;<strong class="red">*</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.</small></label>
+                                <label for="note">&nbsp;&nbsp;<strong class="red">**</strong>&nbsp;&nbsp; <small>Gunakan . (titik) untuk koma.</small></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Dengan Faktor Bahaya -->
+        <div class="span6" id="widget_dengan">
+            <div class="widget-box transparent">
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="content">
+                            <div class="space-6"></div>
+                            <p align="center" class="text-error">
+                                Pasokan Air Minuman Dengan Resiko Bangunan Berdekatan.
+                            <hr>
+                            </p>
+
+                            <div class="control-group">
+                                Rumus Pasokan Air Minimum :
+                                <p align="center">
+                                    <img src="../assets/img/pam2.jpg">
+                                </p>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="tipe-bangunan">Tipe Bangunan :<br /> <small>(Angka Klasifikasi Resiko Kebakaran)</small></label>
+                                <?php
+                                $bangunan2 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                ?>
+                                <div class="controls">
+                                    <select id="bangunan_dengan" onchange="run();
+                                            document.getElementById('nama_tipe2').value = this.options[this.selectedIndex].text">
+                                        <option value="" />Pilih Bangunan...
+                                        <?php while ($r = mysql_fetch_array($bangunan2)): ?>
+                                            <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                    <input type="hidden" name="nama_tipe2" id="nama_tipe2" value="" />
+                                    <input class="span2" id="angka_dengan" name="nilai_bangunan2" type="text" value="" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class = "control-label">Tipe bangunan tidak terdapat dalam list ? </label>
+
+                                <div class="controls">
+                                    <label class="inline">
+                                        <input name="check2" type = "checkbox" onclick="showMe_('tipe_baru2')" class="ace-switch ace-switch-5"/>
+                                        <span class="lbl"></span>
+                                    </label><strong class="red">*</strong>
+                                </div>
+                            </div>
+
+                            <div id="tipe_baru2" style="display:none">
+                                <div class = "control-group">
+                                    <label class = "control-label" for = "nama_tipe_baru2">Tipe bangunan baru:</label>
+
+                                    <div class = "controls">
+                                        <input type = "text" id="nama_tipe_baru2" name = "nama_tipe_baru2" />
+                                        <select name = "nilai_tipe_baru2" id="nilai_tipe_baru2" class="span2">
+                                            <option value="">---
+                                            <option value="3"> 3
+                                            <option value="4"> 4
+                                            <option value="5"> 5
+                                            <option value="6"> 6
+                                            <option value="7"> 7
+                                        </select>
+                                        &nbsp;<strong class="red">*</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
+                                <div class="controls">
+                                    <select name="angka_konstruksi2" id="angka-kostruksi_dengan" onchange="go();">
+                                        <option value="" />Pilih Faktor Bahaya...
+                                        <option value="0.5"> Konstruksi tahan api
+                                        <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                                        <option value="1.0"> Konstruksi biasa
+                                        <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
+                                    </select>
+
+                                    <input name="angka_kostruksi2" class="span2" value="" id="faktor-konstruksi_dengan" type="text" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="faktor-bahaya">Faktor bahaya dari bangunan berdekatan bernilai : 1.5 kali </label>
+                                <input class="span3" type="hidden" name="faktor-bahaya" id="faktor-bahaya_dengan" value="1.5" />
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Volume Bangunan :</label>
+                                <div class="controls">
+                                    <input name="panjang2" class="span2" id="panjang_dengan" type="text" placeholder="Panjang" /> x
+                                    <input name="lebar2" class="span2" id="lebar_dengan" type="text" placeholder="Lebar" /> x
+                                    <input class="span2" name="tinggi2" id="tinggi_dengan" type="text" placeholder="Tinggi" /> (Satuan meter)&nbsp;<strong class="red">**</strong>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                                <div class="controls">
+                                    <input class="span3" id="hasil_dengan" name="hasil2" type="text" value="" readonly/> &nbsp;US Galon atau
+                                    <input class="span2" id="hasil_dkubik"  type="text" value="" readonly/> &nbsp;m<sup>3</sup>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="volume"><small><u><strong>Note :</strong></u></small></label>
+                                <label for="note">&nbsp;&nbsp;<strong class="red">*</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.</small></label>
+                                <label for="note">&nbsp;&nbsp;<strong class="red">**</strong>&nbsp;&nbsp; <small>Gunakan . (titik) untuk koma.</small></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row fliud -->
+</div><!-- end span12 -->
+<!--end lokasi-->
+<!--laju-->
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget-box transparent">
+            <div class="widget-header header-color-blue2">
+                <h3>
+                    Perhitungan Laju Penerapan Air
+                    <a href="#penerapan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
+                </h3>
+                <div class="widget-toolbar">
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main padding-4">
+                    <div class="content">
+                        <div class="span6 center">
+                            <div class="space-6"></div>
+                            <img src="../assets/img/pengirimanAir.JPG" width="" height="" >
+                        </div>
+                        <div class="span6 form-horizontal">
+                            <div class="space-6"></div>
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Volume Bangunan :</label>
+                                <div class="controls">
+                                    <input readonly name="panjang_volume" class="span2" id="panjang_volume" type="text" placeholder="p" /> x
+                                    <input readonly name="lebar_volume" class="span2" id="lebar_volume" type="text" placeholder="l" /> x
+                                    <input readonly name="tinggi_volume" class="span2" id="tinggi_volume" type="text" placeholder="t" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="desa">Laju Penerapan Air :</label>
+                                <div class="controls">
+                                    <input class="span3" id="hasil_laju"  type="text" value="" readonly/> &nbsp;m<sup>3</sup> atau 
+                                    <input class="span3" id="hasil_laju"  type="text" value="" readonly/> &nbsp;US Galon
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end widget-body -->
+        </div>
+    </div><!-- end span12 -->
+</div>
+<!--end laju-->
+<!--potensi-->
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget-box transparent">
+            <div class="widget-header header-color-blue2">
+                <h3>
+                    Perhitungan Potensi Pengangkutan Air
+                </h3>
+                <div class="widget-toolbar">
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main padding-4">
+                    <div class="content">
+                        <div class="span6">
+                            <div class="space-6"></div>
+                            <img src="../assets/img/potensi.JPG" width="400" height="500" >
+                        </div>
+                        <div class="span6 form-horizontal">
+                            <div class="space-6"></div>
+                            <div class="control-group">
+                                <label class="control-label" for="volume">Kapasitas Air Kendaraan Damkar (V):</label>
+                                <div class="controls">
+                                    <input name="v_potensi" id="volume" type="text" placeholder="liter . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="a">Waktu Pengisian Kendaraan Pemasok Air (A) :</label>
+                                <div class="controls">
+                                    <input name="a_potensi" id="a" type="text" placeholder="menit . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="kecepatan">Kecepatan Konstan Kendaraan :</label>
+                                <div class="controls">
+                                    <input name="kecepatan" id="kecepatan" type="text" placeholder="km/jam . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="jarak1">Jarak Lokasi ke Sumber Air (D1) :</label>
+                                <div class="controls">
+                                    <input name="jarak1" id="jarak1" type="text" placeholder="kilometer . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="jarak2">Jarak Lokasi Kembali dari Sumber Air (D2):</label>
+                                <div class="controls">
+                                    <input name="jarak2" id="jarak2" type="text" placeholder="kilometer . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="t1">T1 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <div class="controls">
+                                    <input name="t1_potensi" id="t1" type="text" placeholder="menit . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="t2">T2 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <div class="controls">
+                                    <input name="t2_potensi" id="t2" type="text" placeholder="menit . . ." />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="b">Waktu Pengisian ke Tangki Portable (B) :</label>
+                                <div class="controls">
+                                    <input name="b_potensi" id="b" type="text" placeholder="menit . . ." />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end widget-body -->
+        </div>
+    </div><!-- end span12 -->
+</div>
+<!--end potensi-->
+<!--result-->
+<div class="row-fluid">
+    <div class="span12">
+        <div class="span6">
+            <div class="widget-box transparent">
+                <div class="widget-header header-color-blue2">
+                    <h3>Lokasi Kejadian Kebakaran</h3>
+                    <div class="widget-toolbar">
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="content">
+                            <div class="space-6"></div>
+                            <div id="frm-lokasi">
+                                <div class="control-group">
+                                    <label class="control-label" for="kecamatan">Pilih Kecamatan : </label>
+                                    <?php
+                                    $query_parent = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
+                                    ?>
+                                    <div class="controls">
+                                        <span>
+                                            <select name="kecamatan" id="kecamatan" data-placeholder="Pilih Kecamatan...">
+                                                <option value="" />Pilih Kecamatan...
+                                                <?php while ($row = mysql_fetch_array($query_parent)): ?>
+                                                    <option value="<?= $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="desa">Pilih Desa : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <select name="desa" id="desa">
+                                                <option value=""  />PIlih Desa...
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="sumber_air">Sumber Air : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <input type="hidden" name="sumber_air" id="text_content" value="" />
+                                            <select id="sumber_air" name="sumber_air_" onchange="document.getElementById('text_content').value = this.options[this.selectedIndex].text">
+                                                <option value="" />Sumber Air...
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="sumber_air">Tipe Proteksi Kebakaran : </label>
+                                    <div class="controls">
+                                        <span>
+                                            <select id="tipe_proteksi" name="tipe_proteksi">
+                                                <option value="" />Tipe Proteksi...
+                                                <option value="MPKP" >MPKP (Kota)
+                                                <option value="MPKL" >MPKL (Lingkungan)
+                                                <option value="MPKBG" >MPKBG (Bangunan Gedung)
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">Jumlah Kebutuhan Air :</label>
+
+                                    <div class="controls">
+                                        <span class="span12">
+                                            <label>
+                                                <input onchange='check_value();' name="exposure" value="1" type="radio"/>
+                                                <span class="lbl"> 
+                                                    <b class="text-error">Tanpa</b> resiko bangunan berdekatan. 
+                                                    <a href="#tanpa" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="top" title="More details.">?</span></a>
+                                                </span>
+                                            </label>
+
+                                            <label>
+                                                <input onchange='check_value();' name="exposure" value="2" type="radio"/>
+                                                <span class="lbl"> 
+                                                    <b class="text-error">Dengan</b> resiko bangunan berdekatan. 
+                                                    <a href="#dengan" role="button" class="green" data-toggle="modal"> <span class="help-button" data-rel="tooltip" data-placement="bottom" title="More details.">?</span></a>
+                                                </span>
+                                            </label>
+                                        </span>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label red">Penggunaan Bahan Khusus Pemadam Api: </label>
+
+                                        <div class="controls">
+                                            <span class="span12">
+                                                <label>
+                                                    <input name="tepol" value="Menggunkan Tepol (Cairan Basa)" type="radio"/>
+                                                    <span class="lbl">
+                                                        Ya
+                                                    </span>
+                                                </label>
+                                                <label>
+                                                    <input name="tepol" value="Tidak Menggunakan Tepol" type="radio"/>
+                                                    <span class="lbl">
+                                                        Tidak
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tanpa Faktor Bahaya -->
+        <div class="span6">
+            <div class="space-6"></div>
+            <p align="center" class="text-error">
+                Pasokan Air Minuman Tanpa Resiko Bangunan Berdekatan.
+            <hr>
+            </p>
+
+            <div class="control-group">
+                Rumus Pasokan Air Minimum :
+                <p align="center">
+                    <img src="../assets/img/pam1.jpg">
+                </p>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="tipe-bangunan">Tipe Bangunan :<br /> <small>(Angka Klasifikasi Resiko Kebakaran)</small></label>
+                <?php
+                $bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                ?>
+                <div class="controls">
+                    <select id="bangunan_tanpa" onchange="run();
+                            document.getElementById('nama_tipe1').value = this.options[this.selectedIndex].text" data-placeholder="Pilih Bangunan...">
+                        <option value="" />Pilih Bangunan...
+                        <?php while ($r = mysql_fetch_array($bangunan1)): ?>
+                            <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                    <input type="hidden" name="nama_tipe1" id="nama_tipe1" value="" />
+                    <input name="nilai_bangunan1" class="span2" id="angka_tanpa" type="number" value="" readonly="readonly"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class = "control-label">Tipe bangunan tidak terdapat dalam list ? </label>
+
+                <div class="controls">
+                    <label class="inline">
+                        <input name="check" type = "checkbox" onclick="showMe('tipe_baru')" class="ace-switch ace-switch-5"/>
+                        <span class="lbl"></span>
+                    </label><strong class="red">*</strong>
+                </div>
+            </div>
+
+
+            <div id="tipe_baru" style="display:none">
+                <div class = "control-group">
+                    <label class = "control-label" for = "nama_tipe_baru">Tipe bangunan baru:</label>
+
+                    <div class = "controls">
+                        <input type = "text" id="nama_tipe_baru1" name = "nama_tipe_baru1" />
+                        <select name = "nilai_tipe_baru1" id="nilai_tipe_baru1" class="span2">
+                            <option value="">---
+                            <option value="3"> 3
+                            <option value="4"> 4
+                            <option value="5"> 5
+                            <option value="6"> 6
+                            <option value="7"> 7
+                        </select>
+                        &nbsp;<strong class="red">*</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="angka-kostruksi">Angka Klasifikasi Konstruksi  :</label>
+                <div class="controls">
+                    <select name="angka_konstruksi1" id="angka-kostruksi_tanpa" onchange="go();">
+                        <option value="" />Pilih Faktor Bahaya...
+                        <option value="0.5"> Konstruksi tahan api
+                        <option value="0.75"> Konstruksi kayu berat (tidak mudah terbakar)
+                        <option value="1.0"> Konstruksi biasa
+                        <option value="1.5"> Konstruksi kerangka kayu (mudah terbakar)
+                    </select>
+
+                    <input class="span2" name="angka_kostruksi1" value="" id="faktor-konstruksi_tanpa" type="text" readonly="readonly"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="volume">Volume Bangunan :</label>
+                <div class="controls">
+                    <input name="panjang1"class="span2" id="panjang_tanpa" type="text" placeholder="Panjang" value=""/> x
+                    <input name="lebar1" class="span2" id="lebar_tanpa" type="text" placeholder="Lebar" value=""/> x
+                    <input name="tinggi1" class="span2" id="tinggi_tanpa" type="text" placeholder="Tinggi" value=""/> (Satuan meter)&nbsp;<strong class="red">**</strong>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="volume">Pasokan Air Minimum :</label>
+                <div class="controls">
+                    <input class="span3" id="hasil_tanpa" name="hasil1" type="text" value="" readonly/> &nbsp;US Galon atau
+                    <input class="span2" id="hasil_tanpa1" type="text" value="" readonly/> &nbsp;m<sup>3</sup>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="volume"><small><u><strong>Note :</strong></u></small></label>
+                <label for="note">&nbsp;&nbsp;<strong class="red">*</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.</small></label>
+                <label for="note">&nbsp;&nbsp;<strong class="red">**</strong>&nbsp;&nbsp; <small>Gunakan . (titik) untuk koma.</small></label>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end result-->
 
 <script type="text/javascript">
-    window.jQuery || document.write("<script src='assets/js-ace/jquery-2.0.3.min.js'>"+"<"+"/script>");
+    $('.nexttab').click(function() {
+        $('.nav-tabs > .active').next('li').find('a').trigger('click');
+    });
+
+    $('.prevtab').click(function() {
+        $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+    });
 </script>
 
 <script type="text/javascript">
-    if("ontouchend" in document) document.write("<script src='assets/js-ace/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    //var tabs = $("#tabs").tabs({
+    //select: function(event, ui) {
+    //  var valid = true;
+    //var current = $(this).tabs("option", "selected");
+    //var panelId = $("#tabs ul a").eq(current).attr("href");
+
+    /*$(panelId).find("input").each(function() {
+     console.log(valid);
+     if (!validator.element(this) && valid) {
+     valid = false;
+     }
+     });*/
+
+    /*return valid;
+     }
+     });
+     
+     $(".nexttab").click(function() {                 $("#tabs").tabs("select", this.hash);
+     });
+     
+     $(".prevtab").click(function() {                 $("#tabs").tabs("select", this.hash);
+     });*/
+
+    /*$('.nexttab').click(function() {
+     $('.nav-tabs > .active').next('li').find('a').trigger('click');
+     });
+     
+     $('.prevtab').click(function() {
+     $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+     });*/
+
+    $(function() {
+        $("#tabs").tabs();
+    });
 </script>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script type="text/javascript" src="assets/js-map/jquery.maphilight.min.js"></script>
-<script type="text/javascript">$(function() {
-		$('.map').maphilight();
-	});
+<script type="text/javascript">
+    var codeMap = {'1': '../assets/img/sda/large/balongbendo.png',
+        '2': '../assets/img/sda/large/buduran.png',
+        '3': '../assets/img/sda/large/candi.png',
+        '4': '../assets/img/sda/large/gedangan.png',
+        '5': '../assets/img/sda/large/jabon.png',
+        '6': '../assets/img/sda/large/krembung.png',
+        '7': '../assets/img/sda/large/krian.png',
+        '8': '../assets/img/sda/large/porong.png',
+        '9': '../assets/img/sda/large/prambon.png',
+        '10': '../assets/img/sda/large/sedati.png',
+        '11': '../assets/img/sda/large/sidoarjo.png',
+        '12': '../assets/img/sda/large/sukodono.png',
+        '13': '../assets/img/sda/large/taman.png',
+        '14': '../assets/img/sda/large/tanggulangin.png',
+        '15': '../assets/img/sda/large/tarik.png',
+        '16': '../assets/img/sda/large/tulangan.png',
+        '17': '../assets/img/sda/large/waru.png',
+        '18': '../assets/img/sda/large/wonoayu.png'
+    };
+
+    $(function() {
+        $('area').on('click', function() {
+            updateSelection($(this).attr('id'));
+        });
+        $('#kecamatan').on('change', function() {
+            updateSelection($(this).val());
+        });
+    });
+
+    function updateSelection(code) {
+        $('#gambar2').attr('src', codeMap[code]);
+        $('#kecamatan').val(code);
+    }
 </script>
+<script type="text/javascript">
+// ========================Jam========================================== //
+    function showTime() {
+        var a_p = "";
+        var today = new Date();
+        var curr_hour = today.getHours();
+        var curr_minute = today.getMinutes();
+        var curr_second = today.getSeconds();
+        if (curr_hour < 12) {
+            a_p = "AM";
+        } else {
+            a_p = "PM";
+        }
+        if (curr_hour == 0) {
+            curr_hour = 12;
+        }
+        if (curr_hour > 12) {
+            curr_hour = curr_hour - 12;
+        }
+        curr_hour = checkTime(curr_hour);
+        curr_minute = checkTime(curr_minute);
+        curr_second = checkTime(curr_second);
+        document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+    }
 
-<script src="assets/js-ace/bootstrap.min.js"></script>
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
 
-<script src="assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
-<script src="assets/js-ace/jquery.ui.touch-punch.min.js"></script>
-<script src="assets/js-ace/jquery.slimscroll.min.js"></script>
-<script src="assets/js-ace/jquery.easy-pie-chart.min.js"></script>
-<script src="assets/js-ace/jquery.sparkline.min.js"></script>
-<script src="assets/js-ace/flot/jquery.flot.min.js"></script>
-<script src="assets/js-ace/flot/jquery.flot.pie.min.js"></script>
-<script src="assets/js-ace/flot/jquery.flot.resize.min.js"></script>
+    function showMe(box) {
 
-<script src="assets/js-ace/ace-elements.min.js"></script>
-<script src="assets/js-ace/ace.min.js"></script>
+        var chboxs = document.getElementsByName("check");
+        var vis = "none";
+        for (var i = 0; i < chboxs.length; i++) {
+            if (chboxs[i].checked) {
+                vis = "block";
+                break;
+            }
+        }
+        document.getElementById(box).style.display = vis;
+    }
 
+    function showMe_(box) {
+
+        var chboxs = document.getElementsByName("check2");
+        var vis = "none";
+        for (var i = 0; i < chboxs.length; i++) {
+            if (chboxs[i].checked) {
+                vis = "block";
+                break;
+            }
+        }
+        document.getElementById(box).style.display = vis;
+    }
+
+    $(document).ready(function() {
+
+        $("#desa").change(function() {
+            $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
+            $.get('asumber.php?sumber=' + $(this).val(), function(data) {
+                $("#sumber_air").html(data);
+                $('#loader').slideUp(200, function() {
+                    $(this).remove();
+                });
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#kecamatan").change(function() {
+            $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
+            $.get('akec.php?kecamatan=' + $(this).val(), function(data) {
+                $("#desa").html(data);
+                $('#loader').slideUp(200, function() {
+                    $(this).remove();
+                });
+            });
+        });
+    });
+
+    function run() {
+        document.getElementById("angka_tanpa").value = document.getElementById("bangunan_tanpa").value;
+        document.getElementById("angka_dengan").value = document.getElementById("bangunan_dengan").value;
+    }
+
+    function go() {
+        document.getElementById("faktor-konstruksi_tanpa").value = document.getElementById("angka-kostruksi_tanpa").value;
+        document.getElementById("faktor-konstruksi_dengan").value = document.getElementById("angka-kostruksi_dengan").value;
+    }
+
+    $(function() {
+        $(".chzn-select").chosen();
+    });
+    // scrollables
+    $('.slim-scroll').each(function() {
+        var $this = $(this);
+        $this.slimScroll({
+            height: $this.data('height') || 100,
+            railVisible: true
+        });
+    });
+    function myFunction()
+    {
+        window.location.reload();
+    }
+
+    var radio = document.getElementsByName("exposure");
+    var widgetTanpa = document.getElementById("widget_tanpa");
+    var widgetDengan = document.getElementById("widget_dengan");
+    widgetTanpa.style.display = "none";  // hide
+    widgetDengan.style.display = "none";  // hide
+    for (var i = 0; i < radio.length; i++) {
+        radio[i].onclick = function() {
+            var val = this.value;
+            if (val == '1') {
+                widgetTanpa.style.display = 'block';
+                widgetDengan.style.display = 'none';
+                //angka.style.visibility = "hidden";
+            }
+            else if (val == '2') {
+                widgetTanpa.style.display = 'none';
+                widgetDengan.style.display = 'block';
+                //angka.style.visibility = "visible";
+            }
+
+        }
+    }
+</script>
+<script>
+    $(document).ready(function()
+    {
+        function rumusTanpa()
+        {
+            var p1 = parseFloat($("#panjang_tanpa").val());
+            var l1 = parseFloat($("#lebar_tanpa").val());
+            var t1 = parseFloat($("#tinggi_tanpa").val());
+            var angka1 = parseFloat($("#angka_tanpa").val());
+            var faktor1 = parseFloat($("#faktor-konstruksi_tanpa").val());
+            var total1 = (p1 * 3.2808399) * (l1 * 3.2808399) * (t1 * 3.2808399) / angka1 * faktor1;
+            $("#hasil_tanpa").val(Math.round(total1));
+            var total1_fixed = Math.round(total1) / 264.172052;
+            var hasil = total1_fixed.toFixed(1);
+            $("#hasil_tanpa1").val(hasil);
+        }
+        $(document).on("change, keyup", "#faktor-konstruksi_tanpa,#angka_tanpa,#panjang_tanpa, #tinggi_tanpa, #lebar_tanpa", rumusTanpa);
+    });
+</script>
+<script>
+    $(document).ready(function()
+    {
+        function rumusDengan()
+        {
+            var p = parseFloat($("#panjang_dengan").val());
+            var l = parseFloat($("#lebar_dengan").val());
+            var t = parseFloat($("#tinggi_dengan").val());
+            var angka = parseFloat($("#angka_dengan").val());
+            var faktor = parseFloat($("#faktor-konstruksi_dengan").val());
+            var bahaya = parseFloat($("#faktor-bahaya_dengan").val());
+            var total = Math.round(p * 3.2808399) * Math.round(l * 3.2808399) * Math.round(t * 3.2808399) / angka * faktor * bahaya;
+            $("#hasil_dengan").val(Math.round(total));
+            var total_fixed = Math.round(total) / 264.172052;
+            var hasil = total_fixed.toFixed(1);
+            $("#hasil_dkubik").val(hasil);
+        }
+        $(document).on("change, keyup", "#faktor-bahaya_dengan,#faktor-konstruksi_dengan,#angka_dengan,#panjang_dengan, #tinggi_dengan, #lebar_dengan", rumusDengan);
+    });
+</script>
 <script type="text/javascript">
     $(function() {
-				$('.easy-pie-chart.percentage').each(function(){
-					var $box = $(this).closest('.infobox');
-					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-					var size = parseInt($(this).data('size')) || 50;
-					$(this).easyPieChart({
-						barColor: barColor,
-						trackColor: trackColor,
-						scaleColor: false,
-						lineCap: 'butt',
-						lineWidth: parseInt(size/10),
-						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
-						size: size
-					});
-				})
-			
-				$('.sparkline').each(function(){
-					var $box = $(this).closest('.infobox');
-					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
-					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
-				});
-			
-			
-			
-			
-			  var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
-			  var data = [
-				{ label: "social networks",  data: 38.7, color: "#68BC31"},
-				{ label: "search engines",  data: 24.5, color: "#2091CF"},
-				{ label: "ad campaings",  data: 8.2, color: "#AF4E96"},
-				{ label: "direct traffic",  data: 18.6, color: "#DA5430"},
-				{ label: "other",  data: 10, color: "#FEE074"}
-			  ]
-			  function drawPieChart(placeholder, data, position) {
-			 	  $.plot(placeholder, data, {
-					series: {
-						pie: {
-							show: true,
-							tilt:0.8,
-							highlight: {
-								opacity: 0.25
-							},
-							stroke: {
-								color: '#fff',
-								width: 2
-							},
-							startAngle: 2
-						}
-					},
-					legend: {
-						show: true,
-						position: position || "ne", 
-						labelBoxBorderColor: null,
-						margin:[-30,15]
-					}
-					,
-					grid: {
-						hoverable: true,
-						clickable: true
-					}
-				 })
-			 }
-			 drawPieChart(placeholder, data);
-			
-			 /**
-			 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-			 so that's not needed actually.
-			 */
-			 placeholder.data('chart', data);
-			 placeholder.data('draw', drawPieChart);
-			
-			
-			
-			  var $tooltip = $("<div class='tooltip top in hide'><div class='tooltip-inner'></div></div>").appendTo('body');
-			  var previousPoint = null;
-			
-			  placeholder.on('plothover', function (event, pos, item) {
-				if(item) {
-					if (previousPoint != item.seriesIndex) {
-						previousPoint = item.seriesIndex;
-						var tip = item.series['label'] + " : " + item.series['percent']+'%';
-						$tooltip.show().children(0).text(tip);
-					}
-					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
-				} else {
-					$tooltip.hide();
-					previousPoint = null;
-				}
-				
-			 });
-			
-			
-			
-			
-			
-			
-				var d1 = [];
-				for (var i = 0; i < Math.PI * 2; i += 0.5) {
-					d1.push([i, Math.sin(i)]);
-				}
-			
-				var d2 = [];
-				for (var i = 0; i < Math.PI * 2; i += 0.5) {
-					d2.push([i, Math.cos(i)]);
-				}
-			
-				var d3 = [];
-				for (var i = 0; i < Math.PI * 2; i += 0.2) {
-					d3.push([i, Math.tan(i)]);
-				}
-				
-			
-				var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
-				$.plot("#sales-charts", [
-					{ label: "Domains", data: d1 },
-					{ label: "Hosting", data: d2 },
-					{ label: "Services", data: d3 }
-				], {
-					hoverable: true,
-					shadowSize: 0,
-					series: {
-						lines: { show: true },
-						points: { show: true }
-					},
-					xaxis: {
-						tickLength: 0
-					},
-					yaxis: {
-						ticks: 10,
-						min: -2,
-						max: 2,
-						tickDecimals: 3
-					},
-					grid: {
-						backgroundColor: { colors: [ "#fff", "#fff" ] },
-						borderWidth: 1,
-						borderColor:'#555'
-					}
-				});
-			
-			
-				$('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('.tab-content')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-			
-					var off2 = $source.offset();
-					var w2 = $source.width();
-			
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
-			
-			
-				$('.dialogs,.comments').slimScroll({
-					height: '300px'
-			    });
-				
-				
-				//Android's default browser somehow is confused when tapping on label which will lead to dragging the task
-				//so disable dragging when clicking on label
-				var agent = navigator.userAgent.toLowerCase();
-				if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
-				  $('#tasks').on('touchstart', function(e){
-					var li = $(e.target).closest('#tasks li');
-					if(li.length == 0)return;
-					var label = li.find('label.inline').get(0);
-					if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
-				});
-			
-				$('#tasks').sortable({
-					opacity:0.8,
-					revert:true,
-					forceHelperSize:true,
-					placeholder: 'draggable-placeholder',
-					forcePlaceholderSize:true,
-					tolerance:'pointer',
-					stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
-						$(ui.item).css('z-index', 'auto');
-					}
-					}
-				);
-				$('#tasks').disableSelection();
-				$('#tasks input:checkbox').removeAttr('checked').on('click', function(){
-					if(this.checked) $(this).closest('li').addClass('selected');
-					else $(this).closest('li').removeClass('selected');
-				});
-				
-			
-			})
-		</script>
-                
-                <script type="text/javascript">
-                    //set timezone
-                    <?php date_default_timezone_set('Asia/Jakarta'); ?>
-                    //buat object date berdasarkan waktu di server
-                    var serverTime = new Date(<?php print date('Y, m, d, H, i, s, 0'); ?>);
-                    //buat object date berdasarkan waktu di client
-                    var clientTime = new Date();
-                    //hitung selisih
-                    var Diff = serverTime.getTime() - clientTime.getTime();    
-                    //fungsi displayTime yang dipanggil di bodyOnLoad dieksekusi tiap 1000ms = 1detik
-                    function displayServerTime(){
-                        //buat object date berdasarkan waktu di client
-                        var clientTime = new Date();
-                        //buat object date dengan menghitung selisih waktu client dan server
-                        var time = new Date(clientTime.getTime() + Diff);
-                        //ambil nilai jam
-                        var sh = time.getHours().toString();
-                        //ambil nilai menit
-                        var sm = time.getMinutes().toString();
-                        //ambil nilai detik
-                        var ss = time.getSeconds().toString();
-                        //tampilkan jam:menit:detik dengan menambahkan angka 0 jika angkanya cuma satu digit (0-9)
-                        document.getElementById("clock").innerHTML = (sh.length==1?"0"+sh:sh) + ":" + (sm.length==1?"0"+sm:sm) + ":" + (ss.length==1?"0"+ss:ss);
-                    }
-                </script>
-                <script>
-                    function goBack()
-                      {
-                      window.history.back()
-                      }
-                </script>
-<?php
-                }else{
-        header("location:login/login");
+        $('#validation-form').show();
+        //documentation : http://docs.jquery.com/Plugins/Validation/validate
+        $('#validation-form').validate({
+            errorElement: 'span',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            rules: {
+                kecamatan: {
+                    required: true
+                },
+                nama_tipe_baru1: {
+                    required: true
+                },
+                nilai_tipe_baru1: {
+                    required: true
+                },
+                nama_tipe_baru2: {
+                    required: true
+                },
+                nilai_tipe_baru2: {
+                    required: true
+                },
+                desa: {
+                    required: true
+                },
+                sumber_air_: {
+                    required: true
+                },
+                exposure: {
+                    required: true
+                },
+                tipe_proteksi: {
+                    required: true
+                },
+                nilai_bangunan1: {
+                    required: true
+                },
+                nilai_bangunan2: {
+                    required: true
+                },
+                angka_kostruksi1: {
+                    required: true
+                },
+                angka_kostruksi2: {
+                    required: true
+                },
+                tinggi1: {
+                    required: true
+                },
+                tinggi2: {
+                    required: true
+                },
+                tepol: {
+                    required: true
+                }
+            },
+            messages: {
+                kecamatan: "Mohon untuk memilih lokasi kecamatan.",
+                desa: "Mohon untuk memilih lokasi desa.",
+                sumber_air_: "Mohon untuk memilih sumber air.",
+                tipe_proteksi: "Mohon untuk memilih tipe proteksi kebakaran.",
+                exposure: "Mohon untuk memilih.",
+                tepol: "Mohon untuk memilih."
+            },
+            invalidHandler: function(event, validator) { //display error alert on form submit   
+                $('.alert-error', $('.login-form')).show();
+            },
+            highlight: function(e) {
+                $(e).closest('.control-group').removeClass('info').addClass('error');
+            },
+            success: function(e) {
+                $(e).closest('.control-group').removeClass('error').addClass('info');
+                $(e).remove();
+            },
+            errorPlacement: function(error, element) {
+                if (element.is(':checkbox') || element.is(':radio')) {
+                    var controls = element.closest('.controls');
+                    if (controls.find(':checkbox,:radio').length > 1)
+                        controls.append(error);
+                    else
+                        error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+                }
+                else if (element.is('.select2')) {
+                    error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+                }
+                else if (element.is('.chzn-select')) {
+                    error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+                }
+                else
+                    error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                var url = "Fanalisis/analisisProses.php";
+
+                // mengambil nilai dari inputbox, textbox dan select
+                var v_kec = $('select[name=kecamatan]').val();
+                var v_air = $('select[name=sumber_air]').val();
+                var v_desa = $('select[name=desa]').val();
+                var v_bangunan1 = $('input:text[name=nilai_bangunan1]').val();
+                var v_bangunan2 = $('input:text[name=nilai_bangunan2]').val();
+                var v_akons1 = $('select[name=angka_konstruksi1]').val();
+                var v_akons2 = $('select[name=angka_konstruksi2]').val();
+                var v_tinggi1 = $('input:text[name=tinggi1]').val();
+                var v_tinggi2 = $('input:text[name=tinggi2]').val();
+                var v_exposure = $('input:radio[name=exposure]').val();
+                var v_tepol = $('input:radio[name=tepol]').val();
+                //var v_hasil1 = $('input:text[name=hasil1]').val();
+                //var v_hasil2 = $('input:text[name=hasil2]').val();
+
+                $.post(url, {tinggi2: v_tinggi2, desa: v_desa, kecamatan: v_kec, sumber_air: v_air, nilai_bangunan1: v_bangunan1, nilai_bangunan2: v_bangunan2, angka_konstruksi1: v_akons1, angka_konstruksi2: v_akons2, tinggi1: v_tinggi1, exposure: v_exposure, tepol: v_tepol, hasil1: v_hasil1, hasil2: v_hasil2}, function() {
+
+                })
+            },
+            invalidHandler: function(form) {
+            }
+        });
+    });
+
+    $(function() {
+        $(".chzn-select").chosen();
+    });
+
+    $(function() {
+        ///////////////////////////////////////////
+        $('#user-profile-3').end().find('button[type=reset]').on(ace.click_event, function() {
+            $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
+        })
+    });
+</script>
+
+<table>
+    <tr>
+        <td>Product 1</td>
+        <td>
+            <input type="number" id="product1" class="formnumbers" name="ProductOne" onChange="changeTotalFromCount(this);" onLoad="changeTotalFromCount(this);" min="1" data-unitprice="7" />
+        </td>
+        <td><span id="1"></span>
+
+        </td>
+    </tr>
+    <tr>
+        <td>Product 2</td>
+        <td>
+            <input type="number" id="product2" class="formnumbers" name="ProductTwo" onChange="changeTotalFromCount(this);" onLoad="changeTotalFromCount(this);" min="1" data-unitprice="10" />
+        </td>
+        <td><span id="2"></span>
+
+        </td>
+    </tr>
+    <tr>
+        <td>Total Price</td>
+        <td></td>
+        <td id="totalPriceDisplay">TOTAL PRICE HERE</td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function changeTotalFromCount(input) {
+        var unitPrice = parseFloat(input.getAttribute("data-unitPrice"));
+        var count = input.value;
+
+        var price = unitPrice * count;
+        var formattedPrice = '\u20ac ' + price.toFixed(2);
+
+        var label = input.parentNode.nextElementSibling;
+        label.innerHTML = '';
+        label.appendChild(document.createTextNode(formattedPrice));
+        getTotalPrice();
     }
-?>
-	</body>
-</html>
+    function getTotalPrice() {
+        var total = 0,
+                inputs = document.getElementsByTagName('input');
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value) {
+                total += parseFloat(inputs[i].getAttribute("data-unitPrice")) * parseInt(inputs[i].value, 10);
+            }
+        }
+        if (total > 0) {
+            document.getElementById('totalPriceDisplay').innerText = '\u20ac ' + total.toFixed(2);
+
+        }
+    }
+    function initTotals() {
+        var inputs = document.getElementsByTagName('input');
+        for (var i = 0; i < inputs.length; i++) {
+            changeTotalFromCount(inputs[i]);
+        }
+    }
+    window.onload = initTotals;
+</script>
+$a['galon/liter'] == $laju_galon

@@ -9,10 +9,7 @@ if (loggedin()) { //check if the user is logged in, if it is, it will skip this 
     exit();
 }
 ?>
-<!-- END NEW CODE -->
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
+
 <html lang="en" class="no-js">
     <!--<![endif]-->
     <!-- BEGIN HEAD -->
@@ -67,7 +64,17 @@ if (loggedin()) { //check if the user is logged in, if it is, it will skip this 
                     </span>
                 </div>
                 <?php
-                //echo isset($_COOKIE['pesan']) ? '<p class="alert" id="alert" onclick="hide()">' . $_COOKIE['pesan'] . '</p>' : '';
+                if (isset($_GET['msg'])) {
+                    if ($_GET['msg'] == 'log_error01') {
+                        ?>
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert">
+                            </button>
+                            Kombinasi Nomor Induk & Password salah.
+                        </div>
+                        <?php
+                    } 
+                }
                 ?>
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->

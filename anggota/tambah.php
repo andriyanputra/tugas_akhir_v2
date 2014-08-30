@@ -148,7 +148,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             </li>
                             <li class="active">Tambah Data</li>
                         </ul><!--.breadcrumb-->
-
+                         <div class="pull-right">
+                            <script>
+                                var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                var date = new Date();
+                                var day = date.getDate();
+                                var month = date.getMonth();
+                                var thisDay = date.getDay(),
+                                        thisDay = myDays[thisDay];
+                                var yy = date.getYear();
+                                var year = (yy < 1000) ? yy + 1900 : yy;
+                                document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                            </script>
+                            , Pukul <span id="clock"></span>
+                        </div>
                     </div>
 
                     <div class="page-content">
@@ -175,12 +189,95 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <div class="row-fluid">
                                                 <form class="form-horizontal" id="validation-form" method="post" action="proses.php" enctype="multipart/form-data">
                                                     <div id="user-profile-3" class="user-profile">
-                                                        <h3 class="lighter block green">Mohon untuk mengisi form berikut</h3>
-
                                                         <div class="row-fluid">
+                                                            <?php
+                                                            if (isset($_GET['msg'])) {
+                                                                if ($_GET['msg'] == 'error_foto1') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
 
+                                                                        <i class="icon-remove"></i>
+                                                                        File <strong>Foto</strong> yang diizinkan hanya berformat jpg, jpeg, png, gif!! Silahkan diulangi. 
+                                                                    </div>
+                                                                    <?php
+                                                                } else if ($_GET['msg'] == 'error_foto2') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        File yang diizinkan hanya berukuran kurang dari 1Mb!! Silahkan diulangi. 
+                                                                    </div>
+                                                                    <?php
+                                                                } else if ($_GET['msg'] == 'error_foto4') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        Proses upload foto gagal!! Silahkan diulangi. 
+                                                                    </div>
+                                                                    <?php
+                                                                    echo "<p>Proses upload gagal, kode error = " . $_FILES['location']['error'] . "</p>";
+                                                                } else if ($_GET['msg'] == 'error') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        Proses tambah data gagal!! Silahkan diulangi. 
+                                                                    </div>
+                                                                    <?php
+                                                                } else if ($_GET['msg'] == 'error_foto3') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        Foto sudah digunakan! Silahkan diulangi.
+                                                                    </div>
+                                                                    <?php
+                                                                } else if ($_GET['msg'] == 'error_email') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        Maaf, <strong>Email</strong> sudah dipakai! Silahkan ulangi.
+                                                                    </div>
+                                                                    <?php
+                                                                } else if ($_GET['msg'] == 'error_nip') {
+                                                                    ?>
+                                                                    <div class="alert alert-block alert-error">
+                                                                        <button type="button" class="close" data-dismiss="alert">
+                                                                            <i class="icon-remove"></i>
+                                                                        </button>
+
+                                                                        <i class="icon-remove"></i>
+                                                                        Maaf, <strong>Nomor Induk</strong> sudah digunakan! Silahkan ulangi.
+                                                                    </div>
+                                                                    <?php
+                                                                }
+                                                            }
+                                                            ?>
                                                             <div class="span4">
-                                                                <input type="file" name="foto" required/>
+                                                                <div class="control-group">
+                                                                    <input type="file" name="foto" required/>
+                                                                    <p align="center" class="red">*&nbsp;&nbsp;Ukuran foto tidak boleh melebihi 1Mb.</p>
+                                                                </div>
                                                             </div>
 
                                                             <div class="vspace"></div>
@@ -253,120 +350,115 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                                         <div class="space"></div>
 
-                                                        <h4 class="header blue bolder smaller">Password</h4>
-
-                                                        <div class="control-group">
-                                                            <label class="control-label" for="password">Password:</label>
-
-                                                            <div class="controls">
-                                                                <div class="span12">
-                                                                    <input type="password" name="password" id="password" class="span4" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="control-group">
-                                                            <label class="control-label" for="password2">Confirm Password:</label>
-
-                                                            <div class="controls">
-                                                                <div class="span12">
-                                                                    <input type="password" name="password2" id="password2" class="span4" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="space"></div>
-
                                                         <h4 class="header blue bolder smaller">Kontak</h4>
 
-                                                        <div class="control-group">
-                                                            <label class="control-label" for="email">Email:</label>
+                                                        <div class = "control-group">
+                                                            <label class = "control-label" for = "email">Email:</label>
 
-                                                            <div class="controls">
-                                                                <div class="span4 input-prepend">
-                                                                    <span class="add-on">
-                                                                        <i class="icon-envelope"></i>
+                                                            <div class = "controls">
+                                                                <div class = "span4 input-prepend">
+                                                                    <span class = "add-on">
+                                                                        <i class = "icon-envelope"></i>
                                                                     </span>
-                                                                    <input class="span12" type="email" name="email" id="email" class="span6" />
+                                                                    <input class = "span12" type = "email" name = "email" id = "email" class = "span6" />
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="control-group">
-                                                            <label class="control-label" for="phone">No. Handphone:</label>
+                                                        <div class = "control-group">
+                                                            <label class = "control-label" for = "phone">No. Handphone:</label>
 
-                                                            <div class="controls">
-                                                                <div class="span3 input-prepend">
-                                                                    <span class="add-on">
-                                                                        <i class="icon-phone"></i>
+                                                            <div class = "controls">
+                                                                <div class = "span3 input-prepend">
+                                                                    <span class = "add-on">
+                                                                        <i class = "icon-phone"></i>
                                                                     </span>
-                                                                    <input class="span12" type="tel" id="phone" name="phone" />
+                                                                    <input class = "span12" type = "tel" id = "phone" name = "phone" />
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="space"></div>
+                                                        <div class = "space"></div>
 
-                                                        <h4 class="header blue bolder smaller">Level User</h4>
+                                                        <h4 class = "header blue bolder smaller">Level User</h4>
 
-                                                        <div class="control-group">
-                                                            <label class="control-label" for="state">Jabatan:</label>
+                                                        <div class = "control-group">
+                                                            <label class = "control-label" for = "state">Jabatan:</label>
 
-                                                            <div class="controls">
-                                                                <span class="span10">
-                                                                    <select id="jabatan" name="jabatan">
-                                                                        <option value="" />------------------------------------
-                                                                        <option value="1" />Kepala Bidang PMK
-                                                                        <option value="2" />Kepala Seksi Oprasional
-                                                                        <option value="3" />Kepala Seksi Sarana
-                                                                        <option value="4" />Staff Administrasi Umum
-                                                                        <option value="5" />Komandan Pleton
-                                                                        <option value="6" />Komandan Regu
-                                                                        <option value="7" />Operator
-                                                                        <option value="8" />Anggota
+                                                            <div class = "controls">
+                                                                <span class = "span10">
+                                                                    <select id = "jabatan" name = "jabatan">
+                                                                        <option value = "" /> ------------------------------------
+                                                                        <option value = "1" />Kepala Bidang PMK
+                                                                        <option value = "2" />Kepala Seksi Oprasional
+                                                                        <option value = "3" />Kepala Seksi Sarana
+                                                                        <option value = "4" />Staff Administrasi Umum
+                                                                        <option value = "5" />Komandan Pleton
+                                                                        <option value = "6" />Komandan Regu
+                                                                        <option value = "7" />Operator
+                                                                        <option value = "8" />Anggota
                                                                     </select>
                                                                 </span>
                                                             </div>
                                                         </div>
 
-                                                        <div class="control-group">
-                                                            <label class="control-label">Level:</label>
+                                                        <div id="level">
+                                                            <div class = "control-group">
+                                                                <label class = "control-label">Level:</label>
 
-                                                            <div class="controls">
-                                                                <label>
-                                                                    <input name="level" value="1" type="radio" />
-                                                                    <span class="lbl"> Admin (Staff Administrasi Umum)</span>
-                                                                </label>
+                                                                <div class = "controls">
+                                                                    <div id="1">
+                                                                        <label class="inline">
+                                                                            <input name = "level" value = "1" type = "checkbox"/>
+                                                                            <span class="lbl"> Admin (Staff Administrasi Umum)</span>
+                                                                        </label>
+                                                                    </div>
 
-                                                                <label>
-                                                                    <input name="level" value="2" type="radio" />
-                                                                    <span class="lbl"> Kepala Bidang</span>
-                                                                </label>
-
-                                                                <label>
-                                                                    <input name="level" value="3" type="radio" />
-                                                                    <span class="lbl"> Kepala Seksi Oprasional</span>
-                                                                </label>
-
-                                                                <label>
-                                                                    <input name="level" value="4" type="radio" />
-                                                                    <span class="lbl"> Kepala Seksi Sarana</span>
-                                                                </label>
+                                                                    <div id="2">
+                                                                        <label class="inline">
+                                                                            <input name = "level" value = "2" type = "checkbox" />
+                                                                            <span class="lbl"> Kepala Bidang</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="row-fluid wizard-actions">
-                                                            <button class="btn  btn-primary" onClick="document.location.reload(true)">
-                                                                <i class="icon-refresh"></i>
+                                                        <div class = "space"></div>
+                                                        <div id = "pass">
+                                                            <h4 class = "header blue bolder smaller">Password</h4>
+
+                                                            <div class = "control-group">
+                                                                <label class = "control-label" for = "password">Password:</label>
+
+                                                                <div class = "controls">
+                                                                    <div class = "span12">
+                                                                        <input type = "password" id="password" name = "password" class = "span4" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class = "control-group">
+                                                                <label class = "control-label" for = "password2">Confirm Password:</label>
+
+                                                                <div class = "controls">
+                                                                    <div class = "span12">
+                                                                        <input type = "password" name = "password2" class = "span4" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class = "row-fluid wizard-actions">
+                                                            <button class = "btn  btn-primary" onClick = "document.location.reload(true)">
+                                                                <i class = "icon-refresh"></i>
                                                                 Reset
                                                             </button>
-
-                                                            <input type="submit" name="submit" class="btn btn-success" value="Simpan" />
-
-                                                            <!--<button class="btn btn-success btn-next" data-last="Finish">
-                                                                Next
-                                                                <i class="icon-arrow-right icon-on-right"></i>
-                                                            </button>-->
+                                                            <input type = "submit" name = "submit" class = "btn btn-success" value = "Simpan" />
+                                                            <!--<button class = "btn btn-success btn-next" data-last = "Finish">
+                                                            Next
+                                                            <i class = "icon-arrow-right icon-on-right"></i>
+                                                            </button> -->
                                                         </div>
                                                     </div>
                                                 </form>
@@ -444,27 +536,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 </script>
 <script src="../assets/js-ace/bootstrap.min.js"></script>
 
-<!--page specific plugin scripts-->
-
-<!--[if lte IE 8]>
-  <script src="assets/js/excanvas.min.js"></script>
-<![endif]-->
-
-                                                    <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
-<script src="../assets/js-ace/jquery.gritter.min.js"></script>
 <script src="../assets/js-ace/bootbox.min.js"></script>
-<script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
-<script src="../assets/js-ace/jquery.easy-pie-chart.min.js"></script>
-<script src="../assets/js-ace/jquery.hotkeys.min.js"></script>
-<script src="../assets/js-ace/bootstrap-wysiwyg.min.js"></script>
 <script src="../assets/js-ace/select2.min.js"></script>
 <script src="../assets/js-ace/date-time/bootstrap-datepicker.min.js"></script>
-<script src="../assets/js-ace/fuelux/fuelux.spinner.min.js"></script>
-<script src="../assets/js-ace/fuelux/fuelux.wizard.min.js"></script>
-<script src="../assets/js-ace/x-editable/bootstrap-editable.min.js"></script>
-<script src="../assets/js-ace/x-editable/ace-editable.min.js"></script>
 <script src="../assets/js-ace/jquery.maskedinput.min.js"></script>
 <script src="../assets/js-ace/jquery.validate.min.js"></script>
 
@@ -476,32 +552,76 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <!--inline scripts related to this page-->
 
 <script type="text/javascript">
+    // ========================Jam========================================== //
+          
+            function showTime() {
+                var a_p = "";
+                var today = new Date();
+                var curr_hour = today.getHours();
+                var curr_minute = today.getMinutes();
+                var curr_second = today.getSeconds();
+                if (curr_hour < 12) {
+                    a_p = "AM";
+                } else {
+                    a_p = "PM";
+                }
+                if (curr_hour == 0) {
+                    curr_hour = 12;
+                }
+                if (curr_hour > 12) {
+                    curr_hour = curr_hour - 12;
+                }
+                curr_hour = checkTime(curr_hour);
+                curr_minute = checkTime(curr_minute);
+                curr_second = checkTime(curr_second);
+                document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+            setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
+    
+    var option = document.getElementsByName("jabatan");
+    var l_admin = document.getElementById("1");
+    var l_kepala = document.getElementById("2");
+    var level = document.getElementById("level");
+    pass.style.display = "none";  // hide
+    level.style.display = "none";  // hide
+    l_admin.style.display = "none";  // hide
+    l_kepala.style.display = "none";  // hide
+    for (var i = 0; i < option.length; i++) {
+        option[i].onclick = function() {
+            var val = this.value;
+            if (val == '1') {
+                level.style.display = 'block';
+                pass.style.display = 'block';
+                l_admin.style.display = 'none';
+                l_kepala.style.display = 'block';
+            } else if (val == '4') {
+                level.style.display = 'block';
+                pass.style.display = 'block';
+                l_kepala.style.display = 'none';
+                l_admin.style.display = 'block';
+            } else {
+                level.style.display = 'none';
+                pass.style.display = 'none';
+                l_admin.style.display = 'none';
+                l_kepala.style.display = 'none';
+            }
+        }
+    }
+
     $(function() {
 
         $('[data-rel=tooltip]').tooltip();
 
-        $(".select2").css('width', '150px').select2({allowClear: true})
-                .on('change', function() {
-                    $(this).closest('form').validate().element($(this));
-                });
 
         var $validation = true;
-        $('#fuelux-wizard').ace_wizard().on('change', function(e, info) {
-            if (info.step == 1 && $validation) {
-                if (!$('#validation-form').valid())
-                    return false;
-            }
-        }).on('finished', function(e) {
-            bootbox.dialog("Terima kasih! Informasi Anda berhasil disimpan!", [{
-                    "label": "OK",
-                    "class": "btn-small btn-primary",
-                    "href": "list.php",
-                }]
-                    );
-
-        }).on('stepclick', function(e) {
-            //return false;//prevent clicking on steps
-        });
 
 
         $('#validation-form').show();
@@ -555,6 +675,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 name: {
                     required: true
                 },
+                level: {
+                    required: true
+                },
                 phone: {
                     required: true
                 },
@@ -574,7 +697,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     required: true
                 },
                 gender: 'required',
-                level: 'required',
                 jabatan: 'required',
                 foto: 'required'
             },
@@ -587,7 +709,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     required: "Please specify a password.",
                     minlength: "Please specify a secure password."
                 },
-                subscription: "Please choose at least one option",
+                level: "Mohon untuk dichecklist",
                 gender: "Mohon untuk memilih",
                 jabatan: "Mohon untuk memilih"
             },
@@ -630,10 +752,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 var v_phone = $('input:text[name=alamat]').val();
                 var v_gender = $('input:radio[name=gender]').val();
                 var v_email = $('input:email[name=email]').val();
-                var v_pass1 = $('input:password[name=pass1]').val();
+                var v_pass1 = $('input:password[name=password]').val();
                 var v_jabatan = $('select[name=jabatan]').val();
 
-                $.post(url, {nomor: v_no, nama: v_nama, tempat: v_tempat, ttl: v_ttl, alamat: v_alamat, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, jabatan: v_jabatan}, function() {
+                $.post(url, {nomor: v_no, nama: v_nama, tempat: v_tempat, ttl: v_ttl, alamat: v_alamat, phone: v_phone, gender: v_gender, email: v_email, password: v_pass1, jabatan: v_jabatan}, function() {
 
                 })
 
@@ -651,358 +773,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
 
     $(function() {
-
-        //editables on first profile page
-        /*$.fn.editable.defaults.mode = 'inline';
-         $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
-         $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>' +
-         '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
-         
-         //editables 
-         $('#username').editable({
-         type: 'text',
-         name: 'username'
-         });
-         
-         var countries = [];
-         $.each({"CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function(k, v) {
-         countries.push({id: k, text: v});
-         });
-         
-         var cities = [];
-         cities["CA"] = [];
-         $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"], function(k, v) {
-         cities["CA"].push({id: v, text: v});
-         });
-         cities["IN"] = [];
-         $.each(["Delhi", "Mumbai", "Bangalore"], function(k, v) {
-         cities["IN"].push({id: v, text: v});
-         });
-         cities["NL"] = [];
-         $.each(["Amsterdam", "Rotterdam", "The Hague"], function(k, v) {
-         cities["NL"].push({id: v, text: v});
-         });
-         cities["TR"] = [];
-         $.each(["Ankara", "Istanbul", "Izmir"], function(k, v) {
-         cities["TR"].push({id: v, text: v});
-         });
-         cities["US"] = [];
-         $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"], function(k, v) {
-         cities["US"].push({id: v, text: v});
-         });
-         
-         var currentValue = "NL";
-         $('#country').editable({
-         type: 'select2',
-         value: 'NL',
-         source: countries,
-         success: function(response, newValue) {
-         if (currentValue == newValue)
-         return;
-         currentValue = newValue;
-         var source = (!newValue || newValue == "") ? [] : cities[newValue];
-         $('#city').editable('destroy').editable({
-         type: 'select2',
-         source: source
-         }).editable('setValue', null);
-         }
-         });
-         
-         $('#city').editable({
-         type: 'select2',
-         value: 'Amsterdam',
-         source: cities[currentValue]
-         });
-         
-         
-         
-         $('#signup').editable({
-         type: 'date',
-         format: 'yyyy-mm-dd',
-         viewformat: 'dd/mm/yyyy',
-         datepicker: {
-         weekStart: 1
-         }
-         });
-         
-         $('#age').editable({
-         type: 'spinner',
-         name: 'age', spinner: {
-         min: 16, max: 99, step: 1
-         }
-         });
-         
-         //var $range = document.createElement("INPUT");
-         //$range.type = 'range';
-         $('#login').editable({
-         type: 'slider', //$range.type == 'range' ? 'range' : 'slider',
-         name: 'login',
-         slider: {
-         min: 1, max: 50, width: 100
-         },
-         success: function(response, newValue) {
-         if (parseInt(newValue) == 1)
-         $(this).html(newValue + " hour ago");
-         else
-         $(this).html(newValue + " hours ago");
-         }
-         });
-         
-         $('#about').editable({
-         mode: 'inline',
-         type: 'wysiwyg',
-         name: 'about',
-         wysiwyg: {
-         //css : {'max-width':'300px'}
-         },
-         success: function(response, newValue) {
-         }
-         });
-         
-         
-         
-         // *** editable avatar *** //
-         try {//ie8 throws some harmless exception, so let's catch it
-         
-         //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
-         //so let's have a fake appendChild for it!
-         if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()))
-         Image.prototype.appendChild = function(el) {
-         }
-         
-         var last_gritter
-         $('#avatar').editable({
-         type: 'image',
-         name: 'avatar',
-         value: null,
-         image: {
-         //specify ace file input plugin's options here
-         btn_choose: 'Pilih Foto',
-         droppable: true,
-         /**
-         //this will override the default before_change that only accepts image files
-         before_change: function(files, dropped) {
-         return true;
-         },
-         */
-
-        //and a few extra ones here
-        /*name: 'avatar', //put the field name here as well, will be used inside the custom plugin
-         max_size: 110000, //~100Kb
-         on_error: function(code) {//on_error function will be called when the selected file has a problem
-         if (last_gritter)
-         $.gritter.remove(last_gritter);
-         if (code == 1) {//file format error
-         last_gritter = $.gritter.add({
-         title: 'File is not an image!',
-         text: 'Please choose a jpg|gif|png image!',
-         class_name: 'gritter-error gritter-center'
-         });
-         } else if (code == 2) {//file size rror
-         last_gritter = $.gritter.add({
-         title: 'File too big!',
-         text: 'Image size should not exceed 100Kb!',
-         class_name: 'gritter-error gritter-center'
-         });
-         }
-         else {//other error
-         }
-         },
-         on_success: function() {
-         $.gritter.removeAll();
-         }},
-         url: function(params) {
-         // ***UPDATE AVATAR HERE*** //
-         //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
-         
-         
-         var deferred = new $.Deferred
-         
-         //if value is empty, means no valid files were selected
-         //but it may still be submitted by the plugin, because "" (empty string) is different from previous non-empty value whatever it was
-         //so we return just here to prevent problems
-         var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
-         if (!value || value.length == 0) {
-         deferred.resolve();
-         return deferred.promise();
-         }
-         
-         
-         //dummy upload
-         setTimeout(function() {
-         if ("FileReader" in window) {
-         //for browsers that have a thumbnail of selected image
-         var thumb = $('#avatar').next().find('img').data('thumb');
-         if (thumb)
-         $('#avatar').get(0).src = thumb;
-         }
-         
-         deferred.resolve({'status': 'OK'});
-         
-         if (last_gritter)
-         $.gritter.remove(last_gritter);
-         last_gritter = $.gritter.add({
-         title: 'Avatar Updated!',
-         text: 'Uploading to server can be easily implemented. A working example is included with the template.',
-         class_name: 'gritter-info gritter-center'
-         });
-         
-         }, parseInt(Math.random() * 800 + 800))
-         
-         return deferred.promise();
-         },
-         success: function(response, newValue) {
-         }
-         })
-         } catch (e) {
-         }
-         
-         
-         
-         //another option is using modals
-         $('#avatar2').on('click', function() {
-         var modal =
-         '<div class="modal hide fade">\
-         <div class="modal-header">\
-         <button type="button" class="close" data-dismiss="modal">&times;</button>\
-         <h4 class="blue">Pilih Foto</h4>\
-         </div>\
-         \
-         <form class="no-margin">\
-         <div class="modal-body">\
-         <div class="space-4"></div>\
-         <div style="width:75%;margin-left:12%;"><input type="file" name="file-input" /></div>\
-         </div>\
-         \
-         <div class="modal-footer center">\
-         <button type="submit" class="btn btn-small btn-success"><i class="icon-ok"></i> Submit</button>\
-         <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
-         </div>\
-         </form>\                             </div>';
-         
-         
-         var modal = $(modal);
-         modal.modal("show").on("hidden", function() {
-         modal.remove();
-         });
-         var working = false;
-         
-         var form = modal.find('form:eq(0)');
-         var file = form.find('input[type=file]').eq(0);
-         file.ace_file_input({
-         style: 'well',
-         btn_choose: 'Click to choose new avatar',
-         btn_change: null,
-         no_icon: 'icon-picture',
-         thumbnail: 'small',
-         before_remove: function() {
-         //don't remove/reset files while being uploaded
-         return !working;
-         },
-         before_change: function(files, dropped) {
-         var file = files[0];
-         if (typeof file === "string") {
-         //file is just a file name here (in browsers that don't support FileReader API)
-         if (!(/\.(jpe?g|png|gif)$/i).test(file))
-         return false;
-         }
-         else {//file is a File object
-         var type = $.trim(file.type);
-         if ((type.length > 0 && !(/^image\/(jpe?g|png|gif)$/i).test(type))
-         || (type.length == 0 && !(/\.(jpe?g|png|gif)$/i).test(file.name))//for android default browser!
-         )
-         return false;
-         
-         if (file.size > 110000) {//~100Kb
-         return false;
-         }
-         }
-         
-         return true;
-         }
-         });
-         
-         form.on('submit', function() {
-         if (!file.data('ace_input_files'))
-         return false;
-         
-         file.ace_file_input('disable');
-         form.find('button').attr('disabled', 'disabled');
-         form.find('.modal-body').append("<div class='center'><i class='icon-spinner icon-spin bigger-150 orange'></i></div>");
-         
-         var deferred = new $.Deferred;
-         working = true;
-         deferred.done(function() {
-         form.find('button').removeAttr('disabled');
-         form.find('input[type=file]').ace_file_input('enable');
-         form.find('.modal-body > :last-child').remove();
-         
-         modal.modal("hide");
-         
-         var thumb = file.next().find('img').data('thumb');
-         if (thumb)
-         $('#avatar2').get(0).src = thumb;
-         
-         working = false;
-         });
-         
-         
-         setTimeout(function() {
-         deferred.resolve();
-         }, parseInt(Math.random() * 800 + 800));
-         
-         return false;
-         });
-         
-         });
-         
-         
-         
-         //////////////////////////////
-         /*$('#profile-feed-1').slimScroll({
-         height: '250px',
-         alwaysVisible: true
-         });
-         
-         $('.profile-social-links > a').tooltip();
-         
-         $('.easy-pie-chart.percentage').each(function() {
-         var barColor = $(this).data('color') || '#555';
-         var trackColor = '#E2E2E2';
-         var size = parseInt($(this).data('size')) || 72;
-         $(this).easyPieChart({
-         barColor: barColor,
-         trackColor: trackColor,
-         scaleColor: false,
-         lineCap: 'butt',
-         lineWidth: parseInt(size / 10),
-         animate: false,
-         size: size
-         }).css('color', barColor);
-         });*/
-
-        ///////////////////////////////////////////
-
-        //show the user info on right or left depending on its position
-        /*$('#user-profile-2 .memberdiv').on('mouseenter', function() {
-         var $this = $(this);
-         var $parent = $this.closest('.tab-pane');
-         var off1 = $parent.offset();
-         var w1 = $parent.width();
-         
-         var off2 = $this.offset();
-         var w2 = $this.width();
-         
-         var place = 'left';
-         if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
-         place = 'right';
-         
-         $this.find('.popover').removeClass('right left').addClass(place);
-         }).on('click', function() {
-         return false;
-         });*/
-
-
         ///////////////////////////////////////////
         $('#user-profile-3')
                 .find('input[type=file]').ace_file_input({
@@ -1025,7 +795,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             )
                         return false;
 
-                    if (file.size > 5500000) {//~5Mb
+                    if (file.size > 1100000) {//~5Mb
                         return false;
                     }
                 }

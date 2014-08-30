@@ -7,7 +7,7 @@
 
 include('../config/config.php');
 
-$kec_sumber = $_GET['sumber'];
+$kec_sumber = explode("|",$_GET['sumber']);
 
 $q = "SELECT
     KECAMATAN_ID
@@ -16,7 +16,7 @@ FROM
     sumber_air AS a
     INNER JOIN sumber_air_kecamatan AS b
         ON (a.ID_SUMBER = b.ID_SUMBER)
-        WHERE KECAMATAN_ID =$kec_sumber";
+        WHERE KECAMATAN_ID =$kec_sumber[0]";
 $jadi =  mysql_query($q) or die("Query failed: " . mysql_error());
 
 while($w = mysql_fetch_array($jadi)) {

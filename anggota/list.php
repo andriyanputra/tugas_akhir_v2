@@ -5,15 +5,15 @@ include '../config/functions.php'; //include function.php - very important
 include '../config/koneksi.php'; //include function.php - very important
 
 if (!loggedin()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
-    header("Location: ../login/login.php");
-    exit();
+header("Location: ../login/login.php");
+exit();
 }
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
     $query = mysql_query("SELECT * FROM pegawai,jabatan
-                          WHERE jabatan.jabatan_id = pegawai.jabatan_id
-                          ORDER BY pegawai_nip") or die("Query failed: " . mysql_error());
+      WHERE jabatan.jabatan_id = pegawai.jabatan_id
+      ORDER BY pegawai_nip") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -140,7 +140,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             </li>
                             <li class="active">Anggota Pemadam</li>
                         </ul><!--.breadcrumb-->
-
+                        <div class="pull-right">
+                            <script>
+                                var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                var date = new Date();
+                                var day = date.getDate();
+                                var month = date.getMonth();
+                                var thisDay = date.getDay(),
+                                thisDay = myDays[thisDay];
+                                var yy = date.getYear();
+                                var year = (yy < 1000) ? yy + 1900 : yy;
+                                document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                            </script>
+                            , Pukul <span id="clock"></span>
+                        </div>
                     </div>
 
                     <div class="page-content">
@@ -157,24 +171,72 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         <div class="row-fluid">
                             <div class="span12">
                                 <!--PAGE CONTENT BEGINS-->
-                                <div class="span10">
-                                </div>
-                                <div class="span2">
-                                    <a href="tambah">
-                                        <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Pegawai">
-                                            <i class="icon-plus bigger-130"></i>
+                                <?php
+                                if (isset($_GET['msg'])) {
+                                    if ($_GET['msg'] == 'success1') {
+                                        ?>
+                                        <div class="alert alert-block alert-success">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="icon-remove"></i>
+                                            </button>
+
+                                            <i class="icon-ok green"></i>&nbsp;
+                                            <strong>Selamat</strong>, data berhasil ditambahkan.
+                                        </div>
+                                        <?php
+                                    } else if ($_GET['msg'] == 'success3') {
+                                        ?>
+                                        <div class="alert alert-block alert-success">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="icon-remove"></i>
+                                            </button>
+
+                                            <i class="icon-ok green"></i>&nbsp;
+                                            Data berhasil dihapus.
+                                        </div>
+                                        <?php
+                                    } else if ($_GET['msg'] == 'error') {
+                                        ?>
+                                        <div class="alert alert-block alert-error">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="icon-remove"></i>
+                                            </button>
+
+                                            <i class="icon-remove"></i>
+                                            Terjadi kesalahan url sistem.
+                                        </div>
+                                        <?php
+                                    } else if ($_GET['msg'] == 'success2') {
+                                        ?>
+                                        <div class="alert alert-block alert-success">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="icon-remove"></i>
+                                            </button>
+
+                                            <i class="icon-ok green"></i>&nbsp;
+                                            Data berhasil diperbaharui.
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                                <div class = "space-6"></div>
+                                <div class = "pull-right">
+                                    <a href = "tambah">
+                                        <button class = "btn btn-mini btn-primary btn-block" data-rel = "tooltip" title = "Tambah Pegawai">
+                                            <i class = "icon-plus bigger-130"></i>
                                             <strong>Tambah Data</strong>
                                         </button>
                                     </a>
                                 </div>
-                                <div class="space-18"></div>
-                                <div class="table-header">
+                                <div class = "space-18"></div>
+                                <div class = "table-header">
                                     Angka Klasifikasi Resiko Kebakaran
                                 </div>
-                                <table id="pegawai" class="table table-striped table-bordered table-hover">
+                                <table id = "pegawai" class = "table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="center">No.</th>
+                                            <th class = "center">No.</th>
                                             <th>Nomor Induk</th>
                                             <th>Nama</th>
                                             <th>Alamat</th>
@@ -190,7 +252,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         while ($data = mysql_fetch_array($query)) {
                                             ?>
                                             <tr>
-                                                <td><?php echo ''.$no.'.';  ?></td>
+                                                <td><?php echo '' . $no . '.'; ?></td>
                                                 <td><?php echo $data['pegawai_nip']; ?></td>
                                                 <td><?php echo $data['pegawai_nama']; ?></td>
                                                 <td><?php echo $data['pegawai_alamat']; ?></td>
@@ -292,7 +354,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <!--[if !IE]>-->
 
 <script type="text/javascript">
-                                                                        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
 </script>
 
 <!--<![endif]-->
@@ -314,9 +376,43 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <!--inline scripts related to this page-->
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#pegawai').DataTable();
-    });
+    // ========================Jam========================================== //
+
+    function showTime() {
+        var a_p = "";
+        var today = new Date();
+        var curr_hour = today.getHours();
+        var curr_minute = today.getMinutes();
+        var curr_second = today.getSeconds();
+        if (curr_hour < 12) {
+            a_p = "AM";
+        } else {
+            a_p = "PM";
+        }
+        if (curr_hour == 0) {
+            curr_hour = 12;
+        }
+        if (curr_hour > 12) {
+            curr_hour = curr_hour - 12;
+        }
+        curr_hour = checkTime(curr_hour);
+        curr_minute = checkTime(curr_minute);
+        curr_second = checkTime(curr_second);
+        document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
+
+$(document).ready(function() {
+    var table = $('#pegawai').DataTable();
+});
 </script>
 </body>
 </html>
