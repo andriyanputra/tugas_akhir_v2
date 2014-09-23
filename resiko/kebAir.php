@@ -1,6 +1,4 @@
 <?php
-//include '../template/header.php';
-
 session_start();
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
@@ -38,7 +36,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <!--page specific plugin styles-->
                     <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
-                    <link rel="shortcut icon" href="../assets/img/favicon.ico">
+                    <link rel="shortcut icon" href="../assets/img/favicon.png">
                     <!--fonts-->
 
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
@@ -130,7 +128,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                             <li>
-                                                <a href="../anggota/profile">
+                                                <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                                     <i class="icon-user"></i>
                                                     Profile
                                                 </a>
@@ -146,10 +144,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             </li>
                                         </ul>
                                     </li>
-                                </ul>
-                                <!--/.ace-nav--> </div>
-                            <!--/.container-fluid--> </div>
-                        <!--/.navbar-inner--> </div>
+                                </ul><!--/.ace-nav--> 
+                            </div><!--/.container-fluid--> 
+                        </div><!--/.navbar-inner--> 
+                    </div>
 
                     <div class="main-container container-fluid">
                         <a class="menu-toggler" id="menu-toggler" href="#">
@@ -179,8 +177,25 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         </span>
                                     </li>
                                     <li class="active">Laju Penerapan Air</li>
-                                </ul>
-                                <!--.breadcrumb--> </div>
+                                </ul><!--.breadcrumb-->
+
+                                <div class="pull-right">
+                                    <script>
+                                        var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                        var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                        var date = new Date();
+                                        var day = date.getDate();
+                                        var month = date.getMonth();
+                                        var thisDay = date.getDay(),
+                                                thisDay = myDays[thisDay];
+                                        var yy = date.getYear();
+                                        var year = (yy < 1000) ? yy + 1900 : yy;
+                                        document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                    </script>
+                                    , Pukul
+                                    <span id="clock"></span>
+                                </div> 
+                            </div>
 
                             <div class="page-content">
                                 <div class="page-header position-relative">
@@ -237,6 +252,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         <form class="form-horizontal" id="validation-form" method="POST" action="Fanalisis/kebProses.php">
                                             <div class="row-fluid">
                                                 <div class="span12">
+                                                    <?php
+                                                    if (isset($_GET['msg'])) {
+                                                        if ($_GET['msg'] == 'error') {
+                                                            ?>
+                                                            <div class="alert alert-block alert-error">
+                                                                <button type="button" class="close" data-dismiss="alert">
+                                                                    <i class="icon-remove"></i>
+                                                                </button>
+
+                                                                <i class="icon-remove"></i>
+                                                                Mohon untuk mengisi seluruh field dalam tab <strong>Potensi Pengangkutan Air</strong>.
+                                                            </div>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
                                                     <div class="tabbable">
                                                         <div id="tabs">
                                                             <ul class="nav nav-tabs padding-18" >
@@ -307,6 +338,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                                 $laju2 = round($p2 * $l * $t / 0.7483);
                                                                                                 $laju_galon = round($p_ft * $l_ft * $t_ft / 100);
                                                                                                 $laju_galon2 = round($p_ft2 * $l_ft * $t_ft / 100);
+                                                                                                $luas_bangunan = round($p * $l);
                                                                                                 //p=3.048&l=15.24&t=15.24
                                                                                                 $q = mysql_query("SELECT galonMenit FROM pengiriman_air WHERE galonMenit = '$laju_galon' OR galonMenit = '$laju_galon2'") or die(mysql_error());
                                                                                                 if ($q) {
@@ -354,6 +386,28 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                         <!-- end span12 --> </div>
                                                                 </div>
                                                                 <!--END LAJU-->
+                                                                <?php
+                                                                $q_ = mysql_fetch_assoc(mysql_query("SELECT MAX( resiko_id )FROM resiko"));
+                                                                $resiko_id = $q_['MAX( resiko_id )'];
+                                                                $query_result = mysql_query("SELECT *
+                                                                                            FROM
+                                                                                                kecamatan AS a
+                                                                                                INNER JOIN resiko AS b
+                                                                                                    ON (a.KECAMATAN_ID = b.KECAMATAN_ID)
+                                                                                                INNER JOIN desa AS c
+                                                                                                    ON (c.DESA_ID = b.DESA_ID) AND (c.KECAMATAN_ID = a.KECAMATAN_ID)
+                                                                                                INNER JOIN bangunan AS d
+                                                                                                    ON (d.ID_BANGUNAN = b.ID_BANGUNAN)
+                                                                                                INNER JOIN sumber_air AS e
+                                                                                                    ON (e.ID_SUMBER = b.ID_SUMBER)
+                                                                                             WHERE resiko_id = '$resiko_id'");
+                                                                if ($query_result) {
+                                                                    $result = mysql_fetch_array($query_result);
+                                                                } else {
+                                                                    die(mysql_error());
+                                                                }
+                                                                $result_tgl = date_create($result['resiko_tanggal']);
+                                                                ?>
                                                                 <!--POTENSI-->
                                                                 <div id="potensi" class="tab-pane">
                                                                     <div class="row-fluid">
@@ -369,99 +423,264 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                         <div class="content">
                                                                                             <div class="span6">
                                                                                                 <div class="space-6"></div>
-                                                                                                <img src="../assets/img/potensi.JPG" width="400" height="500" ></div>
-                                                                                            <div class="span6 form-horizontal">
+                                                                                                <img src="../assets/img/potensi.jpg" width="400" height="500" >
+                                                                                            </div>
+                                                                                            <div class="span6" id="validation-form">
                                                                                                 <div class="space-6"></div>
-                                                                                                <div class="control-group">
-                                                                                                    <label class="control-label" for="volume">Kapasitas Air Kendaraan Damkar (V):</label>
-                                                                                                    <div class="controls">
-                                                                                                        <input name="v_potensi" id="volume" type="text" placeholder="liter . . ." />
-                                                                                                    </div>
-                                                                                                </div>
 
                                                                                                 <div class="control-group">
-                                                                                                    <label class="control-label" for="a">Waktu Pengisian Kendaraan Pemasok Air (A) :</label>
-                                                                                                    <div class="controls">
-                                                                                                        <input name="a_potensi" id="a" type="text" placeholder="menit . . ." />
-                                                                                                    </div>
+                                                                                                    <label  for="sumber_air">
+                                                                                                        Sumber Air : <?php echo $result['NAMA_SUMBER'] . '.'; ?><br/>
+                                                                                                        Lokasi Kejadian : <?php echo $result['alamat_pelapor'] . ' Ds. ' . $result['DESA_NAMA'] . ', Kec. ' . $result['KECAMATAN_NAMA'] . ', Kab. Sidoarjo.'; ?>
+                                                                                                    </label>
+                                                                                                    <input type="hidden" name="id" value="<?php echo $resiko_id; ?>" />
                                                                                                 </div>
-
                                                                                                 <div class="control-group">
-                                                                                                    <label class="control-label" for="kecepatan">Kecepatan Konstan Kendaraan :</label>
+                                                                                                    <label class="control-label" for="kecepatan_air">Kecepatan Konstan Kendaraan Menuju Sumber Air:</label>
                                                                                                     <div class="controls">
-                                                                                                        <input name="kecepatan" id="kecepatan" type="text" placeholder="km/jam . . ." />
+                                                                                                        <input class="auto" onkeyup="hitung()" onchange="run()" name="kecepatan_air" id="kecepatan_air" type="text" placeholder="km/jam . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
                                                                                                     </div>
                                                                                                 </div>
-
                                                                                                 <div class="control-group">
                                                                                                     <label class="control-label" for="jarak1">Jarak Lokasi ke Sumber Air (D1) :</label>
                                                                                                     <div class="controls">
-                                                                                                        <input name="jarak1" id="jarak1" type="text" placeholder="kilometer . . ." />
+                                                                                                        <input class="auto" onkeyup="hitung()" onchange="run()" name="jarak1" id="jarak1" type="text" placeholder="kilometer . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
                                                                                                     </div>
                                                                                                 </div>
-
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="kecepatan_back">Kecepatan Konstan Kendaraan Kembali ke Lokasi:</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input class="auto" onkeyup="hitung()" onchange="run()" name="kecepatan_back" id="kecepatan_back" type="text" placeholder="km/jam . . ." data-a-sep=""/>
+                                                                                                        <strong class="red">*</strong>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                                 <div class="control-group">
                                                                                                     <label class="control-label" for="jarak2">Jarak Lokasi Kembali dari Sumber Air (D2):</label>
                                                                                                     <div class="controls">
-                                                                                                        <input name="jarak2" id="jarak2" type="text" placeholder="kilometer . . ." />
+                                                                                                        <input class="auto" onkeyup="hitung()" onchange="run()" name="jarak2" id="jarak2" type="text" placeholder="kilometer . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="v_potensi">Kapasitas Air Kendaraan Damkar (V):</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input class="auto" onkeyup="hitung_()" onchange="run()" name="v_potensi" id="v_potensi" type="text" placeholder="liter . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="a_potensi">Waktu Pengisian Tangki Kendaraan Pemasok Air (A) :</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input class="auto" onkeyup="hitung_()" name="a_potensi" id="a_potensi" type="text" placeholder="menit . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="b_potensi">Waktu Persiapan Pengisian Tangki Kendaraan Pemasok Air  (B) :</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input class="auto" onkeyup="hitung_()" name="b_potensi" id="b_potensi" type="text" placeholder="menit . . ." data-a-sep="" />
+                                                                                                        <strong class="red">*</strong>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="t_potensi">T1 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input class="span3" readonly="readonly" name="t1_potensi" id="t1_potensi" type="text" placeholder="menit . . ." value="" />&nbsp;&nbsp;&nbsp;
+                                                                                                        T2 : <input class="span3" readonly="readonly" name="t2_potensi" id="t2_potensi" type="text" placeholder="menit . . ." value="" />
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <!--<div class="control-group">
+                                                                                                    <label class="control-label red" for="t_potensi_ulang"><b>(Ketik ulang)</b> T1 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                                                                    <div class="controls red">
+                                                                                                        <input class="auto span3" data-a-sep="" onkeyup="hitung_()" name="t1_potensi_ulang" id="t1_potensi_ulang" type="text" placeholder="menit . . ." />&nbsp;&nbsp;&nbsp;
+                                                                                                        T2 : <input class="auto span3" data-a-sep="" onkeyup="hitung_()" name="t2_potensi_ulang" id="t2_potensi_ulang" type="text" placeholder="menit . . ." />
+                                                                                                    </div>
+                                                                                                </div>-->
+                                                                                                <div class="control-group">
+                                                                                                    <label class="control-label" for="aliran">Kemampuan Aliran Maksimum (Q):</label>
+                                                                                                    <div class="controls">
+                                                                                                        <input readonly="readonly" name="aliran" id="aliran" type="text" placeholder="liter/menit . . ." />
                                                                                                     </div>
                                                                                                 </div>
 
                                                                                                 <div class="control-group">
-                                                                                                    <label class="control-label" for="t1">T1 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                                                                    <div class="controls">
-                                                                                                        <input name="t1_potensi" id="t1" type="text" placeholder="menit . . ." />
-                                                                                                    </div>
+                                                                                                    <label for="">
+                                                                                                        <small> <u><strong>Note :</strong></u> 
+                                                                                                        </small>
+                                                                                                    </label>
+                                                                                                    <label for="note">
+                                                                                                        &nbsp;&nbsp;<strong class="red">*</strong>
+                                                                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                                        <small>Gunakan . (titik) untuk koma.</small>
+                                                                                                    </label>
                                                                                                 </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div><!-- end widget-body --> 
+                                                                            </div>
+                                                                        </div><!-- end span12 --> 
+                                                                    </div>
+                                                                </div>
+                                                                <!--END POTENSI-->
 
-                                                                                                <div class="control-group">
-                                                                                                    <label class="control-label" for="t2">T2 :&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                                                                    <div class="controls">
-                                                                                                        <input name="t2_potensi" id="t2" type="text" placeholder="menit . . ." />
-                                                                                                    </div>
+                                                                <!--RESULT-->
+                                                                <div id="result" class="tab-pane">
+                                                                    <div class="space-6"></div>
+
+                                                                    <div class="row-fluid">
+                                                                        <div class="span10 offset1">
+                                                                            <div class="widget-box transparent invoice-box">
+                                                                                <div class="widget-header widget-header-large">
+                                                                                    <h3 class="grey lighter pull-left position-relative">
+                                                                                        <i class="icon-fire-extinguisher red"></i>
+                                                                                        Hasil Analisis Resiko Kebakaran
+                                                                                    </h3>
+
+                                                                                    <div class="widget-toolbar no-border invoice-info">
+                                                                                        <span class="invoice-info-label">No. Analisa:</span>
+                                                                                        <span class="red">#<?= $resiko_id ?></span>
+
+                                                                                        <br />
+                                                                                        <span class="invoice-info-label">Tanggal:</span>
+                                                                                        <span class="blue"><?php echo date_format($result_tgl, 'd/m/Y'); ?></span>
+                                                                                    </div>
+
+                                                                                    <div class="widget-toolbar hidden-480">
+                                                                                        <a href="#">
+                                                                                            <i class="icon-print"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="widget-body">
+                                                                                    <div class="widget-main padding-24">
+                                                                                        <div class="row-fluid">
+                                                                                            <div class="row-fluid">
+                                                                                                <div class="span10 offset1">
+                                                                                                    <form class="form-horizontal" id="" method="POST" action="Fanalisis/kebProses.php">
+                                                                                                        <div class="span12">
+                                                                                                            <div class="span6">
+                                                                                                                <div class="control-group">
+                                                                                                                    <label for="lokasi">
+                                                                                                                        Nama Pelapor : <?php echo $result['nama_pelapor']; ?>
+                                                                                                                    </label>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="span6">
+                                                                                                                <div class="control-group">
+                                                                                                                    <label for="lokasi">
+                                                                                                                        No. Telp/Handphone : <?php echo $result['nomor_telp']; ?>
+                                                                                                                    </label>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label for="lokasi">
+                                                                                                                Lokasi : 
+                                                                                                                <?php echo $result['alamat_pelapor'] . ' Ds. ' . $result['DESA_NAMA'] . ', Kec. ' . $result['KECAMATAN_NAMA'] . ', Kab. Sidoarjo'; ?>
+                                                                                                            </label>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label for="bangunan">
+                                                                                                                Bangunan Terbakar : <?php echo $result['NAMA_BANGUNAN']; ?>
+                                                                                                            </label>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label for="ket_bangunan">Keterangan Bangunan : </label>
+                                                                                                            <ol>
+                                                                                                            <li>Panjang dan Lebar Bangunan : <strong><?php echo $p . ' x ' . $l; ?> m<sup>2</sup></strong></li>
+                                                                                                                <li><?php echo $result['exposure']; ?></li>
+                                                                                                                <li><?php echo $result['tepol']; ?></li>
+                                                                                                                <?php if ($result['KET_BANGUNAN'] == '') { ?>
+                                                                                                                    <li>Deskripsi Bangunan : - </li>
+                                                                                                                <?php } else { ?>
+                                                                                                                    <li>Deskripsi Bangunan : <?php echo $result['KET_BANGUNAN']; ?> </li>
+                                                                                                                <?php } ?>        
+                                                                                                            </ol>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label for="sumber_air">
+                                                                                                                Sumber Air Terdekat : <b><?php echo $result['NAMA_SUMBER']; ?></b><br/>
+                                                                                                                Jarak Lokasi ke Sumber Air (D1) : <b><span id="jarak_1"></span> Km</b><br/>
+                                                                                                                Kecepatan Konstan Kendaraan Menuju Sumber Air : <b><span id="kec1"></span> Km/jam</b><br/>
+                                                                                                                Jarak Lokasi Kembali dari Sumber Air (D2) : <b><span id="jarak_2"></span> Km</b><br/>
+                                                                                                                Kecepatan Konstan Kendaraan Kembali dari Sumber Air : <b><span id="kec2"></span> Km/jam</b>
+                                                                                                            </label>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label class="control-label" for="jarak1">Pasokan Air Minimum :</label>
+                                                                                                            <div class="controls">
+                                                                                                                <input class="span3" type="text" value="<?php echo round($result['pasokan_air_minimum'] / 264.172052, 1, PHP_ROUND_HALF_DOWN); ?>" readonly/> m<sup>3</sup> atau
+                                                                                                                <input class="span3" type="text" value="<?php echo $result['pasokan_air_minimum']; ?>" readonly/> US Galon
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label class="control-label" for="jarak1">Laju Penerapan Air :</label>
+                                                                                                            <div class="controls">
+                                                                                                                <?php if ($sama == 'sama') { ?>
+                                                                                                                    <input class="span3" type="text" value="<?php echo $laju; ?>" readonly/> liter/menit atau
+                                                                                                                    <input class="span3" type="text" value="<?php echo $laju_galon; ?>" readonly/> US Galon/menit
+                                                                                                                <?php } else if ($sama == 'tidak sama') { ?>
+                                                                                                                    <input class="span3" type="text" value="<?php echo $laju2; ?>" readonly/> liter/menit atau
+                                                                                                                    <input class="span3" type="text" value="<?php echo $laju_galon2; ?>" readonly/> US Galon/menit
+                                                                                                                <?php } ?>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="control-group">
+                                                                                                            <label for="jarak1">Potensi Pengangkutan Air :
+                                                                                                                <input class="span1" id="hasil" name="hasil" type="text" value="" readonly/> gpm</b>, kemampuan aliran maksimum 
+                                                                                                                yang terus menerus yang tersedia dari kendaraan pemasok air berkapasitas <span id="liter"></span> liter.
+                                                                                                            </label>
+                                                                                                        </div>
+
+                                                                                                        <div class="">
+                                                                                                            <div class="pull-right">
+                                                                                                                <!--<button class="btn">
+                                                                                                                    <i class="icon-arrow-left bigger-110"></i>
+                                                                                                                    Kembali
+                                                                                                                </button>-->
+                                                                                                                &nbsp; &nbsp; &nbsp;
+                                                                                                                <button class="btn btn-info" type="submit">
+                                                                                                                    <i class="icon-ok"></i>
+                                                                                                                    Submit
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </form>
+                                                                                                </div><!--/span-->
+                                                                                            </div><!--row-->
+
+                                                                                            <div class="space-6"></div>
+
+                                                                                            <div class="row-fluid">
+                                                                                                <div class="span12 well center">
+                                                                                                    Analisa Resiko Bencana Kebakaran Berdasarkan PERMEN PU No. 20 Tahun 2009 
+                                                                                                    Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
                                                                                                 </div>
-
-                                                                                                <div class="control-group">
-                                                                                                    <label class="control-label" for="b">Waktu Pengisian ke Tangki Portable (B) :</label>
-                                                                                                    <div class="controls">
-                                                                                                        <input name="b_potensi" id="b" type="text" placeholder="menit . . ." />
-                                                                                                    </div>
-                                                                                                </div>
-
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <!-- end widget-body --> </div>
-                                                                        </div>
-                                                                        <!-- end span12 --> </div>
-                                                                </div>
-                                                                <!--END POTENSI-->
-                                                                <!--RESULT-->
-                                                                <div id="result" class="tab-pane">
-                                                                    <form class="form-horizontal" id="" method="POST" action="Fanalisis/analisisProses.php">
-
-                                                                        <div class="form-actions">
-                                                                            <div class="pull-right">
-                                                                                <button class="btn">
-                                                                                    <i class="icon-arrow-left bigger-110"></i>
-                                                                                    Kembali
-                                                                                </button>
-                                                                                &nbsp; &nbsp; &nbsp;
-                                                                                <button class="btn btn-info" type="submit">
-                                                                                    <i class="icon-ok"></i>
-                                                                                    Submit
-                                                                                </button>
                                                                             </div>
                                                                         </div>
-                                                                    </form>
-                                                                </div>
-                                                                <!--END RESULT--> </div>
+                                                                    </div>
+                                                                </div><!--END RESULT--> 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <!-- end span12 --> </div>
-                                            <!-- end row-fluid --> </form>
+                                                </div><!-- end span12 --> 
+                                            </div><!-- end row-fluid --> 
+                                        </form>
 
                                         <div id="penerapan" class="modal hide fade" tabindex="-1">
                                             <div class="modal-header no-padding">
@@ -510,11 +729,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     Ok
                                                 </button>
                                             </div>
-                                        </div>
-                                        <!--PAGE CONTENT ENDS--> </div>
-                                    <!--/.span--> </div>
-                                <!--/.row-fluid--> </div>
-                            <!--/.page-content-->
+                                        </div><!--PAGE CONTENT ENDS--> 
+                                    </div><!--/.span--> 
+                                </div><!--/.row-fluid--> 
+                            </div><!--/.page-content-->
                             <?php
                             //include '../template/footer.php';
                         }
@@ -530,14 +748,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         <div>
                             <div class="pull-left">
                                 <select id="skin-colorpicker" class="hide">
-                                    <option data-class="default" value="#438EB9" />
-                                    #438EB9
-                                    <option data-class="skin-1" value="#222A2D" />
-                                    #222A2D
-                                    <option data-class="skin-2" value="#C6487E" />
-                                    #C6487E
-                                    <option data-class="skin-3" value="#D0D0D0" />
-                                    #D0D0D0
+                                    <option data-class="default" value="#438EB9" />#438EB9
+                                    <option data-class="skin-1" value="#222A2D" />#222A2D
+                                    <option data-class="skin-2" value="#C6487E" />#C6487E
+                                    <option data-class="skin-3" value="#D0D0D0" />#D0D0D0
                                 </select>
                             </div>
                             <span>&nbsp; Choose Skin</span>
@@ -564,7 +778,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <!--[if !IE]>
         -->
         <script type="text/javascript">
-            window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");</script>
+                                                                                                window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+        </script>
 
         <!--<![endif]-->
 
@@ -578,14 +793,50 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
         <script src="../assets/js-ace/chosen.jquery.min.js"></script>
         <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
-        <script src="../assets/js-ace/bootstrap-tag.min.js"></script>
         <script src="../assets/js-ace/jquery.validate.min.js"></script>
+        <script src="../assets/js-ace/autoNumeric.js"></script>
         <!--ace scripts-->
 
         <script src="../assets/js-ace/ace-elements.min.js"></script>
         <script src="../assets/js-ace/ace.min.js"></script>
 
         <script>
+            // ========================Jam========================================== //
+            function showTime() {
+                var a_p = "";
+                var today = new Date();
+                var curr_hour = today.getHours();
+                var curr_minute = today.getMinutes();
+                var curr_second = today.getSeconds();
+                if (curr_hour < 12) {
+                    a_p = "AM";
+                } else {
+                    a_p = "PM";
+                }
+                if (curr_hour == 0) {
+                    curr_hour = 12;
+                }
+                if (curr_hour > 12) {
+                    curr_hour = curr_hour - 12;
+                }
+                curr_hour = checkTime(curr_hour);
+                curr_minute = checkTime(curr_minute);
+                curr_second = checkTime(curr_second);
+                document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+            setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
+            jQuery(function($) {
+                $('.auto').autoNumeric('init');
+            });
+
             // scrollables
             $('.slim-scroll').each(function() {
                 var $this = $(this);
@@ -594,42 +845,83 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     railVisible: true
                 });
             });
-            $(document).ready(function()
-            {
-                function rumusTanpa()
-                {
-                    var p1 = parseFloat($("#panjang_tanpa").val());
-                    var l1 = parseFloat($("#lebar_tanpa").val());
-                    var t1 = parseFloat($("#tinggi_tanpa").val());
-                    var angka1 = parseFloat($("#angka_tanpa").val());
-                    var faktor1 = parseFloat($("#faktor-konstruksi_tanpa").val());
-                    var total1 = (p1 * 3.2808399) * (l1 * 3.2808399) * (t1 * 3.2808399) / angka1 * faktor1;
-                    $("#hasil_tanpa").val(Math.round(total1));
-                    var total1_fixed = Math.round(total1) / 264.172052;
-                    var hasil = total1_fixed.toFixed(1);
-                    $("#hasil_tanpa1").val(hasil);
-                }
-                $(document).on("change, keyup", "#faktor-konstruksi_tanpa,#angka_tanpa,#panjang_tanpa, #tinggi_tanpa, #lebar_tanpa", rumusTanpa);
-            });
+
+            function run() {
+                document.getElementById("kec1").innerHTML = document.getElementById('kecepatan_air').value;
+                document.getElementById("jarak_1").innerHTML = document.getElementById('jarak1').value;
+                document.getElementById("kec2").innerHTML = document.getElementById('kecepatan_back').value;
+                document.getElementById("jarak_2").innerHTML = document.getElementById('jarak2').value;
+                document.getElementById("liter").innerHTML = document.getElementById('v_potensi').value;
+            }
+
+
+            function hitung() {
+                //var vol = document.getElementById('v_potensi').value;
+                //var a = document.getElementById('a_potensi').value;
+                //var b = document.getElementById('b_potensi').value;
+                var kecKm1 = document.getElementById('kecepatan_air').value;
+                var kecKm2 = document.getElementById('kecepatan_back').value;
+                var d1 = document.getElementById('jarak1').value;
+                var d2 = document.getElementById('jarak2').value;
+                //var t1Ulang = document.getElementById('t1-potensi-ulang').value;
+                //var t2Ulang = document.getElementById('t2-potensi-ulang').value;
+                var t1 = document.getElementById('t1_potensi');
+                var t2 = document.getElementById('t2_potensi');
+                //var hasil = document.getElementById('aliran');
+                //convert liter to galon
+                //var galon = Math.round(vol * 0.264172051);
+                //convert Km/jam to mph 
+                var kecMph1 = Math.round(kecKm1 * 0.621371192);
+                var kecMph2 = Math.round(kecKm2 * 0.621371192);
+                //convert liter to miles
+                var d1Miles1 = d1 * 0.621371192;
+                var d1Miles2 = d2 * 0.621371192;
+                var x1 = 60 / kecMph1;
+                var x2 = 60 / kecMph2;
+                var kali1 = x1.toFixed(1) * d1Miles1.toFixed(2);
+                var kali2 = x2.toFixed(1) * d1Miles2.toFixed(2);
+                var hasil1 = 0.65 + kali1;
+                var hasil2 = 0.65 + kali2;
+                var tmp1 = hasil1.toFixed(2);
+                var tmp2 = hasil2.toFixed(2);
+                //var sum = a + t1Ulang + t2Ulang + b;
+                //var dev = galon / sum;
+                //var result = Math.round(dev - 0.1);
+                t1.value = tmp1;
+                t2.value = tmp2;
+                //hasil.value = result;
+            }
+
         </script>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function()
             {
-                function rumusDengan()
+                function hitung_()
                 {
-                    var p = parseFloat($("#panjang_dengan").val());
-                    var l = parseFloat($("#lebar_dengan").val());
-                    var t = parseFloat($("#tinggi_dengan").val());
-                    var angka = parseFloat($("#angka_dengan").val());
-                    var faktor = parseFloat($("#faktor-konstruksi_dengan").val());
-                    var bahaya = parseFloat($("#faktor-bahaya_dengan").val());
-                    var total = Math.round(p * 3.2808399) * Math.round(l * 3.2808399) * Math.round(t * 3.2808399) / angka * faktor * bahaya;
-                    $("#hasil_dengan").val(Math.round(total));
-                    var total_fixed = Math.round(total) / 264.172052;
-                    var hasil = total_fixed.toFixed(1);
-                    $("#hasil_dkubik").val(hasil);
+                    var kec1 = parseFloat($('#kecepatan_air').val());
+                    var kec2 = parseFloat($('#kecepatan_back').val());
+                    var jarak1 = parseFloat($('#jarak1').val());
+                    var jarak2 = parseFloat($('#jarak2').val());
+                    var vol = parseFloat($('#v_potensi').val());
+                    var a = parseFloat($('#a_potensi').val());
+                    var b = parseFloat($('#b_potensi').val());
+                    var t1 = parseFloat($('#t1_potensi').val());
+                    var t2 = parseFloat($('#t2_potensi').val());
+                    //convert liter to galon
+                    var galon = Math.round(vol * 0.264172051);
+                    //total
+                    var sum = a + t1 + t2 + b;
+                    var dev = galon / sum;
+                    var result = Math.round(dev - 0.1);
+                    $("#aliran").val(result);
+                    $("#hasil").val(result);
+                    $("#liter").val(vol);
+                    $("#jarak_2").val(jarak2);
+                    $("#jarak_1").val(jarak1);
+                    $("#kec1").val(kec1);
+                    $("#kec2").val(kec2);
                 }
-                $(document).on("change, keyup", "#faktor-bahaya_dengan,#faktor-konstruksi_dengan,#angka_dengan,#panjang_dengan, #tinggi_dengan, #lebar_dengan", rumusDengan);
+                $(document).on("change, keyup", "#v_potensi,#a_potensi,#b_potensi, #t1_potensi_ulang, #t2_potensi_ulang", hitung_);
             });
         </script>
         <script type="text/javascript">
@@ -637,109 +929,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 var img = document.getElementById('gambar2');
                 img.src = url;
             }
-        </script>
-        <script type="text/javascript">
-            $(function() {
-                $('#validation-form').show();
-                //documentation : http://docs.jquery.com/Plugins/Validation/validate
-                $('#validation-form').validate({
-                    errorElement: 'span',
-                    errorClass: 'help-block',
-                    focusInvalid: false,
-                    rules: {
-                        kecamatan: {
-                            required: true
-                        },
-                        desa: {
-                            required: true
-                        },
-                        sumber_air: {
-                            required: true
-                        },
-                        exposure: {
-                            required: true
-                        },
-                        bangunan: {
-                            required: true
-                        },
-                        angka_kostruksi: {
-                            required: true
-                        },
-                        volume1: {
-                            required: true
-                        },
-                        tepol: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        kecamatan: "Mohon untuk memilih lokasi kecamatan.",
-                        desa: "Mohon untuk memilih lokasi desa.",
-                        sumber_air: "Mohon untuk memilih sumber air.",
-                        exposure: "Mohon untuk memilih.",
-                        tepol: "Mohon untuk memilih."
-                    },
-                    invalidHandler: function(event, validator) { //display error alert on form submit   
-                        $('.alert-error', $('.login-form')).show();
-                    },
-                    highlight: function(e) {
-                        $(e).closest('.control-group').removeClass('info').addClass('error');
-                    },
-                    success: function(e) {
-                        $(e).closest('.control-group').removeClass('error').addClass('info');
-                        $(e).remove();
-                    },
-                    errorPlacement: function(error, element) {
-                        if (element.is(':checkbox') || element.is(':radio')) {
-                            var controls = element.closest('.controls');
-                            if (controls.find(':checkbox,:radio').length > 1)
-                                controls.append(error);
-                            else
-                                error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-                        }
-                        else if (element.is('.select2')) {
-                            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-                        }
-                        else if (element.is('.chzn-select')) {
-                            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-                        }
-                        else
-                            error.insertAfter(element);
-                    },
-                    submitHandler: function(form) {
-                        var url = "Fanalisis/analisisProses.php";
-
-                        // mengambil nilai dari inputbox, textbox dan select
-                        var v_kec = $('select[name=kecamatan]').val();
-                        var v_air = $('select[name=sumber_air]').val();
-                        var v_desa = $('select[name=desa]').val();
-                        var v_bangunan = $('input:text[name=bangunan]').val();
-                        var v_akons = $('input:text[name=angka_konstruksi]').val();
-                        var v_volume1 = $('input:text[name=volume1]').val();
-                        var v_exposure = $('input:radio[name=exposure]').val();
-                        var v_tepol = $('input:radio[name=tepol]').val();
-                        var v_pass1 = $('input:password[name=pass1]').val();
-                        var v_jabatan = $('select[name=jabatan]').val();
-
-                        $.post(url, {kecamatan: v_kec, sumber_air: v_air, bangunan: v_bangunan, angka_konstruksi: v_akons, volume1: v_volume1, exposure: v_exposure, tepol: v_tepol, pass1: v_pass1, jabatan: v_jabatan}, function() {
-
-                        })
-                    },
-                    invalidHandler: function(form) {
-                    }
-                });
-            });
-
-            $(function() {
-                $(".chzn-select").chosen();
-            });
-
-            $(function() {
-                ///////////////////////////////////////////
-                $('#user-profile-3').end().find('button[type=reset]').on(ace.click_event, function() {
-                    $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
-                })
-            });
         </script>
     </body>
 </html>

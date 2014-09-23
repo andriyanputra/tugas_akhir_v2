@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="../assets/css-ace/font-awesome.min.css" />
         <link rel="stylesheet" href="../assets/css-zoom/style.css" />
 
-        <link rel="shortcut icon" href="../assets/img/favicon.ico">
+        <link rel="shortcut icon" href="../assets/img/favicon.png">
 
         <!--page specific plugin styles-->
         <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />

@@ -12,7 +12,9 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("select * from bangunan") or die("Query failed: " . mysql_error());
+    $query = mysql_query("SELECT * FROM master_bangunan AS a
+                        INNER JOIN bangunan AS b
+                        ON (a.ID_MASTER = b.ID_MASTER);") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -99,7 +101,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                         <li>
-                                            <a href="../anggota/profile">
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                                 <i class="icon-user"></i>
                                                 Profile
                                             </a>
@@ -170,16 +172,63 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="page-header position-relative">
                                 <h1>
                                     Daftar Bangunan
-                                    <small>
-                                        <i class="icon-double-angle-right"></i>
-                                        Angka Klasifikasi Resiko Kebakaran
-                                    </small>
                                 </h1>
                             </div><!--/.page-header-->
+
 
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT-->
+                                    <?php
+                                    if (isset($_GET['msg'])) {
+                                        if ($_GET['msg'] == 'success') {
+                                            ?>
+                                            <div class="widget-box transparent">
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-6">
+                                                        <div class="alert alert-block alert-success">
+                                                            <button type="button" class="close" data-dismiss="alert">
+                                                                <i class="icon-remove"></i>
+                                                            </button>
+
+                                                            <i class="icon-ok green"></i>&nbsp;
+                                                            Selamat data berhasil ditambahkan.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        } else if ($_GET['msg'] == 'success_edit') {
+                                            ?>
+                                            <div class="widget-box transparent">
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-6">
+                                                        <div class="alert alert-block alert-success">
+                                                            <button type="button" class="close" data-dismiss="alert">
+                                                                <i class="icon-remove"></i>
+                                                            </button>
+
+                                                            <i class="icon-ok green"></i>&nbsp;
+                                                            Selamat data berhasil diperbaharui.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+
+                                    <div class="pull-right">
+                                        <a href="bangunanAdd">
+                                            <button class="btn btn-mini btn-primary btn-block" data-rel="tooltip" title="Tambah Data Bangunan">
+                                                <i class="icon-plus bigger-130"></i>
+                                                <strong>Tambah Data</strong>
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class="space-18"></div>
+
                                     <div class="table-header">
                                         Angka Klasifikasi Resiko Kebakaran.
                                     </div>
@@ -189,8 +238,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Peruntukan Bangunan</th>
-                                                <th><i class="icon-warning-sign red"></i>&nbsp;Tingkat Bahaya</th>
+                                                <th>Tingkat Bahaya</th>
+                                                <th>Golongan</th>
                                                 <th>Keterangan</th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
 
                                         <tbody>
@@ -199,10 +251,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             while ($row = mysql_fetch_array($query)) {
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo '' . $no . '.'; ?></td>
+                                                    <td><?php echo $no . '.'; ?></td>
                                                     <td><?= $row['NAMA_BANGUNAN'] ?></td>
-                                                    <td class="center"><?= $row['TINGKAT_BANGUNAN'] ?></td>
+                                                    <td><?= $row['TINGKAT_BANGUNAN'] ?></td>
+                                                    <td><?= $row['NAMA_MASTER']; ?></td>
                                                     <td><?= $row['KET_BANGUNAN'] ?></td>
+                                                    <td class="td-actions">
+                                                        <div class="hidden-phone visible-desktop action-buttons">
+                                                            <a class="green" href="bangunanEdit?id=<?php echo $row['ID_BANGUNAN']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                <i class="icon-pencil bigger-130"></i>
+                                                            </a>
+
+                                                            <a class="red order-delete" id="<?= $row['ID_BANGUNAN']; ?>" href="" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                <i class="icon-trash bigger-130"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 <?php
                                                 $no++;
@@ -229,6 +293,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 <th>Tipe Konstruksi</th>
                                                 <th>Angka Klasifikasi</th>
                                                 <th></th>
+                                            </tr>
                                         </thead>
 
                                         <tbody>
@@ -512,7 +577,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <!--[if !IE]>-->
 
     <script type="text/javascript">
-                                    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->
@@ -528,6 +593,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
     <script src="../assets/js-ace/jquery.dataTables.min.js"></script>
     <script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+    <script src="../assets/js-ace/bootbox.min.js"></script>
     <script src="../assets/js-ace/ace-elements.min.js"></script>
     <script src="../assets/js-ace/ace.min.js"></script>
 
@@ -537,6 +603,32 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         $(document).ready(function() {
             var bangunan = $('#bangunan').DataTable();
             //var konstruksi = $('#konstruksi').DataTable();
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(document).on(ace.click_event, ".order-delete", function(e) {
+                var id = $(this).attr('id');
+                e.preventDefault();
+                bootbox.confirm("Apakah Anda yakin ?", function(result) {
+                    if (result) {
+                        //sent request to delete order with given id
+                        $.ajax({
+                            type: 'get',
+                            url: 'Fbangunan/prosesHapus.php',
+                            data: 'hapusId=' + id,
+                            success: function(data) {
+                                if (data) {
+                                    bootbox.alert("Data berhasil dihapus!");
+                                    window.location.replace("bangunan.php");
+                                } else {
+                                    bootbox.alert("Maaf terjadi kesalahan proses penghapusan data!");
+                                }
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
     <script type="text/javascript">

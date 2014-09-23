@@ -37,7 +37,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <!--page specific plugin styles-->
                     <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
-                    <link rel="shortcut icon" href="../assets/img/favicon.ico">
+                    <link rel="shortcut icon" href="../assets/img/favicon.png">
                     <!--fonts-->
 
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
@@ -131,7 +131,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                             <li>
-                                                <a href="../anggota/profile">
+                                                <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                                     <i class="icon-user"></i>
                                                     Profile
                                                 </a>
@@ -321,6 +321,17 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     Maaf, nama bangunan baru kembar. Silahkan ulangi !
                                                 </div>
                                                 <?php
+                                            } else if ($_GET['msg'] == 'error3') {
+                                                ?>
+                                                <div class="alert alert-block alert-error">
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="icon-remove"></i>
+                                                    </button>
+
+                                                    <i class="icon-remove"></i>
+                                                    Mohon untuk menggunakan <strong class="red">angka</strong> dalam field No. Telp/Handphone, panjang, lebar, dan tinggi. Silahkan ulangi !
+                                                </div>
+                                                <?php
                                             }
                                         }
                                         ?>
@@ -339,6 +350,28 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     <div class="content">
                                                                         <div class="space-6"></div>
                                                                         <div id="frm-lokasi">
+                                                                            <div class="control-group">
+                                                                                <label class="control-label">Nama Pelapor :</label>
+                                                                                <div class="controls">
+                                                                                    <input type="text" name="pelapor" id="pelapor" placeholder="Nama Pelapor..." value="">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="control-group">
+                                                                                <label class="control-label">No Telp/Handphone :</label>
+                                                                                <div class="controls">
+                                                                                    <input type="text" name="telp" id="telp" placeholder="Nomor Telepon..." class="input-mask-phone">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="control-group">
+                                                                                <label class="control-label">Jalan :</label>
+                                                                                <div class="controls">
+                                                                                    <textarea name="jalan" id="jalan" placeholder="Jalan..."></textarea>
+                                                                                    <!--<input type="text" name="jalan" id="Jalan" placeholder="Jalan..." value="">-->
+                                                                                </div>
+                                                                            </div>
+
                                                                             <div class="control-group">
                                                                                 <label class="control-label" for="kecamatan">Pilih Kecamatan :</label>
                                                                                 <?php
@@ -374,7 +407,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <div class="controls">
                                                                                     <span>
                                                                                         <input type="hidden" name="sumber_air" id="text_content" value="" />
-                                                                                        <select id="sumber_air" name="sumber_air_" onchange="document.getElementById('text_content').value = this.options[this.selectedIndex].text">
+                                                                                        <select id="sumber_air" name="sumber_air_" onclick ="document.getElementById('text_content').value = this.options[this.selectedIndex].text">
                                                                                             <option value="" />
                                                                                             Sumber Air...
                                                                                         </select>
@@ -388,9 +421,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                     <span>
                                                                                         <select id="tipe_proteksi" name="tipe_proteksi">
                                                                                             <option value="" />Tipe Proteksi...
-                                                                                            <option value="MPKP" >MPKP (Kota)
-                                                                                            <option value="MPKL" >MPKL (Lingkungan)
-                                                                                            <option value="MPKBG" >MPKBG (Bangunan Gedung)
+                                                                                            <option value="MPKP" />MPKP (Kota)
+                                                                                            <option value="MPKL" />MPKL (Lingkungan)
+                                                                                            <option value="MPKBG" />MPKBG (Bangunan Gedung)
                                                                                         </select>
                                                                                     </span>
                                                                                 </div>
@@ -428,11 +461,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <div class="controls">
                                                                                     <span class="span12">
                                                                                         <label>
-                                                                                            <input name="tepol" value="Menggunkan Tepol (Cairan Basa)" type="radio"/>
+                                                                                            <input name="tepol" value="<b>Menggunkan</b> Tepol (Cairan Basa)" type="radio"/>
                                                                                             <span class="lbl">Ya</span>
                                                                                         </label>
                                                                                         <label>
-                                                                                            <input name="tepol" value="Tidak Menggunakan Tepol" type="radio"/>
+                                                                                            <input name="tepol" value="<b>Tidak</b> Menggunakan Tepol" type="radio"/>
                                                                                             <span class="lbl">Tidak</span>
                                                                                         </label>
                                                                                     </span>
@@ -468,15 +501,30 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <small>(Angka Klasifikasi Resiko Kebakaran)</small>
                                                                             </label>
                                                                             <?php
-                                                                            $bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                                                            $bangunan1 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
+                                                                                                        INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
+                                                                                                        ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
+                                                                            $group = array();
+                                                                            //$bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
                                                                             ?>
                                                                             <div class="controls">
                                                                                 <select id="bangunan_tanpa" onchange="run();
                                                                                         document.getElementById('nama_tipe1').value = this.options[this.selectedIndex].text" data-placeholder="Pilih Bangunan...">
-                                                                                    <option value="" />Pilih Bangunan...
-                                                                                    <?php while ($r = mysql_fetch_array($bangunan1)): ?>
-                                                                                        <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
-                                                                                    <?php endwhile; ?>
+                                                                                    <option value="">Pilih Bangunan...</option>
+                                                                                    <?php 
+                                                                                        while ($r = mysql_fetch_assoc($bangunan1)){
+                                                                                            $group[$r['NAMA_MASTER']][] = $r;
+                                                                                        }
+                                                                                        foreach ($group as $key => $value) {
+                                                                                             echo '<optgroup label="'.$key.'">';
+                                                                                             foreach ($value as $values) {
+                                                                                                 echo "<option value=".$values['TINGKAT_BANGUNAN'].">".$values['NAMA_BANGUNAN']."";
+                                                                                             }
+                                                                                             echo '</optgroup>';
+                                                                                         } 
+                                                                                    ?>
+                                                                                        <!--<option value="<?php //echo $r['TINGKAT_BANGUNAN']; ?>"><?php //echo $r['NAMA_BANGUNAN']; ?></option>-->
+                                                                                    <?php //} ?>
                                                                                 </select>
                                                                                 <input type="hidden" name="nama_tipe1" id="nama_tipe1" value="" />
                                                                                 <input name="nilai_bangunan1" class="span2" id="angka_tanpa" type="number" value="" readonly="readonly"/>
@@ -490,9 +538,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <label class = "control-label" for = "nama_tipe_baru">Tipe bangunan baru:</label>
 
                                                                                 <div class = "controls">
+                                                                                    <select name = "master" id="master">
+                                                                                        <option value=""/>Pilih Tipe Bangunan . . .
+                                                                                        <option value="1">Perkantoran
+                                                                                        <option value="2">Usaha Dagang dan Jasa
+                                                                                        <option value="3">Industri
+                                                                                        <option value="4">Kendaraan Bermotor
+                                                                                        <option value="5">Rumah
+                                                                                        <option value="6">Lahan / Sawah
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="space-6"></div>
+                                                                                <div class = "controls">
                                                                                     <input type = "text" id="nama_tipe_baru1" name = "nama_tipe_baru1" />
                                                                                     <select name = "nilai_tipe_baru1" id="nilai_tipe_baru1" class="span2">
-                                                                                        <option value="">---
+                                                                                        <option value=""/>---
                                                                                         <option value="3">3
                                                                                         <option value="4">4
                                                                                         <option value="5">5
@@ -522,9 +582,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                         <div class="control-group">
                                                                             <label class="control-label" for="volume">Volume Bangunan :</label>
                                                                             <div class="controls">
-                                                                                <input name="panjang1"class="span2" id="panjang_tanpa" type="text" placeholder="Panjang" value=""/>x
-                                                                                <input name="lebar1" class="span2" id="lebar_tanpa" type="text" placeholder="Lebar" value=""/>x
-                                                                                <input name="tinggi1" class="span2" id="tinggi_tanpa" type="text" placeholder="Tinggi" value=""/>(Satuan meter)&nbsp;<strong class="red">**</strong>
+                                                                                <input name="panjang1"class="span2 auto" id="panjang_tanpa" type="text" placeholder="Panjang" data-a-sep=""/>x
+                                                                                <input name="lebar1" class="span2 auto" id="lebar_tanpa" type="text" placeholder="Lebar" data-a-sep=""/>x
+                                                                                <input name="tinggi1" class="span2 auto" id="tinggi_tanpa" type="text" placeholder="Tinggi" data-a-sep=""/>(Satuan meter)&nbsp;<strong class="red">**</strong>
                                                                             </div>
                                                                         </div>
 
@@ -562,7 +622,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <strong class="red">*</strong>
                                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                                 <small>
-                                                                                    Semaikin kecil nilai tipe banguanan semakin berbahaya kebakaran yang terjadi.
+                                                                                    Semaikin kecil nilai tipe bangunan semakin berbahaya kebakaran yang terjadi.
                                                                                 </small>
                                                                             </label>
                                                                             <label for="note">
@@ -600,15 +660,31 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 <small>(Angka Klasifikasi Resiko Kebakaran)</small>
                                                                             </label>
                                                                             <?php
-                                                                            $bangunan2 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
+                                                                                $bangunan2 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
+                                                                                                        INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
+                                                                                                        ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
+                                                                            //$bangunan2 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
                                                                             ?>
                                                                             <div class="controls">
                                                                                 <select id="bangunan_dengan" onchange="run();
                                                                                         document.getElementById('nama_tipe2').value = this.options[this.selectedIndex].text">
-                                                                                    <option value="" />Pilih Bangunan...
-                                                                                    <?php while ($r = mysql_fetch_array($bangunan2)): ?>
-                                                                                        <option value="<?php echo $r['TINGKAT_BANGUNAN']; ?>"><?php echo $r['NAMA_BANGUNAN']; ?></option>
-                                                                                    <?php endwhile; ?>
+                                                                                    <option value="">Pilih Bangunan...</option>
+                                                                                    <?php 
+                                                                                        while ($r = mysql_fetch_assoc($bangunan2)){
+                                                                                            $group[$r['NAMA_MASTER']][] = $r;
+                                                                                        }
+                                                                                        foreach ($group as $key => $value) {
+                                                                                             echo '<optgroup label="'.$key.'">';
+                                                                                             foreach ($value as $values) {
+                                                                                                 echo "<option value='".$values['TINGKAT_BANGUNAN']."'/>'".$values['NAMA_BANGUNAN']."'";
+                                                                                             }
+                                                                                             echo '</optgroup>';
+                                                                                         } 
+                                                                                    ?>
+                                                                                    <!--<option value="" />Pilih Bangunan...
+                                                                                    <?php //while ($r = mysql_fetch_array($bangunan2)): ?>
+                                                                                        <option value="<?php //echo $r['TINGKAT_BANGUNAN']; ?>"><?php //echo $r['NAMA_BANGUNAN']; ?></option>-->
+                                                                                    <?php //endwhile; ?>
                                                                                 </select>
                                                                                 <input type="hidden" name="nama_tipe2" id="nama_tipe2" value="" />
                                                                                 <input class="span2" id="angka_dengan" name="nilai_bangunan2" type="text" value="" readonly="readonly"/>
@@ -621,6 +697,18 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                             <div class = "control-group">
                                                                                 <label class = "control-label" for = "nama_tipe_baru2">Tipe bangunan baru:</label>
 
+                                                                                <div class = "controls">
+                                                                                    <select name = "master1" id="master1">
+                                                                                        <option value=""/>Pilih Tipe Bangunan . . .
+                                                                                        <option value="1">Perkantoran
+                                                                                        <option value="2">Usaha Dagang dan Jasa
+                                                                                        <option value="3">Industri
+                                                                                        <option value="4">Kendaraan Bermotor
+                                                                                        <option value="5">Rumah
+                                                                                        <option value="6">Lahan / Sawah
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="space-6"></div>
                                                                                 <div class = "controls">
                                                                                     <input type = "text" id="nama_tipe_baru2" name = "nama_tipe_baru2" />
                                                                                     <select name = "nilai_tipe_baru2" id="nilai_tipe_baru2" class="span2">
@@ -659,9 +747,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                         <div class="control-group">
                                                                             <label class="control-label" for="volume">Volume Bangunan :</label>
                                                                             <div class="controls">
-                                                                                <input name="panjang2" class="span2" id="panjang_dengan" type="text" placeholder="Panjang" />x
-                                                                                <input name="lebar2" class="span2" id="lebar_dengan" type="text" placeholder="Lebar" />x
-                                                                                <input class="span2" name="tinggi2" id="tinggi_dengan" type="text" placeholder="Tinggi" />(Satuan meter)&nbsp;
+                                                                                <input data-a-sep="" name="panjang2" class="auto span2" id="panjang_dengan" type="text" placeholder="Panjang" />x
+                                                                                <input data-a-sep="" name="lebar2" class="auto span2" id="lebar_dengan" type="text" placeholder="Lebar" />x
+                                                                                <input data-a-sep="" class="auto span2" name="tinggi2" id="tinggi_dengan" type="text" placeholder="Tinggi" />(Satuan meter)&nbsp;
                                                                                 <strong class="red">**</strong>
                                                                             </div>
                                                                         </div>
@@ -721,8 +809,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </button>
                                                     &nbsp; &nbsp; &nbsp;
                                                     <button class="btn btn-info" type="submit">
-                                                        <i class="icon-ok"></i>
                                                         Submit
+                                                        <i class="icon-ok"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -897,10 +985,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <label class="lbl" for="ace-settings-rtl">Right To Left (rtl)</label>
                         </div>
                     </div>
-                </div>
-                <!--/#ace-settings-container--> </div>
-            <!--/.main-content--> </div>
-        <!--/.main-container-->
+                </div><!--/#ace-settings-container--> 
+            </div><!--/.main-content--> 
+        </div><!--/.main-container-->
 
         <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
             <i class="icon-double-angle-up icon-only bigger-110"></i>
@@ -921,12 +1008,17 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
         <script src="../assets/js-ace/bootstrap-tag.min.js"></script>
         <script src="../assets/js-ace/jquery.validate.min.js"></script>
+        <script src="../assets/js-ace/autoNumeric.js"></script>
         <!--ace scripts-->
 
         <script src="../assets/js-ace/ace-elements.min.js"></script>
         <script src="../assets/js-ace/ace.min.js"></script>
 
         <script type="text/javascript">
+            jQuery(function($) {
+                $('.auto').autoNumeric('init');
+            });
+
             var codeMap = {'1': '../assets/img/sda/large/balongbendo.png',
                 '2': '../assets/img/sda/large/buduran.png',
                 '3': '../assets/img/sda/large/candi.png',
@@ -1123,6 +1215,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     var total1_fixed = Math.round(total1) / 264.172052;
                     var hasil = total1_fixed.toFixed(1);
                     $("#hasil_tanpa1").val(hasil);
+
                 }
                 $(document).on("change, keyup", "#faktor-konstruksi_tanpa,#angka_tanpa,#panjang_tanpa, #tinggi_tanpa, #lebar_tanpa", rumusTanpa);
             });
@@ -1142,6 +1235,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     var total1_fixed = Math.round(total1) / 264.172052;
                     var hasil = total1_fixed.toFixed(1);
                     $("#hTanpa1").val(hasil);
+
                 }
                 $(document).on("change, keyup", "#faktor-konstruksi_tanpa,#nilai_tipe_baru1,#panjang_tanpa, #tinggi_tanpa, #lebar_tanpa", rumusTanpa1);
             });
@@ -1186,6 +1280,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 }
                 $(document).on("change, keyup", "#faktor-bahaya_dengan,#faktor-konstruksi_dengan,#nilai_tipe_baru2,#panjang_dengan, #tinggi_dengan, #lebar_dengan", rumusDengan1);
             });
+
         </script>
         <script type="text/javascript">
             $(function() {
@@ -1196,6 +1291,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     errorClass: 'help-block',
                     focusInvalid: false,
                     rules: {
+                        master1: {
+                            required: true
+                        },
+                        master: {
+                            required: true
+                        },
+                        pelapor: {
+                            required: true
+                        },
+                        jalan: {
+                            required: true
+                        },
+                        telp: {
+                            required: true
+                        },
                         kecamatan: {
                             required: true
                         },
@@ -1240,6 +1350,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         }
                     },
                     messages: {
+                        master: "Mohon untuk memilih tipe bangunan.",
+                        master1: "Mohon untuk memilih tipe bangunan.",
+                        pelapor: "Mohon untuk mengisi field nama pelapor.",
+                        jalan: "Mohon untuk mengisi nama jalan lokasi kejadian.",
+                        telp: "Mohon untuk mengisi field nomor telepon.",
                         kecamatan: "Mohon untuk memilih lokasi kecamatan.",
                         desa: "Mohon untuk memilih lokasi desa.",
                         sumber_air_: "Mohon untuk memilih sumber air.",

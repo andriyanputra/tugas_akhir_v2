@@ -6,17 +6,17 @@ include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 
 if (!loggedin()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
-header("Location: ../login/login.php");
-exit();
+    header("Location: ../login/login.php");
+    exit();
 }
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.NAMA_SUMBER,GROUP_CONCAT(KECAMATAN_NAMA SEPARATOR ', ') AS Kecamatan, a.KET_SUMBER, a.ID_SUMBER
-        FROM sumber_air a 
-        JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
-        JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
-        GROUP BY a.NAMA_SUMBER") or die("Query failed: " . mysql_error());
+    $query_kec = mysql_query("SELECT a.NAMA_SUMBER,GROUP_CONCAT(KECAMATAN_NAMA SEPARATOR ', ') AS Kecamatan, a.KET_SUMBER, a.ID_SUMBER
+                            FROM sumber_air a 
+                            JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
+                            JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
+                            GROUP BY a.NAMA_SUMBER") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -103,7 +103,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                         <li>
-                                            <a href="../anggota/profile">
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                                 <i class="icon-user"></i>
                                                 Profile
                                             </a>
@@ -161,7 +161,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     var day = date.getDate();
                                     var month = date.getMonth();
                                     var thisDay = date.getDay(),
-                                    thisDay = myDays[thisDay];
+                                            thisDay = myDays[thisDay];
                                     var yy = date.getYear();
                                     var year = (yy < 1000) ? yy + 1900 : yy;
                                     document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
@@ -259,7 +259,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <tr>
                                                 <th class="center">No.</th>
                                                 <th>Nama</th>
-                                                <th>Lokasi</th>
+                                                <th>Kecamatan</th>
+                                                <!--<th>Desa</th>-->
                                                 <th>Keterangan</th>
                                                 <th></th>
                                             </tr>
@@ -268,12 +269,13 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         <tbody>
                                             <?php
                                             $no = 1;
-                                            while ($data = mysql_fetch_array($query)) {
+                                            while ($data = mysql_fetch_array($query_kec)) {
                                                 ?>
                                                 <tr>
                                                     <td><?php echo '' . $no . '.'; ?></td>
                                                     <td><?php echo $data['NAMA_SUMBER']; ?></td>
                                                     <td><?php echo $data['Kecamatan']; ?></td>
+                                                    <!--<td><?php //echo $data['DESA_NAMA'];   ?></td>-->
                                                     <td><?php echo $data['KET_SUMBER']; ?></td>
                                                     <td class="td-actions">
                                                         <div class="hidden-phone visible-desktop action-buttons">
@@ -287,7 +289,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         </div>
                                                     </td>
                                                 </tr>
-
                                                 <?php
                                                 $no++;
                                             }
@@ -356,7 +357,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->
@@ -399,6 +400,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             success: function(data) {
                                 if (data) {
                                     bootbox.alert("Data berhasil dihapus!");
+                                    window.location.replace("sumber.php");
                                 } else {
                                     bootbox.alert("Maaf terjadi kesalahan proses penghapusan data!");
                                 }
@@ -442,6 +444,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         }
         setInterval(showTime, 500);
 //-->
-</script>
+    </script>
 </body>
 </html>

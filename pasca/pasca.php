@@ -12,6 +12,13 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
+    $query = mysql_query("SELECT a.nama_pelapor, a.resiko_tanggal, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, a.alamat_pelapor
+                        FROM resiko AS a INNER JOIN desa AS b
+                            ON (a.DESA_ID = b.DESA_ID)
+                        INNER JOIN bangunan AS c
+                            ON (a.ID_BANGUNAN = c.ID_BANGUNAN)
+                        INNER JOIN kecamatan AS d
+                            ON (a.KECAMATAN_ID = d.KECAMATAN_ID) AND (b.KECAMATAN_ID = d.KECAMATAN_ID)") or die(mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -99,7 +106,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                         <li>
-                                            <a href="../anggota/profile">
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                                 <i class="icon-user"></i>
                                                 Profile
                                             </a>
@@ -141,33 +148,281 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 <li class="active">Pasca Kebakaran</li>
                             </ul><!--.breadcrumb-->
 
+                            <div class="pull-right">
+                                <script>
+                                    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                    var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                    var date = new Date();
+                                    var day = date.getDate();
+                                    var month = date.getMonth();
+                                    var thisDay = date.getDay(),
+                                            thisDay = myDays[thisDay];
+                                    var yy = date.getYear();
+                                    var year = (yy < 1000) ? yy + 1900 : yy;
+                                    document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                </script>
+                                , Pukul <span id="clock"></span>
+                            </div>
                         </div>
 
                         <div class="page-content">
-                            <div class="page-header position-relative">
-                                <h1>
-                                    Pasca Kebakaran
-                                    <small>
-                                        <i class="icon-double-angle-right"></i>
-                                        Overview
-                                    </small>
-                                </h1>
-                            </div><!--/.page-header-->
 
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <p align="center">
+                                                <img src='../assets/img/tulisan.png' width="768" height="200" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="table-header center">Daftar Kejadian Kebakaran di Kabupaten Sidoarjo</div>
+
+                                                <table id="kejadian" class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="center">No.</th>
+                                                                    <th class="center">Nama Pelapor</th>
+                                                                    <th class="center">Lokasi Kejadian</th>
+                                                                    <th class="center">Tanggal Kejadian</th>
+                                                                    <th class="center">Action</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                            <?php
+                                                                $no = 1;
+                                                                while($res = mysql_fetch_array($query)){
+                                                                    $result_tgl = date_create($res['resiko_tanggal']);
+                                                            ?>
+                                                                <tr>
+                                                                    <td><?php echo $no.'.'; ?></td>
+                                                                    <td><?php echo $res['nama_pelapor']; ?></td>
+                                                                    <td><?php echo $res['alamat_pelapor'].' Ds. '.$res['DESA_NAMA'].' Kec. '.$res['KECAMATAN_NAMA'].'.' ?></td>
+                                                                    <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
+                                                                    <td>
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                                <?php  
+                                                                    $no++; 
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                </table>
+                                            </div>
+                                        </div> 
+                                </div>
+
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
                         </div><!--/.page-content-->
+                    </div>
+                </div>
 
-
-                        <?php
-                        include '../template/footer.php';
-                    }
-                }
+                <?php
+                //include '../template/footer.php';
             }
-            ?>  
-            </body>
-            </html>
+        }
+    }
+    ?>  
+    <div class="ace-settings-container" id="ace-settings-container">
+        <div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
+            <i class="icon-cog bigger-150"></i>
+        </div>
+
+        <div class="ace-settings-box" id="ace-settings-box">
+            <div>
+                <div class="pull-left">
+                    <select id="skin-colorpicker" class="hide">
+                        <option data-class="default" value="#438EB9" />
+                        #438EB9
+                        <option data-class="skin-1" value="#222A2D" />
+                        #222A2D
+                        <option data-class="skin-2" value="#C6487E" />
+                        #C6487E
+                        <option data-class="skin-3" value="#D0D0D0" />
+                        #D0D0D0
+                    </select>
+                </div>
+                <span>&nbsp; Choose Skin</span>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
+                <label class="lbl" for="ace-settings-rtl">Right To Left (rtl)</label>
+            </div>
+        </div>
+    </div><!--/#ace-settings-container--> 
+</div><!--/.main-content--> 
+</div><!--/.main-container-->
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+    <i class="icon-double-angle-up icon-only bigger-110"></i>
+</a>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+</script>
+<script type="text/javascript">
+    if ("ontouchend" in document)
+        document.write("<script src='../assets/js-ace/jquery.mobile.custom.min.js'>" + "<" + "/script>");</script>
+<script src="../assets/js-ace/bootstrap.min.js"></script>
+
+<!--page specific plugin scripts-->
+<script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
+<script src="../assets/js-ace/chosen.jquery.min.js"></script>
+<script src="../assets/js-ace/jquery.dataTables.min.js"></script>
+<script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+<script src="../assets/js-ace/autoNumeric.js"></script>
+<!--ace scripts-->
+
+<script src="../assets/js-ace/ace-elements.min.js"></script>
+<script src="../assets/js-ace/ace.min.js"></script>
+<script type="text/javascript">
+    function showUser(str) {
+        if (str=="") {
+            document.getElementById("kejadian").innerHTML="";
+            return;
+        } 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        } else { // code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                document.getElementById("kejadian").innerHTML=xmlhttp.responseText;
+            }
+        }
+          xmlhttp.open("GET","proses/cari?cari="+str,true);
+          xmlhttp.send();
+    }
+    var htmlobjek;
+            $(document).ready(function() {
+                //apabila terjadi event onchange terhadap object <select id=kecamatan>
+                $("#kecamatan_").change(function() {
+                    var kecamatan = $("#kecamatan_").val();
+                    $.ajax({
+                        url: "ambildesa.php",
+                        data: "kec=" + kecamatan,
+                        cache: false,
+                        success: function(msg) {
+                            //jika data sukses diambil dari server kita tampilkan
+                            //di <select id=desa>
+                            $("#desa").html(msg);
+                        }
+                    });
+                });
+                /*$("#kota").change(function() {
+                    var kota = $("#kota").val();
+                    $.ajax({
+                        url: "ambilkecamatan.php",
+                        data: "kota=" + kota,
+                        cache: false,
+                        success: function(msg) {
+                            $("#kec").html(msg);
+                        }
+                    });
+                });*/
+            });
+</script>
+<script type="text/javascript">
+    jQuery(function($) {
+        $('.biaya').autoNumeric('init');
+    });
+// ========================Jam========================================== //
+    function showTime() {
+        var a_p = "";
+        var today = new Date();
+        var curr_hour = today.getHours();
+        var curr_minute = today.getMinutes();
+        var curr_second = today.getSeconds();
+        if (curr_hour < 12) {
+            a_p = "AM";
+        } else {
+            a_p = "PM";
+        }
+        if (curr_hour == 0) {
+            curr_hour = 12;
+        }
+        if (curr_hour > 12) {
+            curr_hour = curr_hour - 12;
+        }
+        curr_hour = checkTime(curr_hour);
+        curr_minute = checkTime(curr_minute);
+        curr_second = checkTime(curr_second);
+        document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
+
+    function showMe(box1, box2) {
+
+        var chboxs = document.getElementsByName("check");
+        var vis1 = "none";
+        var vis2 = "none";
+        for (var i = 0; i < chboxs.length; i++) {
+            if (chboxs[i].checked) {
+                vis1 = "block";
+                vis2 = "block";
+                break;
+            }
+        }
+        document.getElementById(box1).style.display = vis1;
+        document.getElementById(box2).style.display = vis2;
+    }
+
+    function showMe_(box1) {
+
+        var chboxs = document.getElementsByName("check2");
+        var vis1 = "none";
+        for (var i = 0; i < chboxs.length; i++) {
+            if (chboxs[i].checked) {
+                vis1 = "block";
+                break;
+            }
+        }
+        document.getElementById(box1).style.display = vis1;
+    }
+</script>
+
+<script type="text/javascript">
+        $(document).ready(function() {
+            var kejadian = $('#kejadian').DataTable();
+            //var konstruksi = $('#konstruksi').DataTable();
+        });
+
+    $(function() {
+        $(".chzn-select").chosen();
+    });
+    // scrollables
+    $('.slim-scroll').each(function() {
+        var $this = $(this);
+        $this.slimScroll({
+            height: $this.data('height') || 100,
+            railVisible: true
+        });
+    });
+    function myFunction()
+    {
+        window.location.reload();
+    }
+</script>
+
+</body>
+</html>

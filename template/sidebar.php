@@ -55,7 +55,7 @@
                 <li>
                     <a href="../resiko/sumber.php">
                         <i class="icon-double-angle-right"></i>
-                        Sumber Air
+                        Daftar Sumber Air
                     </a>
                 </li>
             </ul>

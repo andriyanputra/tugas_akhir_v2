@@ -109,7 +109,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                         <li>
-                                            <a href="../anggota/profile?nip=<?php $row['pegawai_nip']; ?>">
+                                            <a href="../anggota/profile?nip=<?=$row['pegawai_nip'];?>">
                                                 <i class="icon-user"></i>
                                                 Profile
                                             </a>

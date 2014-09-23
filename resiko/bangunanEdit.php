@@ -36,7 +36,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <!--page specific plugin styles-->
                     <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
-                    <link rel="shortcut icon" href="../assets/img/favicon.png">
+                    <link rel="shortcut icon" href="../assets/img/favicon.ico">
                     <script src='../assets/js-zoom/jquery-1.8.3.min.js'></script>
                     <script src='../assets/js-zoom/jquery.elevatezoom.js'></script>
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
@@ -170,13 +170,13 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     </li>
 
                                     <li>
-                                        <a href="sumber">Sumber Air</a>
+                                        <a href="bangunan">Daftar Bangunan</a>
 
                                         <span class="divider">
                                             <i class="icon-angle-right arrow-icon"></i>
                                         </span>
                                     </li>
-                                    <li class="active">Tambah Data</li>
+                                    <li class="active">Edit Data</li>
                                 </ul><!--.breadcrumb-->
                                 <div class="pull-right">
                                     <script>
@@ -198,10 +198,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="page-content">
                                 <div class="page-header position-relative">
                                     <h1>
-                                        Sumber Air
+                                        Daftar Bangunan
                                         <small>
                                             <i class="icon-double-angle-right"></i>
-                                            Tambah Data
+                                            Edit Data
                                         </small>
                                     </h1>
                                 </div><!--/.page-header-->
@@ -212,18 +212,18 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                         <div class="widget-box">
                                             <div class="widget-header widget-header-blue widget-header-flat">
-                                                <h4 class="lighter">Form Sumber Air di Kebupaten Sidoarjo</h4>
+                                                <h4 class="lighter">Form Bangunan di Kebupaten Sidoarjo</h4>
                                             </div>
 
                                             <div class="widget-body">
                                                 <div class="widget-main">
                                                     <div class="row-fluid">
-                                                        <form class="form-horizontal" id="validation-form" method="post" action="Fsumber/prosesAdd.php" enctype="multipart/form-data">
+                                                        <form class="form-horizontal" id="validation-form" method="post" action="Fbangunan/prosesEdit.php" enctype="multipart/form-data">
                                                             <div id="user-profile-3" class="user-profile">
                                                                 <div class="row-fluid">
 
                                                                     <p align="center">
-                                                                        <img id="zoom_01" src='../assets/img/sda/small/potensi.png' data-zoom-image="../assets/img/sda/large/kec.png"/>
+                                                                        <img src='../assets/img/house.jpg' width="200" height="200" />
                                                                     </p>
 
                                                                     <div class="vspace"></div>
@@ -238,78 +238,109 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 </button>
 
                                                                                 <i class="icon-remove"></i>
-                                                                                Maaf nama sumber air sudah ada. Mohon untuk melakukan update data.
-                                                                            </div>
-                                                                            <?php
-                                                                        } else
-                                                                        if ($_GET['msg'] == 'error0') {
-                                                                            ?>
-                                                                            <div class="alert alert-block alert-error">
-                                                                                <button type="button" class="close" data-dismiss="alert">
-                                                                                    <i class="icon-remove"></i>
-                                                                                </button>
-
-                                                                                <i class="icon-remove"></i>
-                                                                                Maaf, mohon untuk memilih pilihan lokasi pada baris lokasi sumber.
+                                                                                Maaf nama bangunan sudah ada.
                                                                             </div>
                                                                             <?php
                                                                         }
                                                                     }
                                                                     ?>
+                                                                    <?php
+                                                                    $id = $_GET['id'];
+
+                                                                    $q = mysql_query("SELECT * FROM master_bangunan AS a INNER JOIN bangunan AS b
+                                                                            ON (a.ID_MASTER = b.ID_MASTER) WHERE ID_BANGUNAN = '$id'") or die("Query failed: " . mysql_error());
+                                                                    $r = mysql_fetch_assoc($q);
+                                                                    $pilih_master = $r['NAMA_MASTER'];
+                                                                    $pilih_tingkat = $r['TINGKAT_BANGUNAN'];
+                                                                    $master_nama = array('Perkantoran', 'Usaha Dagang dan Jasa', 'Industri', 'Kendaraan Bermotor', 'Rumah', 'Lahan / Sawah');
+                                                                    $master_tingkat = array('3', '4', '5', '6', '7');
+                                                                    ?>
                                                                     <div class="vspace"></div>
 
                                                                     <div class="control-group">
-                                                                        <label class="control-label" for="nama_sumber">Nama Sumber:</label>
+                                                                        <label class="control-label" for="kriteria">Kriteria Bangunan :</label>
 
                                                                         <div class="controls">
-                                                                            <input type="text" name="nama_sumber" id="nama_sumber" placeholder="Nama Sumber" value=""/>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="control-group">
-                                                                        <label class="control-label" for="lokasi_sumber">Lokasi Sumber:</label>
-                                                                        <?php
-                                                                        $q = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
-                                                                        ?>
-                                                                        <div class="controls span6">
-                                                                            <select id="lokasi_sumber" name="lokasi_sumber" class="chzn-select" data-placeholder="Pilih Lokasi...">
-                                                                                <option value="" />
-                                                                                <?php while ($row = mysql_fetch_array($q)): ?>
-                                                                                    <option value="<?php echo $row['KECAMATAN_ID']; ?>"><?php echo $row['KECAMATAN_NAMA']; ?></option>
-                                                                                <?php endwhile; ?>
-                                                                            </select>
-                                                                            <select name="desa" id="desa">
-                                                                                <option value=""  />PIlih Desa...
+                                                                            <select id="kriteria" name="kriteria">
+                                                                                <option value="" />Pilih Kriteria...
+                                                                                <?php
+                                                                                foreach ($master_nama as $nama) {
+                                                                                    if ($pilih_master == $nama) {
+                                                                                        echo "<option selected='selected' value='$nama'>$nama</option>";
+                                                                                    } else {
+                                                                                        echo "<option value='$nama'>$nama</option>";
+                                                                                    }
+                                                                                }
+                                                                                ?>
                                                                             </select>
                                                                         </div>
                                                                     </div>
 
-
-                                                                    <div class='space-6'></div>
-
                                                                     <div class="control-group">
-                                                                        <label class="control-label" for="keterangan">Keterangan ( Jalan, gang, dll ):</label>
+                                                                        <label class="control-label" for="nama">Nama Bangunan :</label>
 
                                                                         <div class="controls">
-                                                                            <textarea class="span6" id="keterangan" name="keterangan"></textarea>
+                                                                            <input type="hidden" name="id_bangunan" value="<?php echo $id; ?>">
+                                                                            <input type="text" name="nama" id="nama" placeholder="Nama Bangunan..." value="<?= $r['NAMA_BANGUNAN'] ?>">
                                                                         </div>
+                                                                    </div>
+
+                                                                    <div class="control-group">
+                                                                        <label class="control-label" for="tingkat">Tingkat Bangunan :</label>
+
+                                                                        <div class="controls">
+                                                                            <select id="tingkat" name="tingkat" >
+                                                                                <option value=""/>Pilih Tingkat...
+                                                                                <?php
+                                                                                foreach ($master_tingkat as $tingkat) {
+                                                                                    if ($pilih_tingkat == $tingkat) {
+                                                                                        echo "<option selected='selected' value='$tingkat'>$tingkat</option>";
+                                                                                    } else {
+                                                                                        echo "<option value='$tingkat'>$tingkat</option>";
+                                                                                    }
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                            <strong class="red">*</strong>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="control-group">
+                                                                        <label class="control-label" for="keterangan">Keterangan Bangunan :</label>
+
+                                                                        <div class="controls">
+                                                                            <textarea class="span6" id="keterangan" name="keterangan" placeholder="Keterangan Bangunan..."><?= $r['KET_BANGUNAN']; ?></textarea>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="control-group">
+                                                                        <label for="volume">
+                                                                            <small> <u><strong>Note :</strong></u> 
+                                                                            </small>
+                                                                        </label>
+                                                                        <label for="note">
+                                                                            &nbsp;&nbsp;
+                                                                            <strong class="red">*</strong>
+                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                            <small>
+                                                                                Semaikin kecil nilai tingkat bangunan semakin berbahaya kebakaran yang bisa terjadi.
+                                                                            </small>
+                                                                        </label>
                                                                     </div>
 
                                                                     <div class="row-fluid wizard-actions">
-                                                                        <button class="btn  btn-primary" onClick="document.location.reload(true)">
-                                                                            <i class="icon-refresh"></i>
-                                                                            Reset
+                                                                        <button class="btn btn-primary" onclick="window.history.go(-1)">
+                                                                            <i class="icon-arrow-left"></i>
+                                                                            Batal
                                                                         </button>
 
-                                                                        <input type="submit" name="submit" class="btn btn-success" value="Simpan" />
-
-                                                                        <!--<button class="btn btn-success btn-next" data-last="Finish">
-                                                                            Next
-                                                                            <i class="icon-arrow-right icon-on-right"></i>
+            <input type="submit" name="submit" class="btn btn-success" value="Update" />                                                                                                                                                                                                                                                                                    <!--<input type="submit" name="submit" class="btn btn-success" value="Simpan" />-->
+                                                                        <!--<button class="btn btn-success" type="submit">
+                                                                            Simpan
+                                                                            <i class="icon-ok bigger-110"></i>
                                                                         </button>-->
                                                                     </div>
                                                                 </div>
-                                                            </div>
                                                         </form>
                                                     </div>
                                                 </div><!--/widget-main-->
@@ -382,41 +413,29 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         });
                     </script>
                     <script type="text/javascript">
-                        $(document).ready(function() {
-                            $("#lokasi_sumber").change(function() {
-                                $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
-                                $.get('akec.php?kecamatan=' + $(this).val(), function(data) {
-                                    $("#desa").html(data);
-                                    $('#loader').slideUp(200, function() {
-                                        $(this).remove();
-                                    });
-                                });
-                            });
-                        });
-
-                        < !--
-                                function showTime() {
-                                    var a_p = "";
-                                    var today = new Date();
-                                    var curr_hour = today.getHours();
-                                    var curr_minute = today.getMinutes();
-                                    var curr_second = today.getSeconds();
-                                    if (curr_hour < 12) {
-                                        a_p = "AM";
-                                    } else {
-                                        a_p = "PM";
-                                    }
-                                    if (curr_hour == 0) {
-                                        curr_hour = 12;
-                                    }
-                                    if (curr_hour > 12) {
-                                        curr_hour = curr_hour - 12;
-                                    }
-                                    curr_hour = checkTime(curr_hour);
-                                    curr_minute = checkTime(curr_minute);
-                                    curr_second = checkTime(curr_second);
-                                    document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
-                                }
+                        <!--
+            function showTime() {
+                            var a_p = "";
+                            var today = new Date();
+                            var curr_hour = today.getHours();
+                            var curr_minute = today.getMinutes();
+                            var curr_second = today.getSeconds();
+                            if (curr_hour < 12) {
+                                a_p = "AM";
+                            } else {
+                                a_p = "PM";
+                            }
+                            if (curr_hour == 0) {
+                                curr_hour = 12;
+                            }
+                            if (curr_hour > 12) {
+                                curr_hour = curr_hour - 12;
+                            }
+                            curr_hour = checkTime(curr_hour);
+                            curr_minute = checkTime(curr_minute);
+                            curr_second = checkTime(curr_second);
+                            document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+                        }
 
                         function checkTime(i) {
                             if (i < 10) {
@@ -439,17 +458,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     keterangan: {
                                         required: true
                                     },
-                                    nama_sumber: {
+                                    nama: {
                                         required: true
                                     },
-                                    desa: {
+                                    kriteria: {
+                                        required: true
+                                    },
+                                    tingkat: {
                                         required: true
                                     }
                                 },
                                 messages: {
-                                    desa: "Mohon untuk memilih lokasi desa.",
-                                    nama_sumber: "Mohon untuk mengisi field nama sumber.",
-                                    keterangan: "Mohon untuk mengisi field keterangan."
+                                    kriteria: "Mohon untuk memilih kriteria bangunan.",
+                                    nama: "Mohon untuk mengisi nama dari bangunan.",
+                                    tingkat: "Mohon untuk memilih tingkat resiko kebakaran dari bangunan.",
+                                    keterangan: "Mohon untuk mengisi deskripsi dari bangunan."
                                 },
                                 invalidHandler: function(event, validator) { //display error alert on form submit   
                                     $('.alert-error', $('.login-form')).show();
@@ -479,11 +502,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         error.insertAfter(element);
                                 },
                                 submitHandler: function(form) {
-                                    var url = "Fsumber/prosesAdd.php";
+                                    var url = "Fbangunan/prosesEdit.php";
 
                                     // mengambil nilai dari inputbox, textbox dan select
-                                    var v_nSumber = $('input:text[name=nama_sumber]').val();
-                                    var v_lSumber = $('select[name=lokasi_sumber]').val();
+                                    var v_nama = $('input:text[name=nama]').val();
+                                    var v_kriteria = $('select[name=kriteria]').val();
                                     var v_tempat = $('input:text[name=tempat]').val();
                                     var v_ttl = $('input:text[name=tanggal]').val();
                                     var v_keterangan = $('textarea[name=keterangan]').val();
@@ -491,9 +514,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     var v_gender = $('input:radio[name=gender]').val();
                                     var v_email = $('input:email[name=email]').val();
                                     var v_pass1 = $('input:password[name=pass1]').val();
-                                    var v_jabatan = $('select[name=jabatan]').val();
+                                    var v_tingkat = $('select[name=tingkat]').val();
 
-                                    $.post(url, {nama_sumber: v_nSumber, lokasi_sumber: v_lSumber, tempat: v_tempat, ttl: v_ttl, keterangan: v_keterangan, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, jabatan: v_jabatan}, function() {
+                                    $.post(url, {nama: v_nama, kriteria: v_kriteria, tempat: v_tempat, ttl: v_ttl, keterangan: v_keterangan, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, tingkat: v_tingkat}, function() {
 
                                     })
                                 },

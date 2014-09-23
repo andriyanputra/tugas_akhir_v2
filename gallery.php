@@ -94,9 +94,7 @@
         </div>
     </div>
 </div>
-
 <!--End tab halaman-->
-
 <form class="form-horizontal" id="validation-form">
     <div class="row-fluid form-horizontal">
         <div class="span12">
@@ -1135,7 +1133,6 @@
     </div>
 </div>
 <!--end result-->
-
 <script type="text/javascript">
     $('.nexttab').click(function() {
         $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -1145,7 +1142,6 @@
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
     });
 </script>
-
 <script type="text/javascript">
     //var tabs = $("#tabs").tabs({
     //select: function(event, ui) {
@@ -1182,7 +1178,6 @@
         $("#tabs").tabs();
     });
 </script>
-
 <script type="text/javascript">
     var codeMap = {'1': '../assets/img/sda/large/balongbendo.png',
         '2': '../assets/img/sda/large/buduran.png',
@@ -1523,7 +1518,6 @@
         })
     });
 </script>
-
 <table>
     <tr>
         <td>Product 1</td>
@@ -1549,7 +1543,6 @@
         <td id="totalPriceDisplay">TOTAL PRICE HERE</td>
     </tr>
 </table>
-
 <script type="text/javascript">
     function changeTotalFromCount(input) {
         var unitPrice = parseFloat(input.getAttribute("data-unitPrice"));
@@ -1584,4 +1577,106 @@
     }
     window.onload = initTotals;
 </script>
-$a['galon/liter'] == $laju_galon
+<!--KEB AIR-->
+<script type="text/javascript">
+    $(function() {
+        $('#validation-form').show();
+        //documentation : http://docs.jquery.com/Plugins/Validation/validate
+        $('#validation-form').validate({
+            errorElement: 'span',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            rules: {
+                v_potensi: {
+                    required: true
+                },
+                a_potensi: {
+                    required: true
+                },
+                b_potensi: {
+                    required: true
+                },
+                kecepatan: {
+                    required: true
+                },
+                jarak1: {
+                    required: true
+                },
+                jarak2: {
+                    required: true
+                }
+            },
+            messages: {
+                v_potensi: "Field tidak boleh kosong.",
+                a_potensi: "Field tidak boleh kosong.",
+                b_potensi: "Field tidak boleh kosong.",
+                kecepatan: "Field tidak boleh kosong.",
+                jarak1: "Field tidak boleh kosong.",
+                jarak2: "Field tidak boleh kosong."
+
+            },
+            invalidHandler: function(event, validator) { //display error alert on form submit   
+                $('.alert-error', $('.login-form')).show();
+            },
+            highlight: function(e) {
+                $(e).closest('.control-group').removeClass('info').addClass('error');
+            },
+            success: function(e) {
+                $(e).closest('.control-group').removeClass('error').addClass('info');
+                $(e).remove();
+            },
+            errorPlacement: function(error, element) {
+                if (element.is(':checkbox') || element.is(':radio')) {
+                    var controls = element.closest('.controls');
+                    if (controls.find(':checkbox,:radio').length > 1)
+                        controls.append(error);
+                    else
+                        error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+                }
+                else if (element.is('.select2')) {
+                    error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+                }
+                else if (element.is('.chzn-select')) {
+                    error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+                }
+                else
+                    error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                var url = "Fanalisis/analisisProses.php";
+
+                // mengambil nilai dari inputbox, textbox dan select
+                var v_kec = $('select[name=kecamatan]').val();
+                var v_air = $('select[name=sumber_air]').val();
+                var v_desa = $('select[name=desa]').val();
+                var v_bangunan = $('input:text[name=bangunan]').val();
+                var v_akons = $('input:text[name=angka_konstruksi]').val();
+                var v_volume1 = $('input:text[name=volume1]').val();
+                var v_exposure = $('input:radio[name=exposure]').val();
+                var v_tepol = $('input:radio[name=tepol]').val();
+                var v_pass1 = $('input:password[name=pass1]').val();
+                var v_jabatan = $('select[name=jabatan]').val();
+
+                $.post(url, {kecamatan: v_kec, sumber_air: v_air, bangunan: v_bangunan, angka_konstruksi: v_akons, volume1: v_volume1, exposure: v_exposure, tepol: v_tepol, pass1: v_pass1, jabatan: v_jabatan}, function() {
+
+                })
+            },
+            invalidHandler: function(form) {
+            }
+        });
+    });
+
+
+
+    /*$(function() {
+     ///////////////////////////////////////////
+     $('#user-profile-3').end().find('button[type=reset]').on(ace.click_event, function() {
+     $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
+     })
+     });*/
+</script>
+<!--END KEB AIR-->
+
+
+
+

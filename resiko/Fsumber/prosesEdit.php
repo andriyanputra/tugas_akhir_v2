@@ -1,97 +1,104 @@
 <?php
 
 include('../../config/config.php');
+if ($_POST) {
+    $sumber_id = $_POST['id_sumber'];
+    $nSumber = $_POST['nama_sumber'];
+    $lokasi1 = $_POST['kec_nama1'];
+    $lokasi2 = $_POST['kec_nama2'];
+    $desa = $_POST['desa'];
+    $lokasi_id = $_POST['kec_id'];
+    $ketSumber = $_POST['keterangan'];
+    
+    $query_desa = mysql_query("SELECT DESA_ID FROM desa WHERE DESA_NAMA = '" . $desa . "'") or die("Query failed: " . mysql_error());
+    $r = mysql_fetch_assoc($query_desa);
+    $query_kec = mysql_query("SELECT KECAMATAN_ID FROM kecamatan WHERE KECAMATAN_NAMA = '" . $lokasi1 . "'") or die("Query failed: " . mysql_error());
+    $d = mysql_fetch_assoc($query_kec);
+    $query_sumber_kec = mysql_query("SELECT ID_SAK FROM sumber_air_kecamatan WHERE ID_SUMBER = '$sumber_id'") or die("Query failed: " . mysql_error());
+    $a = mysql_fetch_assoc($query_sumber_kec);
+    $query_sumber_desa = mysql_query("SELECT ID_SAD FROM sumber_air_desa WHERE ID_SUMBER = '$sumber_id'") or die("Query failed: " . mysql_error());
+    $b = mysql_fetch_assoc($query_sumber_desa);
+    $desa_id = $r['DESA_ID'];
+    $kec_id = $d['KECAMATAN_ID'];
+    $sumber_kec_id = $a['ID_SAK'];
+    $sumber_desa_id = $b['ID_SAD'];
+    /*echo 'ID Sumber: '.$sumber_id.'<br/>';
+    echo 'Nama Sumber: '.$nSumber.'<br/>';
+    echo 'Lokasi Sumber: '.$lokasi1.' '. $d['KECAMATAN_ID'].'<br/>';
+    echo 'Lokasi Sumber Baru: '.$lBaru.'<br/>';
+    echo 'Lokasi desa: '.$r['DESA_ID'].'<br/>';
+    echo 'Keterangan Sumber: '.$ketSumber.'<br/>';*/
 
-$nSumber = $_POST['nama_sumber'];
-$lSumber1 = $_POST['lokasi_sumber1'];
-$lSumber2 = $_POST['lokasi_sumber2'];
-$lSumber3 = $_POST['lSumber'];
-$ketSumber = $_POST['keterangan'];
-$id_sumber = $_POST['id_sumber'];
-
-$qnama = mysql_query("SELECT NAMA_SUMBER, KET_SUMBER FROM sumber_air WHERE NAMA_SUMBER = '" . $nSumber . "'") or die("Query failed: " . mysql_error());
-$qlokasi = mysql_query("SELECT GROUP_CONCAT(kecamatan.KECAMATAN_ID SEPARATOR ', ') AS id, GROUP_CONCAT(kecamatan.KECAMATAN_NAMA SEPARATOR ', ') AS Kecamatan
-                    FROM sumber_air a 
-                    JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
-                    JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
-                    WHERE a.ID_SUMBER = '" . $id_sumber . "' ") or die("Query failed: " . mysql_error());
-$a = mysql_fetch_array($qlokasi);
-$b = mysql_fetch_assoc($qnama);
-if ($b['NAMA_SUMBER'] == $nSumber) {
-    if (empty($lSumber3)) {
-        if ($b['KET_SUMBER'] == $ketSumber) {
-            if (!empty($lSumber1)) {
-                foreach ($lSumber1 as $v1) {
-                    if ($a['id'] == $v1) {
-                        header('location:../sumber.php?msg=notif1');
-                    } else {
-                        mysql_query("DELETE FROM sumber_air_kecamatan WHERE KECAMATAN_ID = '" . $v1 . "'") or die("Query delete failed: " . mysql_error());
-                    }
-                }
+    if($sumber_id > 19){
+            $update_sumber = mysql_query("UPDATE sumber_air SET
+                                    ID_SUMBER = '$sumber_id',
+                                    NAMA_SUMBER = '$nSumber',
+                                    KET_SUMBER = '$ketSumber'
+                                    WHERE ID_SUMBER = '$sumber_id'") or die(mysql_error());
+            $update_air_kec = mysql_query("UPDATE sumber_air_kecamatan SET 
+                                    ID_SAK = '$sumber_kec_id',
+                                    ID_SUMBER = '$sumber_id',
+                                    KECAMATAN_ID = '$kec_id'
+                                    WHERE ID_SAK = '$sumber_kec_id'") or die(mysql_error());
+            $update_air_desa = mysql_query("UPDATE sumber_air_desa SET 
+                                    ID_SAD = '$sumber_desa_id',
+                                    ID_SUMBER = '$sumber_id',
+                                    DESA_ID = '$desa_id'
+                                    WHERE ID_SAD = '$sumber_desa_id'") or die(mysql_error());
+            if($update_sumber && $update_air_kec && $update_air_desa){
+                header('Location: ../sumber.php?msg=success_edit');
             }
-            if (!empty($lSumber2)) {
-                foreach ($lSumber2 as $v2) {
-                    if ($a['id'] == $v2) {
-                        header('location:../sumber.php?msg=notif1');
-                    }
-                }
-            }
-        }
-    } else {
-        if (is_array($lSumber3)) {
-            foreach ($lSumber3 as $v3) {
-                if ($a['id'] == $v3) {
-                    header('location:../sumber.php?msg=notif2');
-                } else {
-                    mysql_query("INSERT INTO sumber_air_kecamatan VALUES ('" . $id_sumber . "', '" . $v3 . "')") or die("Query insert lokasi baru failed: " . mysql_error());
-                }
-            }
-            header('Location: ../sumber.php?msg=success_edit');
-        }
+            //header("Location: ../sumber.php?msg=notif1");
+        
+    }else{
+            $update_sumber = mysql_query("UPDATE sumber_air SET
+                                    ID_SUMBER = '$sumber_id',
+                                    NAMA_SUMBER = '$nSumber',
+                                    KET_SUMBER = '$ketSumber'
+                                    WHERE ID_SUMBER = '$sumber_id'") or die(mysql_error());
+            /*$update_air_kec = mysql_query("UPDATE sumber_air_kecamatan SET 
+                                    ID_SAK = '$sumber_kec_id',
+                                    ID_SUMBER = '$sumber_id ',
+                                    KECAMATAN_ID = '$kec_id'
+                                    WHERE ID_SAK = '$sumber_kec_id'") or die(mysql_error());
+            $update_air_desa = mysql_query("UPDATE sumber_air_desa SET 
+                                    ID_SAD = '$sumber_kec_id',
+                                    ID_SUMBER = '$sumber_id',
+                                    DESA_ID = '$desa_id'
+                                    WHERE ID_SAK = '$sumber_desa_id'") or die(mysql_error());*/
+            if($update_sumber){
+                header('Location: ../sumber.php?msg=success_edit');
+            }  //else {
+                //echo "Tidak berhasil";
+                //die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');
+            //}
+            //header("Location: ../sumber.php?msg=notif1");
+        
     }
-} else {
-    $qupdate = mysql_query("UPDATE tugas_akhir.sumber_air SET NAMA_SUMBER = '" . $nSumber . "', KET_SUMBER = '" . $ketSumber . "'
-                WHERE ID_SUMBER = '" . $id_sumber . "' AND ID_SUMBER = LAST_INSERT_ID('" . $id_sumber . "')") or die("Query update data failed: " . mysql_error());
-    header('Location: ../sumber.php?msg=success_edit');
-    /* if(is_array($lSumber2)){
-      foreach ($lSumber2 AS $v2) {
-      mysql_query("UPDATE sumber_air_kecamatan SET ID_SUMBER = '" . $ganti_id . "', '" . $v2 . "')");
-      }
-      }
-      if(is_array($lSumber3)){
-      foreach ($lSumber3 AS $v3) {
-      mysql_query("UPDATE sumber_air_kecamatan SET ID_SUMBER = '" . $ganti_id . "', '" . $v3 . "')");
-      }
-      }
-      //header('Location: ../sumber.php?msg=success_edit'); */
 }
 
-/* if (is_array($lSumber1)) {
-  foreach ($lSumber1 as $v1) {
-  echo 'lokasi sumber eksis (edit):' . $v1 . ', <br/>';
-  }
-  }
-  if (is_array($lSumber2)) {
-  foreach ($lSumber2 as $v2) {
-  echo 'lokasi sumber eksis (disable) :' . $v2 . ', <br/>';
-  }
-  }
-  if (is_array($lSumber3)) {
-  foreach ($lSumber3 as $v3) {
-  echo 'lokasi sumber baru :' . $v3 . ', <br/>';
-  }
-  }
 
-  echo $nSumber . '<br/>';
-  echo $ketSumber . '<br/>';
-  echo $id_sumber;
 
-  if ($id_sumber) {
-  echo $nSumber;
-  if (empty($lSumber1) || empty($lSumber2)) {
-  if ($nSumber == $_POST['nama_sumber'] && $lSumber3 = $_POST['lSumber'] && $ketSumber = $_POST['keterangan']) {
-  header('location:../sumber.php?msg=notif');
-  }
-  }
-  } */
+//$lokasi_string = implode(', ', $_POST['lBaru']);
+//$sql = '
+//            INSERT INTO
+//                `my_table` (
+//                    `shopID`,
+//                    `cars`
+//                )
+//            VALUES (
+//                ' . $_POST['shopID'] . ',
+//                "' . $cars_string . '"
+//            )
+//        ';
+//mysql_query($sql) OR die(mysql_error());
+
+
+//$qnama = mysql_query("SELECT NAMA_SUMBER, KET_SUMBER FROM sumber_air WHERE NAMA_SUMBER = '" . $nSumber . "'") or die("Query failed: " . mysql_error());
+/* $qlokasi = mysql_query("SELECT GROUP_CONCAT(kecamatan.KECAMATAN_ID SEPARATOR ', ') AS id, GROUP_CONCAT(kecamatan.KECAMATAN_NAMA SEPARATOR ', ') AS Kecamatan
+  FROM sumber_air a
+  JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
+  JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
+  WHERE a.ID_SUMBER = '" . $id_sumber . "' ") or die("Query failed: " . mysql_error()); */
+//$a = mysql_fetch_array($qlokasi);
 ?>

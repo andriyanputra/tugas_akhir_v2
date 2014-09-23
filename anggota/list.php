@@ -5,8 +5,8 @@ include '../config/functions.php'; //include function.php - very important
 include '../config/koneksi.php'; //include function.php - very important
 
 if (!loggedin()) { // check if the user is logged in, but if it isn't, it will redirect to the Login Form page. Noticed the difference?
-header("Location: ../login/login.php");
-exit();
+    header("Location: ../login/login.php");
+    exit();
 }
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
@@ -148,7 +148,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 var day = date.getDate();
                                 var month = date.getMonth();
                                 var thisDay = date.getDay(),
-                                thisDay = myDays[thisDay];
+                                        thisDay = myDays[thisDay];
                                 var yy = date.getYear();
                                 var year = (yy < 1000) ? yy + 1900 : yy;
                                 document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
@@ -354,7 +354,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <!--[if !IE]>-->
 
 <script type="text/javascript">
-    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+                                            window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
 </script>
 
 <!--<![endif]-->
@@ -410,9 +410,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     setInterval(showTime, 500);
 // ========================Akhir Jam========================================== //
 
-$(document).ready(function() {
-    var table = $('#pegawai').DataTable();
-});
+    $(document).ready(function() {
+        var table = $('#pegawai').DataTable();
+    });
 </script>
 </body>
 </html>
