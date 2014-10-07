@@ -92,7 +92,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?= $row['pegawai_nama']; ?>" />
                                         <span class="user-info">
                                             <small>Welcome,</small>
-                                            <?= $row['pegawai_nama']; ?>    
+                                            <?= $row['pegawai_nama']; ?>
                                         </span>
 
                                         <i class="icon-caret-down"></i>
@@ -568,13 +568,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-    <!--<![endif]-->
-
-    <!--[if IE]>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <![endif]-->
-
-    <!--[if !IE]>-->
 
     <script type="text/javascript">
                         window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");

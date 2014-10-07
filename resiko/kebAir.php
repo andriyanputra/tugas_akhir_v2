@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 
@@ -50,7 +51,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <!--inline styles related to this page-->
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                 </head>
-                <body tracingsrc="../assets/img/sda/Kec.jpg" tracingopacity="100">
+                <body>
 
                     <div class="navbar">
                         <div class="navbar-inner">
@@ -243,9 +244,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- end row fliud --> </div>
-                                        <!-- end span12 -->
+                                            </div><!-- end row fliud --> 
+                                        </div><!-- end span12 -->
 
                                         <div class="space-6"></div>
 

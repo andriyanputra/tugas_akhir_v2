@@ -2,6 +2,7 @@
 include '../template/header.php';
 
 session_start();
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 

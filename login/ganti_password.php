@@ -84,21 +84,21 @@ if (isset($_COOKIE['rePass'])) {
                                 <ul class="submenu">
 
                                     <li class="disabled">
-                                        <a href="../resiko/peta">
+                                        <a href="">
                                             <i class="icon-double-angle-right"></i>
                                             Peta Kab. Sidoarjo
                                         </a>
                                     </li>
 
                                     <li class="disabled">
-                                        <a href="../resiko/analisis">
+                                        <a href="">
                                             <i class="icon-double-angle-right"></i>
                                             Analisis Resiko Kebakaran
                                         </a>
                                     </li>
 
                                     <li class="disabled">
-                                        <a href="../resiko/bangunan">
+                                        <a href="">
                                             <i class="icon-double-angle-right"></i>
                                             Daftar Bangunan
                                         </a>
@@ -107,7 +107,7 @@ if (isset($_COOKIE['rePass'])) {
                             </li>
 
                             <li class="disabled">
-                                <a href="../pasca/pasca" class="dropdown-toggle">
+                                <a href="" class="dropdown-toggle">
                                     <i class="icon-desktop"></i>
                                     <span class="menu-text"> Pasca Kebakaran </span>
                                 </a>
@@ -116,14 +116,14 @@ if (isset($_COOKIE['rePass'])) {
 
 
                             <li class="disabled">
-                                <a href="../anggota/list">
+                                <a href="">
                                     <i class="icon-group"></i>
                                     <span class="menu-text"> Anggota Pemadam </span>
                                 </a>
                             </li>
 
                             <li class="disabled">
-                                <a href="../kalendar/kalendar">
+                                <a href="">
                                     <i class="icon-calendar"></i>
 
                                     <span class="menu-text">
@@ -136,14 +136,14 @@ if (isset($_COOKIE['rePass'])) {
                             </li>
 
                             <li class="disabled">
-                                <a href="gallery.php">
+                                <a href="">
                                     <i class="icon-picture"></i>
                                     <span class="menu-text"> Gallery </span>
                                 </a>
                             </li>
 
                             <li class="disabled">
-                                <a href="#" class="dropdown-toggle">
+                                <a href="" class="dropdown-toggle">
                                     <i class="icon-file-alt"></i>
 
                                     <span class="menu-text">

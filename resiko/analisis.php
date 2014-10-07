@@ -1,7 +1,7 @@
 <?php
 //include '../template/header.php';
-
 session_start();
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 
@@ -504,7 +504,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                             $bangunan1 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
                                                                                                         INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
                                                                                                         ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
-                                                                            $group = array();
+                                                                            $group1 = array();
                                                                             //$bangunan1 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
                                                                             ?>
                                                                             <div class="controls">
@@ -513,9 +513,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                     <option value="">Pilih Bangunan...</option>
                                                                                     <?php 
                                                                                         while ($r = mysql_fetch_assoc($bangunan1)){
-                                                                                            $group[$r['NAMA_MASTER']][] = $r;
+                                                                                            $group1[$r['NAMA_MASTER']][] = $r;
                                                                                         }
-                                                                                        foreach ($group as $key => $value) {
+                                                                                        foreach ($group1 as $key => $value) {
                                                                                              echo '<optgroup label="'.$key.'">';
                                                                                              foreach ($value as $values) {
                                                                                                  echo "<option value=".$values['TINGKAT_BANGUNAN'].">".$values['NAMA_BANGUNAN']."";
@@ -663,6 +663,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                 $bangunan2 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
                                                                                                         INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
                                                                                                         ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
+                                                                                $group2 = array();
                                                                             //$bangunan2 = mysql_query("SELECT * FROM bangunan ORDER BY NAMA_BANGUNAN ASC") or die("Query failed: " . mysql_error());
                                                                             ?>
                                                                             <div class="controls">
@@ -671,12 +672,12 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                     <option value="">Pilih Bangunan...</option>
                                                                                     <?php 
                                                                                         while ($r = mysql_fetch_assoc($bangunan2)){
-                                                                                            $group[$r['NAMA_MASTER']][] = $r;
+                                                                                            $group2[$r['NAMA_MASTER']][] = $r;
                                                                                         }
-                                                                                        foreach ($group as $key => $value) {
+                                                                                        foreach ($group2 as $key => $value) {
                                                                                              echo '<optgroup label="'.$key.'">';
                                                                                              foreach ($value as $values) {
-                                                                                                 echo "<option value='".$values['TINGKAT_BANGUNAN']."'/>'".$values['NAMA_BANGUNAN']."'";
+                                                                                                 echo "<option value=".$values['TINGKAT_BANGUNAN'].">".$values['NAMA_BANGUNAN']."";
                                                                                              }
                                                                                              echo '</optgroup>';
                                                                                          } 

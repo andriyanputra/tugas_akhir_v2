@@ -12,7 +12,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.nama_pelapor, a.resiko_tanggal, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, a.alamat_pelapor
+    $query = mysql_query("SELECT a.resiko_id, a.nama_pelapor, a.resiko_tanggal, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, a.alamat_pelapor
                         FROM resiko AS a INNER JOIN desa AS b
                             ON (a.DESA_ID = b.DESA_ID)
                         INNER JOIN bangunan AS c
@@ -163,10 +163,18 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </script>
                                 , Pukul <span id="clock"></span>
                             </div>
-                        </div>
+                        </div><!--.breadcrumb-->
 
                         <div class="page-content">
-
+                            <div class="page-header position-relative">
+                                <h1>
+                                    Pasca Kebakaran
+                                    <small>
+                                        <i class="icon-double-angle-right"></i>
+                                        Overview
+                                    </small>
+                                </h1>
+                            </div><!--/.page-header-->
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->
@@ -179,39 +187,68 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     </div>
                                         <div class="row-fluid">
                                             <div class="span12">
+                                            <?php
+                                            if (isset($_GET['msg'])) {
+                                                if ($_GET['msg'] == 'notif') {
+                                            ?>
+                                            <div class="alert alert-block alert-warning">
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <i class="icon-remove"></i>
+                                                </button>
+
+                                                <i class="icon-exclamation-sign red"></i>
+
+                                                &nbsp;&nbsp; 
+                                                <strong class="red">
+                                                    <?php echo $_GET['nama'];?>
+                                                </strong>
+                                                melaporkan terjadinya kebakaran dan telah di padamkan oleh petugas. Mohon untuk ditindaklanjuti. 
+                                            </div>
+                                            <?php 
+                                                }
+                                            }
+                                            ?>
                                                 <div class="table-header center">Daftar Kejadian Kebakaran di Kabupaten Sidoarjo</div>
 
                                                 <table id="kejadian" class="table table-striped table-bordered table-hover">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="center">No.</th>
-                                                                    <th class="center">Nama Pelapor</th>
-                                                                    <th class="center">Lokasi Kejadian</th>
-                                                                    <th class="center">Tanggal Kejadian</th>
-                                                                    <th class="center">Action</th>
-                                                                </tr>
-                                                            </thead>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="center">No.</th>
+                                                            <th class="center">Nama Pelapor</th>
+                                                            <th class="center">Lokasi Kejadian</th>
+                                                            <th class="center">Tanggal Kejadian</th>
+                                                            <th class="center">Action</th>
+                                                        </tr>
+                                                    </thead>
 
-                                                            <tbody>
-                                                            <?php
-                                                                $no = 1;
-                                                                while($res = mysql_fetch_array($query)){
-                                                                    $result_tgl = date_create($res['resiko_tanggal']);
-                                                            ?>
-                                                                <tr>
-                                                                    <td><?php echo $no.'.'; ?></td>
-                                                                    <td><?php echo $res['nama_pelapor']; ?></td>
-                                                                    <td><?php echo $res['alamat_pelapor'].' Ds. '.$res['DESA_NAMA'].' Kec. '.$res['KECAMATAN_NAMA'].'.' ?></td>
-                                                                    <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
-                                                                    <td>
-                                                                        
-                                                                    </td>
-                                                                </tr>
-                                                                <?php  
-                                                                    $no++; 
-                                                                }
-                                                                ?>
-                                                            </tbody>
+                                                    <tbody>
+                                                        <?php
+                                                            $no = 1;
+                                                            while($res = mysql_fetch_array($query)){
+                                                                $result_tgl = date_create($res['resiko_tanggal']);
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $no.'.'; ?></td>
+                                                            <td><?php echo $res['nama_pelapor']; ?></td>
+                                                            <td><?php echo $res['alamat_pelapor'].' Ds. '.$res['DESA_NAMA'].' Kec. '.$res['KECAMATAN_NAMA'].'.' ?></td>
+                                                            <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
+                                                            <td>
+                                                                <div class="hidden-phone visible-desktop action-buttons">
+                                                                    <a class="green" href="olahPasca?id=<?php echo $res['resiko_id']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                        <i class="icon-edit bigger-130"></i>
+                                                                    </a>
+
+                                                                    <a class="red order-delete" href="view?id=<?php echo $res['resiko_id']; ?>" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                        <i class="icon-zoom-in bigger-130"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <?php  
+                                                                $no++; 
+                                                            }
+                                                        ?>
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div> 
@@ -221,8 +258,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
                         </div><!--/.page-content-->
-                    </div>
-                </div>
+                    
 
                 <?php
                 //include '../template/footer.php';

@@ -64,6 +64,7 @@ if ($_POST) {
         echo 'penerapan_air = '.$laju."<br/>";
         echo 'pengangkutan_air = '.$hasil."<br/>";
         echo 'tipe_proteksi = '.$proteksi."<br/>";*/
+        $luas = $p * $l;
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$id',
                                 resiko_tanggal = NOW(),
@@ -85,7 +86,7 @@ if ($_POST) {
                                 tipe_proteksi = '$proteksi'
                                 WHERE resiko_id = '$id'") or die(mysql_error());
 		if($update){
-			header("Location: ../../beranda/index");
+			header("Location: ../../pasca/pasca?msg=notif&nama=$nama&id=$id");
 		}
     }
 }

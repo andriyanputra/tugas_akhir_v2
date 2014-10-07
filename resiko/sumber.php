@@ -1,6 +1,6 @@
 <?php
 include '../template/header.php';
-
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 session_start();
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
