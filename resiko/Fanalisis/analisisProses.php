@@ -22,7 +22,10 @@ if ($_POST) {
         $sumber_air = $_POST['sumber_air'];
     }
 
-    $bangunan = mysql_query("SELECT ID_BANGUNAN FROM bangunan WHERE NAMA_BANGUNAN = '$nama_tipe1' OR NAMA_BANGUNAN = '$nama_tipe2'");
+    $bangunan = mysql_query("SELECT * FROM bangunan AS a
+                            INNER JOIN master_bangunan AS b 
+                            ON (a.ID_MASTER = b.ID_MASTER)
+                            WHERE a.NAMA_BANGUNAN = '$nama_tipe1' OR a.NAMA_BANGUNAN = '$nama_tipe2'");
     $air = mysql_query("SELECT ID_SUMBER FROM sumber_air WHERE NAMA_SUMBER = '$sumber_air'");
     $desaID = mysql_query("SELECT DESA_ID FROM desa WHERE DESA_NAMA = '$desa[1]'");
     if ($bangunan || $air || $desa) {
@@ -38,40 +41,6 @@ if ($_POST) {
 
     $tepol = $_POST['tepol'];
     $tipe_proteksi = $_POST['tipe_proteksi'];
-
-    //=========GRAFIK========//
-    if($tipe_proteksi = 'MPKP'){
-        $grafik = mysql_query("INSERT INTO grafik
-                                    (grafik_id, grafik_tgl, grafik_mpkp, 
-                                    grafik_mpkl, grafik_mpkbg, grafik_luka, 
-                                    grafik_meninggal, grafik_bbm, grafik_kpr,
-                                    grafik_lst, grafik_rk, grafik_lain, grafik_perkantoran,
-                                    grafik_udj, grafik_industri, grafik_kb, grafik_rmh, grafik_lahan) 
-                                    VALUES ('',NOW(),'$tipe_proteksi','','','','','','','','','','13',
-                                        '14','15','16','17','18'") or die("Query : ".mysql_error());
-    }elseif ($tipe_proteksi = 'MPKL') {
-        $grafik = mysql_query("INSERT INTO grafik
-                                    (grafik_id, grafik_tgl, grafik_mpkp, 
-                                    grafik_mpkl, grafik_mpkbg, grafik_luka, 
-                                    grafik_meninggal, grafik_bbm, grafik_kpr,
-                                    grafik_lst, grafik_rk, grafik_lain, grafik_perkantoran,
-                                    grafik_udj, grafik_industri, grafik_kb, grafik_rmh, grafik_lahan) 
-                                    VALUES ('',NOW(),,[value-4],
-                                    [value-5],[value-6],[value-7],[value-8],
-                                    [value-9],[value-10],[value-11],[value-12],[value-13],
-                                    [value-14],[value-15],[value-16],[value-17],[value-18])") or die("Query : ".mysql_error());
-    }else{
-        $grafik = mysql_query("INSERT INTO grafik
-                                    (grafik_id, grafik_tgl, grafik_mpkp, 
-                                    grafik_mpkl, grafik_mpkbg, grafik_luka, 
-                                    grafik_meninggal, grafik_bbm, grafik_kpr,
-                                    grafik_lst, grafik_rk, grafik_lain, grafik_perkantoran,
-                                    grafik_udj, grafik_industri, grafik_kb, grafik_rmh, grafik_lahan) 
-                                    VALUES ('',NOW(),,[value-4],
-                                    [value-5],[value-6],[value-7],[value-8],
-                                    [value-9],[value-10],[value-11],[value-12],[value-13],
-                                    [value-14],[value-15],[value-16],[value-17],[value-18])") or die("Query : ".mysql_error());
-    }
 
     if ($_POST['hasil1'] == 'NaN' || $_POST['hasil2'] == 'NaN') {
         $hasil1 = $_POST['hasil1_'];

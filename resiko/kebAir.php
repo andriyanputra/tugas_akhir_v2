@@ -387,8 +387,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 </div>
                                                                 <!--END LAJU-->
                                                                 <?php
-                                                                $q_ = mysql_fetch_assoc(mysql_query("SELECT MAX( resiko_id )FROM resiko"));
-                                                                $resiko_id = $q_['MAX( resiko_id )'];
+                                                                //$q_ = mysql_fetch_assoc(mysql_query("SELECT MAX( resiko_id )FROM resiko"));
+                                                                $q_ = mysql_fetch_assoc(mysql_query("SELECT resiko_id FROM resiko ORDER BY resiko_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
+                                                                $resiko_id = $q_['resiko_id'];
                                                                 $query_result = mysql_query("SELECT *
                                                                                             FROM
                                                                                                 kecamatan AS a
@@ -400,7 +401,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                                     ON (d.ID_BANGUNAN = b.ID_BANGUNAN)
                                                                                                 INNER JOIN sumber_air AS e
                                                                                                     ON (e.ID_SUMBER = b.ID_SUMBER)
-                                                                                             WHERE resiko_id = '$resiko_id'");
+                                                                                             WHERE b.resiko_id = '$resiko_id'");
                                                                 if ($query_result) {
                                                                     $result = mysql_fetch_array($query_result);
                                                                 } else {

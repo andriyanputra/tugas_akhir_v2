@@ -1,3 +1,169 @@
+<?php
+include 'config/koneksi.php';
+$tgl = date('Y-m-d H:i:s');
+    $bln = date('Y');
+    echo $bln.'<br /><br />';
+
+    $query = mysql_query("SELECT * FROM bangunan AS a
+                    INNER JOIN resiko AS b ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
+                    INNER JOIN master_bangunan AS c ON (a.ID_MASTER = c.ID_MASTER)
+                    WHERE b.resiko_id = 115");
+        if ($query) {
+            $row = mysql_fetch_array($query);
+        } else {
+            die(mysql_error());
+        }
+        $proteksi = $row['tipe_proteksi'];
+/*
+1 = perkantoran     4 = kb
+2 = udj             5 = rumah
+3 = industri        6 = lahan/sawah
+*/
+        $tgl_buat = strtotime($row['resiko_tanggal']);
+        date("Y-m-d H:i:s", $datetime);
+        $tgl = date('Y-F-j h:i:s' ,$tgl_buat);
+        $bln = date('Y', strtotime($row['resiko_tanggal']));
+        $cek = mysql_fetch_assoc(mysql_query("
+            SELECT SUM(grafik_perkantoran) AS jml_perkantoran,
+            SUM(grafik_udj) AS jml_udj, SUM(grafik_industri) AS jml_industri,
+            SUM(grafik_kb) AS jml_kb, SUM(grafik_rmh) AS jml_rmh,
+            SUM(grafik_lahan) AS jml_lahan,
+            SUM(grafik_mpkp) AS jml_mpkp, SUM(grafik_mpkl) AS jml_mpkl, SUM(grafik_mpkbg) AS jml_mpkbg 
+            FROM grafik 
+            WHERE grafik_bln = 'Sep' AND grafik_thn = '2013'")) or die("Query : ".mysql_error());
+        $jml_perkantoran = $cek['jml_perkantoran']; $jml_mpkp = $cek['jml_mpkp'];  
+        $jml_udj = $cek['jml_udj'];                 $jml_mpkl = $cek['jml_mpkl'];
+        $jml_industri = $cek['jml_industri'];       $jml_mpkbg = $cek['jml_mpkbg'];
+        $jml_kb = $cek['jml_kb'];
+        $jml_rmh = $cek['jml_rmh'];
+        $jml_lahan = $cek['jml_lahan'];
+        if($cek['jml_mpkp'] == NULL && $cek['jml_mpkl'] == NULL && $cek['jml_mpkbg'] == NULL && $cek['jml_perkantoran'] == NULL && $cek['jml_udj'] == NULL && $cek['jml_industri'] == NULL && $cek['jml_kb'] == NULL && $cek['jml_rmh'] == NULL && $cek['jml_lahan'] == NULL){
+            $jml_perkantoran = '0'; $jml_mpkp = '0';  
+            $jml_udj = '0';         $jml_mpkl = '0';
+            $jml_industri = '0';    $jml_mpkbg = '0';
+            $jml_kb = '0';
+            $jml_rmh = '0';
+            $jml_lahan = '0';        
+            //echo '1 <br/>';
+            
+        }
+        
+        $master_id = $row['ID_MASTER'];
+        /*if($master_id == '1'){
+            //echo "master id = 1 dan tipe proteksi = ".$tipe_proteksi;
+            $add_perkantoran = $jml_perkantoran + 1;    
+        }else if($master_id == '2'){
+            //echo "master id = 2 dan tipe proteksi = ".$tipe_proteksi;
+            $add_udj = $jml_udj + 1;
+        }else if($master_id == '3'){
+            //echo "master id = 3 dan tipe proteksi = ".$tipe_proteksi;
+            $add_industri = $jml_industri + 1;
+        }else if($master_id == '4'){
+            //echo "master id = 4 dan tipe proteksi = ".$tipe_proteksi;
+            $add_kb = $jml_kb + 1;
+        }else if($master_id == '5'){
+            //echo "master id = 5 dan tipe proteksi = ".$tipe_proteksi;
+            $add_rmh = $jml_rmh + 1;
+        }else if($master_id == '6'){
+            $add_lahan = $jml_lahan + 1;
+        }
+
+        if($proteksi == 'MPKP'){
+            $add_mpkp = $jml_mpkp + 1;    
+        }else if($proteksi == 'MPKL'){
+            $add_mpkl = $jml_mpkl + 1;
+        }else if($proteksi == 'MPKBG'){
+            $add_mpkbg = $jml_mpkbg + 1;
+        }*/
+
+        echo "Sebelum proses insert = <br/>";
+        echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+        echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan.'<br/><br/>';
+        if($master_id == '1' && $proteksi == 'MPKP'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$add_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '1' && $proteksi == 'MPKL'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$add_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '1' && $proteksi == 'MPKBG'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$add_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '2' && $proteksi == 'MPKP'){
+            $add_udj = $jml_udj + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$add_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '2' && $proteksi == 'MPKL'){
+            $add_udj = $jml_udj + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$add_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '2' && $proteksi == 'MPKBG'){
+            $add_udj = $jml_udj + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$add_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '3' && $proteksi == 'MPKP'){
+            $add_industri = $jml_industri + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$add_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;    
+        }else if($master_id == '3' && $proteksi == 'MPKL'){
+            $add_industri = $jml_industri + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$add_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;    
+        }else if($master_id == '3' && $proteksi == 'MPKBG'){
+            $add_industri = $jml_industri + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$add_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;    
+        }else if($master_id == '4' && $proteksi == 'MPKP'){
+            $add_kb = $jml_kb + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$add_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '4' && $proteksi == 'MPKL'){
+            $add_kb = $jml_kb + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$add_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '4' && $proteksi == 'MPKBG'){
+            $add_kb = $jml_kb + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$add_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '5' && $proteksi == 'MPKP'){
+            $add_rmh = $jml_rmh + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$add_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '5' && $proteksi == 'MPKL'){
+            $add_rmh = $jml_rmh + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$add_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '5' && $proteksi == 'MPKBG'){
+            $add_rmh = $jml_rmh + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$add_rmh.' lahan:'.$jml_lahan;
+        }else if($master_id == '6' && $proteksi == 'MPKP'){
+            $add_lahan = $jml_lahan + 1; $add_mpkp = $jml_mpkp + 1;
+            echo 'mpkp: '.$add_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$add_lahan;
+        }else if($master_id == '6' && $proteksi == 'MPKL'){
+            $add_lahan = $jml_lahan + 1; $add_mpkl = $jml_mpkl + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$add_lahan;
+        }else if($master_id == '6' && $proteksi == 'MPKBG'){
+            $add_lahan = $jml_lahan + 1; $add_mpkbg = $jml_mpkbg + 1;
+            echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+            echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$add_lahan;
+        }
+            
+        
+        //echo ' <br/>Jumlah mpkp : '.count($row['tipe_proteksi']).'<br/>';
+        
+        /*echo "Setelah proses insert = <br/>";
+        echo 'mpkp: '.$add_mpkp.' mpkl: '.$add_mpkl.' mpkbg: '.$add_mpkbg.'<br/>';
+        echo 'kantor: '.$add_perkantoran.' udj: '.$add_udj.' industri: '.$add_industri.' kb: '.$add_kb.' rmh:'.$add_rmh.' lahan:'.$add_lahan;
+        $mpkp = $cek['grafik_mpkp']+1;
+        echo $cek['grafik_mpkp'].'atau'.$mpkp.' atau '.$cek['grafik_mpkl'].' atau '.$cek['grafik_mpkbg'];
+        echo $row['']*/
+
+    ?>
 <!--Tab halaman-->
 <div class="tabbable">
     <div id="tabs">

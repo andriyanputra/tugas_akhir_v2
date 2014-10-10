@@ -353,14 +353,14 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                             <div class="control-group">
                                                                                 <label class="control-label">Nama Pelapor :</label>
                                                                                 <div class="controls">
-                                                                                    <input type="text" name="pelapor" id="pelapor" placeholder="Nama Pelapor..." value="">
+                                                                                    <input type="text" autocomplete="off" name="pelapor" id="pelapor" placeholder="Nama Pelapor..." value="">
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="control-group">
                                                                                 <label class="control-label">No Telp/Handphone :</label>
                                                                                 <div class="controls">
-                                                                                    <input type="text" name="telp" id="telp" placeholder="Nomor Telepon..." class="input-mask-phone">
+                                                                                    <input type="text" autocomplete="off" name="telp" id="telp" placeholder="Nomor Telepon..." class="input-mask-phone">
                                                                                 </div>
                                                                             </div>
 

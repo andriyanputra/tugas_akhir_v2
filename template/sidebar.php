@@ -51,7 +51,7 @@
                         Daftar Bangunan
                     </a>
                 </li>
-                
+
                 <li>
                     <a href="../resiko/sumber.php">
                         <i class="icon-double-angle-right"></i>
@@ -67,8 +67,6 @@
                 <span class="menu-text"> Pasca Kebakaran </span>
             </a>
         </li>
-
-
 
         <li>
             <a href="../anggota/list">
@@ -99,12 +97,30 @@
 
         <li>
             <a href="#" class="dropdown-toggle">
-                <i class="icon-file-alt"></i>
+                <i class="icon-file"></i>
 
                 <span class="menu-text">
-                    Laporan Kejadian
+                    Laporan Kebakaran
                 </span>
+                <b class="arrow icon-angle-down"></b>
             </a>
+
+            <ul class="submenu">
+
+                <li>
+                    <a href="../resiko/peta">
+                        <i class="icon-double-angle-right"></i>
+                        Laporan Kebakaran
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../grafik/grafik">
+                        <i class="icon-double-angle-right"></i>
+                        Grafik Kebakaran
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul><!--/.nav-list-->
 
