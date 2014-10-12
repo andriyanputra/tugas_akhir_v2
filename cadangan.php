@@ -308,4 +308,41 @@
                                                          <i class="icon-search icon-on-right bigger-110"></i>
                                                     </button>-->
                                                 </form>
-                                                
+        /*echo 'ID resiko = '.$id."<br/>";
+        echo 'tgl resiko = '.NOW()."<br/>";
+        echo 'nama pelapor = '.$nama."<br/>";
+        echo 'nomor_telp = '.$no."<br/>";
+        echo 'alamat_pelapor = '.$alamat."<br/>";
+        echo 'ID BANGUNAN = '.$bangunan."<br/>";
+        echo 'DESA_ID = '.$desa."<br/>";
+        echo 'KECAMATAN_ID = '.$kecamatan."<br/>";
+        echo 'ID sumber = '.$sumber."<br/>";
+        echo 'exposure = '.$exposure."<br/>";
+        echo 'tepol = '.$tepol."<br/>";
+        echo 'p x l x t = '.$p.'x'.$l.'x'.$t."<br/>";
+        echo 'pasokan_air_minimum = '.$minim."<br/>";
+        echo 'penerapan_air = '.$laju."<br/>";
+        echo 'pengangkutan_air = '.$hasil."<br/>";
+        echo 'tipe_proteksi = '.$proteksi."<br/>";*/
+        /*echo '1 <br/>';
+        echo $cek['jml_mpkp'].' '.$cek['jml_mpkl'].' '.$cek['jml_mpkbg'].'<br/>';
+        echo $cek['jml_perkantoran'].' '.$cek['jml_udj'].' '.$cek['jml_industri'].' '.$cek['jml_kb'].' '.$cek['jml_rmh'].' '.$cek['jml_lahan'];*/
+        /*echo "2 <br/>";
+        echo $cek['jml_mpkp'].' '.$cek['jml_mpkl'].' '.$cek['jml_mpkbg'].'<br/>';
+        echo $cek['jml_perkantoran'].' '.$cek['jml_udj'].' '.$cek['jml_industri'].' '.$cek['jml_kb'].' '.$cek['jml_rmh'].' '.$cek['jml_lahan'];*/
+        /*if(($master_id == '1' && $tipe_proteksi == 'MPKP') || ($master_id == '1' && $tipe_proteksi == 'MPKL') || ($master_id == '1' && $tipe_proteksi == 'MPKBG')){
+            //echo "master id = 1 dan tipe proteksi = ".$tipe_proteksi;
+            
+        }else if(($master_id == '2' && $tipe_proteksi == 'MPKP') || ($master_id == '2' && $tipe_proteksi == 'MPKL') || ($master_id == '2' && $tipe_proteksi == 'MPKBG')){
+            //echo "master id = 2 dan tipe proteksi = ".$tipe_proteksi;
+
+        }else if(($master_id == '3' && $tipe_proteksi == 'MPKP') || ($master_id == '3' && $tipe_proteksi == 'MPKL') || ($master_id == '3' && $tipe_proteksi == 'MPKBG')){
+            //echo "master id = 3 dan tipe proteksi = ".$tipe_proteksi;
+
+        }else if(($master_id == '4' && $tipe_proteksi == 'MPKP') || ($master_id == '4' && $tipe_proteksi == 'MPKL') || ($master_id == '4' && $tipe_proteksi == 'MPKBG')){
+            //echo "master id = 4 dan tipe proteksi = ".$tipe_proteksi;
+
+        }else if(($master_id == '5' && $tipe_proteksi == 'MPKP') || ($master_id == '5' && $tipe_proteksi == 'MPKL') || ($master_id == '5' && $tipe_proteksi == 'MPKBG')){
+            //echo "master id = 5 dan tipe proteksi = ".$tipe_proteksi;
+            
+        }*/

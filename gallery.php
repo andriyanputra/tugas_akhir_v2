@@ -1,6 +1,6 @@
 <?php
 include 'config/koneksi.php';
-$tgl = date('Y-m-d H:i:s');
+//$tgl = date('Y-m-d H:i:s');
     $bln = date('Y');
     echo $bln.'<br /><br />';
 
@@ -75,7 +75,8 @@ $tgl = date('Y-m-d H:i:s');
         }else if($proteksi == 'MPKBG'){
             $add_mpkbg = $jml_mpkbg + 1;
         }*/
-
+        $wew = $row['resiko_tanggal'];
+        echo $wew.'<br/>';
         echo "Sebelum proses insert = <br/>";
         echo 'mpkp: '.$jml_mpkp.' mpkl: '.$jml_mpkl.' mpkbg: '.$jml_mpkbg.'<br/>';
         echo 'kantor: '.$jml_perkantoran.' udj: '.$jml_udj.' industri: '.$jml_industri.' kb: '.$jml_kb.' rmh:'.$jml_rmh.' lahan:'.$jml_lahan.'<br/><br/>';

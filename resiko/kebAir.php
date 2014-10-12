@@ -217,7 +217,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <div class="span12">
                                                 <?php $r = mysql_fetch_assoc($query); ?>
                                                 <div class="widget-box">
-                                                    <div class="widget-header widget-hea1der-small header-color-blue2">
+                                                    <div class="widget-header widget-hea1der-small header-color-red">
                                                         <h6>
                                                             Peta Desa Kecamatan <?= $r['KECAMATAN_NAMA']; ?>
                                                         </h6>

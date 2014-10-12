@@ -69,72 +69,179 @@ if ($_POST) {
             SUM(grafik_mpkp) AS jml_mpkp, SUM(grafik_mpkl) AS jml_mpkl, SUM(grafik_mpkbg) AS jml_mpkbg 
             FROM grafik 
             WHERE grafik_bln = '$bln' AND grafik_thn = '$thn'")) or die("Query : ".mysql_error());
-        //===Jika query dari cek, menghasilkan NULL record===
-        if($cek['jml_mpkp'] == NULL && $cek['jml_mpkl'] == NULL && $cek['jml_mpkbg'] == NULL && $cek['jml_perkantoran'] == NULL && $cek['jml_udj'] == NULL && $cek['jml_industri'] == NULL && $cek['jml_kb'] == NULL && $cek['jml_rmh'] == NULL && $cek['jml_lahan'] == NULL){
-            $cek['jml_perkantoran'] = '0'; $cek['jml_mpkp'] = '0'; $cek['jml_mpkl'] = '0'; $cek['jml_mpkbg'] = '0';
-            $cek['jml_udj'] = '0'; $cek['jml_industri'] = '0'; $cek['jml_kb'] = '0'; $cek['jml_rmh'] = '0'; $cek['jml_lahan'] = '0';        
-        }
-        /*
         $jml_perkantoran = $cek['jml_perkantoran']; $jml_mpkp = $cek['jml_mpkp'];  
         $jml_udj = $cek['jml_udj'];                 $jml_mpkl = $cek['jml_mpkl'];
         $jml_industri = $cek['jml_industri'];       $jml_mpkbg = $cek['jml_mpkbg'];
         $jml_kb = $cek['jml_kb'];
         $jml_rmh = $cek['jml_rmh'];
         $jml_lahan = $cek['jml_lahan'];
-        
+
+        //===Jika query dari cek, menghasilkan NULL record===
+        if($jml_mpkp == NULL && $jml_mpkl == NULL && $jml_mpkbg == NULL && $jml_perkantoran == NULL && $jml_udj == NULL && $jml_industri == NULL && $jml_kb == NULL && $jml_rmh == NULL && $jml_lahan == NULL){
+            $jml_perkantoran = '0'; $jml_mpkp = '0';  
+            $jml_udj = '0';         $jml_mpkl = '0';
+            $jml_industri = '0';    $jml_mpkbg = '0';
+            $jml_kb = '0';
+            $jml_rmh = '0';
+            $jml_lahan = '0';        
+        }
+        /*
         1 = perkantoran     4 = kb
         2 = udj             5 = rumah
         3 = industri        6 = lahan/sawah
         */
         $master_id = $row['ID_MASTER'];
-        if($master_id == '1'){
-            //echo "master id = 1 dan tipe proteksi = ".$tipe_proteksi;
-            $jml_perkantoran = $cek['jml_perkantoran'] + 1;    
-        }else if($master_id == '2'){
-            //echo "master id = 2 dan tipe proteksi = ".$tipe_proteksi;
-            $jml_udj = $cek['jml_udj'] + 1;
-        }else if($master_id == '3'){
-            //echo "master id = 3 dan tipe proteksi = ".$tipe_proteksi;
-            $jml_industri = $cek['jml_industri'] + 1;
-        }else if($master_id == '4'){
-            //echo "master id = 4 dan tipe proteksi = ".$tipe_proteksi;
-            $jml_kb = $cek['jml_kb'] + 1;
-        }else if($master_id == '5'){
-            //echo "master id = 5 dan tipe proteksi = ".$tipe_proteksi;
-            $jml_rmh = $cek['jml_rmh'] + 1;
-        }else if($master_id == '6'){
-            $jml_lahan = $cek['jml_lahan'];
+        if($master_id == '1' && $proteksi == 'MPKP'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '1' && $proteksi == 'MPKL'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '1' && $proteksi == 'MPKBG'){
+            $add_perkantoran = $jml_perkantoran + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '2' && $proteksi == 'MPKP'){
+            $add_udj = $jml_udj + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '2' && $proteksi == 'MPKL'){
+            $add_udj = $jml_udj + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '2' && $proteksi == 'MPKBG'){
+            $add_udj = $jml_udj + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '3' && $proteksi == 'MPKP'){
+            $add_industri = $jml_industri + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());    
+        }else if($master_id == '3' && $proteksi == 'MPKL'){
+            $add_industri = $jml_industri + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());   
+        }else if($master_id == '3' && $proteksi == 'MPKBG'){
+            $add_industri = $jml_industri + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());   
+        }else if($master_id == '4' && $proteksi == 'MPKP'){
+            $add_kb = $jml_kb + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '4' && $proteksi == 'MPKL'){
+            $add_kb = $jml_kb + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '4' && $proteksi == 'MPKBG'){
+            $add_kb = $jml_kb + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '5' && $proteksi == 'MPKP'){
+            $add_rmh = $jml_rmh + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '5' && $proteksi == 'MPKL'){
+            $add_rmh = $jml_rmh + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '5' && $proteksi == 'MPKBG'){
+            $add_rmh = $jml_rmh + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '6' && $proteksi == 'MPKP'){
+            $add_lahan = $jml_lahan + 1; $add_mpkp = $jml_mpkp + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '6' && $proteksi == 'MPKL'){
+            $add_lahan = $jml_lahan + 1; $add_mpkl = $jml_mpkl + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
+        }else if($master_id == '6' && $proteksi == 'MPKBG'){
+            $add_lahan = $jml_lahan + 1; $add_mpkbg = $jml_mpkbg + 1;
+            $grafik = mysql_query("INSERT INTO grafik
+                    VALUES (NULL,'$bln','$thn',
+                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
+                    '','',
+                    '','','','','',
+                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
         }
-
-        if($proteksi == 'MPKP'){
-            $jml_mpkp = $cek['jml_mpkp']+1;    
-        }else if($proteksi == 'MPKL'){
-            $jml_mpkl = $cek['jml_mpkl']+1;
-        }else if($proteksi == 'MPKBG'){
-            $jml_mpkbg = $cek['jml_mpkbg']+1;
-        }
-        
-        
-
-    //=========GRAFIK========//
-    $grafik = mysql_query("INSERT INTO `grafik`
-                        (`grafik_id`, `grafik_bln`, `grafik_thn`, 
-                        `grafik_mpkp`, `grafik_mpkl`, `grafik_mpkbg`, 
-                        `grafik_luka`, `grafik_meninggal`, 
-                        `grafik_bbm`, `grafik_kpr`, `grafik_lst`, `grafik_rk`, `grafik_lain`, 
-                        `grafik_perkantoran`, `grafik_udj`, `grafik_industri`, `grafik_kb`, `grafik_rmh`, `grafik_lahan`) 
-                        VALUES (
-                        NULL,'$bln','$thn',
-                        '$jml_mpkp','','',
-                        '','',
-                        '','','','','',
-                        '','','','','','')") or die("Query : ".mysql_error());
 
 
         $luas = $p * $l;
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$id',
-                                resiko_tanggal = NOW(),
+                                resiko_tanggal = '$tgl',
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',
@@ -152,49 +259,9 @@ if ($_POST) {
                                 pengangkutan_air = '$hasil',
                                 tipe_proteksi = '$proteksi'
                                 WHERE resiko_id = '$id'") or die(mysql_error());
-		if($update){
+		if($update && $grafik){
 			header("Location: ../../pasca/pasca?msg=notif&nama=$nama&id=$id");
 		}
     }
 }
-
-        /*echo 'ID resiko = '.$id."<br/>";
-        echo 'tgl resiko = '.NOW()."<br/>";
-        echo 'nama pelapor = '.$nama."<br/>";
-        echo 'nomor_telp = '.$no."<br/>";
-        echo 'alamat_pelapor = '.$alamat."<br/>";
-        echo 'ID BANGUNAN = '.$bangunan."<br/>";
-        echo 'DESA_ID = '.$desa."<br/>";
-        echo 'KECAMATAN_ID = '.$kecamatan."<br/>";
-        echo 'ID sumber = '.$sumber."<br/>";
-        echo 'exposure = '.$exposure."<br/>";
-        echo 'tepol = '.$tepol."<br/>";
-        echo 'p x l x t = '.$p.'x'.$l.'x'.$t."<br/>";
-        echo 'pasokan_air_minimum = '.$minim."<br/>";
-        echo 'penerapan_air = '.$laju."<br/>";
-        echo 'pengangkutan_air = '.$hasil."<br/>";
-        echo 'tipe_proteksi = '.$proteksi."<br/>";*/
-        /*echo '1 <br/>';
-        echo $cek['jml_mpkp'].' '.$cek['jml_mpkl'].' '.$cek['jml_mpkbg'].'<br/>';
-        echo $cek['jml_perkantoran'].' '.$cek['jml_udj'].' '.$cek['jml_industri'].' '.$cek['jml_kb'].' '.$cek['jml_rmh'].' '.$cek['jml_lahan'];*/
-        /*echo "2 <br/>";
-        echo $cek['jml_mpkp'].' '.$cek['jml_mpkl'].' '.$cek['jml_mpkbg'].'<br/>';
-        echo $cek['jml_perkantoran'].' '.$cek['jml_udj'].' '.$cek['jml_industri'].' '.$cek['jml_kb'].' '.$cek['jml_rmh'].' '.$cek['jml_lahan'];*/
-        /*if(($master_id == '1' && $tipe_proteksi == 'MPKP') || ($master_id == '1' && $tipe_proteksi == 'MPKL') || ($master_id == '1' && $tipe_proteksi == 'MPKBG')){
-            //echo "master id = 1 dan tipe proteksi = ".$tipe_proteksi;
-            
-        }else if(($master_id == '2' && $tipe_proteksi == 'MPKP') || ($master_id == '2' && $tipe_proteksi == 'MPKL') || ($master_id == '2' && $tipe_proteksi == 'MPKBG')){
-            //echo "master id = 2 dan tipe proteksi = ".$tipe_proteksi;
-
-        }else if(($master_id == '3' && $tipe_proteksi == 'MPKP') || ($master_id == '3' && $tipe_proteksi == 'MPKL') || ($master_id == '3' && $tipe_proteksi == 'MPKBG')){
-            //echo "master id = 3 dan tipe proteksi = ".$tipe_proteksi;
-
-        }else if(($master_id == '4' && $tipe_proteksi == 'MPKP') || ($master_id == '4' && $tipe_proteksi == 'MPKL') || ($master_id == '4' && $tipe_proteksi == 'MPKBG')){
-            //echo "master id = 4 dan tipe proteksi = ".$tipe_proteksi;
-
-        }else if(($master_id == '5' && $tipe_proteksi == 'MPKP') || ($master_id == '5' && $tipe_proteksi == 'MPKL') || ($master_id == '5' && $tipe_proteksi == 'MPKBG')){
-            //echo "master id = 5 dan tipe proteksi = ".$tipe_proteksi;
-            
-        }*/
-
 ?>
