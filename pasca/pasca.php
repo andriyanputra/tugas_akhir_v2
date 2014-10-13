@@ -175,6 +175,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     </small>
                                 </h1>
                             </div><!--/.page-header-->
+                            
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->

@@ -87,7 +87,8 @@ if ($_POST) {
                                     '$hasil1',
                                     '',
                                     '',
-                                    '$tipe_proteksi'
+                                    '$tipe_proteksi',
+                                    'no'
                                     )") or die(mysql_error());
 
                     if ($q1 && $baru1) {
@@ -115,7 +116,8 @@ if ($_POST) {
                                     '$hasil1',
                                     '',
                                     '',
-                                    '$tipe_proteksi'
+                                    '$tipe_proteksi',
+                                    'no'
                                     )") or die(mysql_error());
             if ($q_) {
                 header("location: ../kebAir.php?kec=$kec&p=$panjang1&l=$lebar1&t=$tinggi1");
@@ -156,7 +158,8 @@ if ($_POST) {
                                     '$hasil2',
                                     '',
                                     '',
-                                    '$tipe_proteksi'
+                                    '$tipe_proteksi',
+                                    'no'
                                     )") or die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');
                     if ($q2 && $baru2) {
                       header("location: ../kebAir.php?kec=$kec&p=$panjang2&l=$lebar2&t=$tinggi2");
@@ -183,7 +186,8 @@ if ($_POST) {
               '$hasil2',
               '',
               '',
-              '$tipe_proteksi'
+              '$tipe_proteksi',
+              'no'
               )") or die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');
             if ($qinsert) {
                 header("location: ../kebAir.php?kec=$kec&p=$panjang2&l=$lebar2&t=$tinggi2");

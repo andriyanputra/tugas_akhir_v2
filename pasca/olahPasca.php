@@ -12,8 +12,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.nama_pelapor, a.resiko_tanggal, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, d.KECAMATAN_DIR, a.alamat_pelapor
-                        FROM resiko AS a INNER JOIN desa AS b
+    $query = mysql_query("SELECT * FROM resiko AS a INNER JOIN desa AS b
                             ON (a.DESA_ID = b.DESA_ID)
                         INNER JOIN bangunan AS c
                             ON (a.ID_BANGUNAN = c.ID_BANGUNAN)
@@ -176,6 +175,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     </small>
                                 </h1>
                             </div><!--/.page-header-->
+
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->
@@ -242,7 +242,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                  <form class="form-horizontal" id="validation-form" method="POST" action="proses/submit.php">
                                                     <div class="row-fluid">
                                                         <div class="span12">
-                                                            
+                                                            <input type="hidden" name="pasca_id" value="<?=$_GET['id']?>"/>
                                                             <div class="control-group">
                                                                 <label class="control-label" for="nama">Nama Pelapor :</label>
 
@@ -271,9 +271,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                                             <div id="bangunan_baru" style="display:none">
                                                                 <div class="control-group">
+                                                                    <label class="control-label" ></label>
                                                                     <div class="controls">
-                                                                        <select id="bangunan_baru" name="bangunan_baru" class="select2" data-placeholder="Pilih Bangunan...">
-                                                                            <option value=""/>
+                                                                        <select id="bangunan_tbaru" name="bangunan_tbaru" class="">
+                                                                            <option value=""/>Pilih Bangunan...
                                                                             <?php 
                                                                             $bangunan1 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
                                                                                                         INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
@@ -299,9 +300,17 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                                             <div class="control-group">
                                                                 <label class="control-label" for="penyebab">Penyebab Kebakaran :</label>
-
+                                                                <?php
+                                                                        $q = mysql_query("SELECT * FROM penyebab") or die("Query failed: " . mysql_error());
+                                                                        ?>
                                                                 <div class="controls">
-                                                                    <select id="penyebab" name="penyebab">
+                                                                 <select id="penyebab" name="penyebab">
+                                                                                <option value="" />Pilih Penyebab
+                                                                                <?php while ($p = mysql_fetch_array($q)): ?>
+                                                                                    <option value="<?php echo $p['penyebab_id']; ?>"><?php echo $p['penyebab_nama']; ?></option>
+                                                                                <?php endwhile; ?>
+                                                                    </select>
+                                                                    <!--<select id="penyebab" name="penyebab">
                                                                         <option value="" />Pilih Penyebab...
                                                                         <option value="BBM" />Bahan Bakar Minyak
                                                                         <option value="KPR/LPG" />Kompor Gas
@@ -310,14 +319,14 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                         <option value="LAIN" />Lain-lain
                                                                     </select>
                                                                     <input name="check2" class="ace-switch ace-switch-2" type="checkbox" onclick="showMe_('penyebab_baru')" data-rel="tooltip" title="Penyebab kebakaran tidak terdapat dalam list ?" data-placement="bottom" />
-                                                                    <span class="lbl"></span>
+                                                                    <span class="lbl"></span>-->
                                                                 </div>
                                                             </div>
 
                                                             <div id="penyebab_baru" style="display:none">
                                                                 <div class="control-group">
                                                                     <div class="controls">
-                                                                        <input type="text" name="penyebab_baru" value="" placeholder="Penyebab Baru...">
+                                                                        <input type="text" name="penyebab_baru" value="" placeholder="Nama Penyebab...">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -333,7 +342,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                             <div id="luas_baru" style="display:none">
                                                                 <div class="control-group">
                                                                     <div class="controls">
-                                                                        <input type="text" name="luas_total" value="" placeholder="Luas Keseluruhan Bangunan...">&nbsp;m<sup>2</sup>
+                                                                        <input type="text" class="biaya" name="luas_total" value="" placeholder="Luas Keseluruhan Bangunan..." data-a-sep="">&nbsp;m<sup>2</sup>
                                                                     </div>
                                                                 </div>
                                                             </div>                                                
@@ -342,8 +351,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 <label class="control-label" for="korban">Jumlah Korban :</label>
 
                                                                 <div class="controls">
-                                                                    <input type="text" id="korban_luka" name="korban_luka" placeholder="Korban Luka..." value="">
-                                                                    <input type="text" id="korban_meninggal" name="korban_meninggal" placeholder="Korban Meninggal..." value="">
+                                                                    <input type="text" class="korban" data-m-dec="0" id="korban_luka" name="korban_luka" placeholder="Korban Luka..." value="">
+                                                                    <input type="text" class="korban" data-m-dec="0" id="korban_meninggal" name="korban_meninggal" placeholder="Korban Meninggal..." value="">
                                                                 </div>
                                                             </div>
 
@@ -463,6 +472,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     jQuery(function($) {
         $('.biaya').autoNumeric('init');
     });
+    jQuery(function($) {
+        $('.korban').autoNumeric('init',{mDec:'0'});
+    });
 // ========================Jam========================================== //
     function showTime() {
         var a_p = "";
@@ -512,7 +524,23 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         document.getElementById(box2).style.display = vis2;
     }
 
-    function showMe_(box1) {
+$(document).ready(function(){
+        $("#penyebab").change(function(){
+            $( "select option:selected").each(function(){
+                if($(this).attr("value")=="5"){
+                    //$(".box").hide();
+                    $("#penyebab_baru").show();
+                }
+                if($(this).attr("value")=="1" || $(this).attr("value")=="2"){
+                    $("#penyebab_baru").hide();
+                }
+                if($(this).attr("value")=="3" || $(this).attr("value")=="4"){
+                    $("#penyebab_baru").hide();
+                }
+            });
+        }).change();
+    });
+    /*function showMe_(box1) {
 
         var chboxs = document.getElementsByName("check2");
         var vis1 = "none";
@@ -523,14 +551,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
             }
         }
         document.getElementById(box1).style.display = vis1;
-    }
+    }*/
 </script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        var kejadian = $('#kejadian').DataTable();
-        //var konstruksi = $('#konstruksi').DataTable();
-
-    });
     // scrollables
     $('.slim-scroll').each(function() {
         var $this = $(this);
@@ -553,7 +576,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
             errorClass: 'help-inline',
             focusInvalid: false,
             rules: {
-                bangunan_baru: {
+                bangunan_tbaru: {
                     required: true
                 },
                 penyebab: {
@@ -576,7 +599,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 }
             },
             messages: {
-                bangunan_baru: "Mohon untuk mengisi field bangunan.",
+                bangunan_tbaru: "Mohon untuk mengisi field bangunan.",
                 penyebab: "Mohon untuk memilih penyebab kebakaran.",
                 penyebab_baru: "Mohon untuk mengisi field penyebab.",
                 luas_total: "Mohon untuk memilih lokasi kecamatan.",
