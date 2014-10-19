@@ -2,6 +2,7 @@
 
 include "../../config/koneksi.php";
 if ($_POST) {
+
     $nama = $_POST['nama'];
     $alamat = $_POST['alamat'];
     $bangunan = $_POST['bangunan'];
@@ -15,7 +16,14 @@ if ($_POST) {
     $biaya = $_POST['biaya'];
     $pasca_id = $_POST['pasca_id'];
     $pasca_status = 'yes';
-    
+    if($_POST['akhir_perjalanan'] == '00:00' || $_POST['pemadaman'] == '00:00'){
+        header("Location: ../olahPasca?id=$pasca_id&msg=error");
+    }else{
+        //$awal = $_POST['awal_perjalanan'];
+        $akhir = $_POST['akhir_perjalanan'];
+        $pemadaman = $_POST['pemadaman'];
+    }
+
     //============================== R E S I K O===================================
     $query = mysql_query("SELECT * FROM bangunan AS a
                     INNER JOIN resiko AS b ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
@@ -26,8 +34,9 @@ if ($_POST) {
     } else {
         die(mysql_error());
     }
-    $nama = $row['nama_pelapor'];
     $tgl = $row['resiko_tanggal'];
+    $awal = date('H:i', strtotime($tgl));          
+    $nama = $row['nama_pelapor'];
     $no = $row['nomor_telp'];
     $alamat = $row['alamat_pelapor'];
     $bangunan = $row['ID_BANGUNAN'];
@@ -40,44 +49,61 @@ if ($_POST) {
     $l = $row['lebar'];
     $t = $row['tinggi'];        
     $minim = $row['pasokan_air_minimum'];
+    $laju = $row['penerapan_air'];
+    $angkut = $row['pengangkutan_air'];
     $proteksi = $row['tipe_proteksi'];
 
-    //==============================G R A F I K======================================
-    $bln = date('F', strtotime($tgl));
-    if($bln == 'January')$bln = 'Jan';else if($bln == 'February')$bln = 'Feb';
-    else if($bln == 'March')$bln = 'Mar';else if($bln == 'April')$bln = 'Apr';
-    else if($bln == 'May')$bln = 'Mei';else if($bln == 'June')$bln = 'Jun';
-    else if($bln == 'July')$bln = 'Jul';else if($bln == 'August')$bln = 'Agt';
-    else if($bln == 'September')$bln = 'Sep';else if($bln == 'October')$bln = 'Okt';
-    else if($bln == 'November')$bln = 'Nov';else if($bln == 'December')$bln = 'Des';
-    $thn = date('Y', strtotime($row['resiko_tanggal']));
-    $cek = mysql_fetch_assoc(mysql_query("SELECT grafik_id, SUM(grafik_luka) AS jml_luka, SUM(grafik_meninggal) AS jml_meninggal,
-       SUM(grafik_bbm) AS jml_bbm, SUM(grafik_kpr) AS jml_kpr,
-       SUM(grafik_lst) AS jml_lst, SUM(grafik_rk) AS jml_rk, SUM(grafik_lain) AS jml_lain,
-       SUM(grafik_perkantoran) AS jml_perkantoran,
-       SUM(grafik_udj) AS jml_udj, SUM(grafik_industri) AS jml_industri,
-       SUM(grafik_kb) AS jml_kb, SUM(grafik_rmh) AS jml_rmh,
-       SUM(grafik_lahan) AS jml_lahan,
-       SUM(grafik_mpkp) AS jml_mpkp, SUM(grafik_mpkl) AS jml_mpkl, SUM(grafik_mpkbg) AS jml_mpkbg 
-       FROM grafik 
-       WHERE grafik_bln = '$bln' AND grafik_thn = '$thn'") or die("Query : ".mysql_error());
-    $grafik_id = $cek['grafik_id'];
-    $grafik_mpkp = $cek['jml_mpkp']; $grafik_mpkl = $cek['jml_mpkl']; $grafik_mpkbg = $cek['jml_mpkbg'];
-    $grafik_luka = $cek['jml_luka']; $grafik_meninggal = $cek['jml_meninggal'];
-    $grafik_bbm = $cek['jml_bbm'];   $grafik_kpr = $cek['jml_kpr'];   $grafik_lst = $cek['jml_lst'];
-    $grafik_rk = $cek['jml_rk'];     $grafik_lain = $cek['jml_lain'];
-    $grafik_perkantoran = $cek['jml_perkantoran'];
-    $grafik_udj = $cek['jml_udj'];   $grafik_industri = $cek['jml_industri'];
-    $grafik_kb = $cek['jml_kb']; $grafik_rmh = $cek['jml_rmh']; $grafik_lahan = $cek['jml_lahan'];
+    //=======HiTUNG WAKTU==========
+    function beda_waktu($time1, $time2) {
+        $time1 = strtotime("1980-01-01 $time1");
+        $time2 = strtotime("1980-01-01 $time2");
+        
+        if ($time2 < $time1) {
+            $time2 += 86400;
+        }
+        
+        return date("H:i", strtotime("1980-01-01 00:00:00") + ($time2 - $time1));
+    } 
+    $hasil = beda_waktu($awal,$akhir);
+    //echo $nama.'<br>'.$alamat.'<br>'.$awal.'<br>'.$akhir.'<br>'.$hasil.'<br>'.$pemadaman.'<br>';
+    //echo $bangunan.'<br>'.$bangunanBaru.'<br>'.$penyebab.'<br>'.$penyebabBaru.'<br>';
+    //echo $luas.'<br>'.$luas_total.'<br>'.$korban_luka.'<br>'.$korban_meninggal.'<br>'.$biaya.'<br>'.$pasca_id.'<br>'.$pasca_status;
+?>
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <title>SIM Proteksi Kebakaran Perkotaan</title>
 
-    if (!empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru) {
+            <meta name="description" content="Common form elements and layouts" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <!--page specific plugin styles-->
+            <link rel="shortcut icon" href="../../assets/img/favicon.png">
+            <!--fonts-->
+
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+            <!--ace styles-->
+            <script src="../../assets/js-ace/sweet-alert.js"></script>
+            <link rel="stylesheet" type="text/css" href="../../assets/css-ace/sweet-alert.css">
+
+            <!--inline styles related to this page-->
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        </head>
+    <body onpageshow="myFunction()">
+<?php
+    if (!empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru)) {
         $insert = mysql_query("INSERT INTO pasca
-            (`pasca_id`, `resiko_id`, `pasca_penyebab`,
-             `pasca_luas`, `pasca_bangunan_add`, `pasca_luka`,
-             `pasca_meninggal`, `pasca_biaya`) VALUES 
-            NULL,'$pasca_id','$penyebab',
-            '$luas_total','$bangunanBaru','$korban_luka',
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+             VALUES 
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
             '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
+
+        //=== PENYEBAB LAIN ===
+        $id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
+        $id_pasca = $id['pasca_id'];
+        $insert_pLain = mysql_query("INSERT INTO penyebab_lain (`lain_ID`, `pasca_id`, `penyebab_id`, `lain_tgl`, `lain_nama`) VALUES ('','$id_pasca','$penyebab','$tgl','$penyebabBaru')") or die("Query: ".mysql_error());
+
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$pasca_id',
@@ -96,223 +122,40 @@ if ($_POST) {
                                 tinggi = '$t',
                                 pasokan_air_minimum = '$minim',
                                 penerapan_air = '$laju',
-                                pengangkutan_air = '$hasil',
+                                pengangkutan_air = '$angkut',
                                 tipe_proteksi = '$proteksi',
                                 resiko_status = 'yes'
                                 WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
-        //=== PENYEBAB LAIN ===
-        $id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
-        $id_pasca = $id['pasca_id'];
-        $insert_pLain = mysql_query("INSERT INTO penyebab_lain (`lain_ID`, `pasca_id`, `penyebab_id`, `lain_TGL`, `lain_NAMA`) VALUES ('','$id_pasca','$penyebab','$tgl','$penyebabBaru')") or die("Query: ".mysql_error());
 
-        //=== G R A F I K ===
-        if($penyebab == '1'){
-            $update_grafik = mysql_query("UPDATE grafik SET 
-                            grafik_id='$grafik_id', grafik_bln = '$bln', grafik_thn = '$thn',
-                            grafik_mpkp = '$grafik_mpkp', grafik_mpkl = '$grafik_mpkl', grafik_mpkbg = '$grafik_mpkbg',
-                            grafik_luka = '$korban_luka', grafik_meninggal = '$korban_meninggal', 
-                            grafik_bbm = '', grafik_kpr = '', grafik_lst = '', grafik_rk = '', grafik_lain = '',
-                            grafik_perkantoran = '$grafik_perkantoran', grafik_udj = '$grafik_udj', 
-                            grafik_industri = '$grafik_industri', grafik_kb = '$grafik_kb', 
-                            grafik_rmh = '$grafik_rmh', grafik_lahan = '$grafik_lahan'
-                            WHERE grafik_id='$grafik_id'") or die("Query: ".mysql_error());
-        }
-        $update_grafik = mysql_query("UPDATE grafik SET 
-            grafik_id='$grafik_id', grafik_bln = '$bln', grafik_thn = '$thn',
-            grafik_mpkp = '$grafik_mpkp', grafik_mpkl = '$grafik_mpkl', grafik_mpkbg = '$grafik_mpkbg',
-            grafik_luka = '$korban_luka', grafik_meninggal = '$korban_meninggal', 
-            grafik_bbm = '', grafik_kpr = '', grafik_lst = '', grafik_rk = '', grafik_lain = '',
-            grafik_perkantoran = '$grafik_perkantoran', grafik_udj = '$grafik_udj', grafik_industri = '$grafik_industri', grafik_kb = '$grafik_kb', grafik_rmh = '$grafik_rmh', grafik_lahan = '$grafik_lahan'
-            WHERE grafik_id='$grafik_id'") or die("Query: ".mysql_error());
+        if($insert && $insert_pLain && $update){
+        ?>
+        <script type="text/javascript">
+            function myFunction() {
+                swal({
+                    title: "Great Work and Well Done!",
+                    text: "Keep Fire in Your Life.",
+                    imageUrl: '../../assets/img/thumbs-up.jpg'
+                });
+                document.location = '../../beranda/index.php';
+            }
 
-        if($insert && $update){
-            echo "Berhasil Update";
+            //document.location = 'beranda/index.php';
+        </script>
+        <?php
         }else{
             echo "Gagal Update";
         }
 
-    }else {
-        
+    }else if(!empty($bangunanBaru) && !empty($luas_total)){
+        $insert = mysql_query("INSERT INTO pasca
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+             VALUES 
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
+            '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
 
-        $cek = mysql_fetch_assoc(mysql_query("SELECT SUM(grafik_perkantoran) AS jml_perkantoran,
-            SUM(grafik_udj) AS jml_udj, SUM(grafik_industri) AS jml_industri,
-            SUM(grafik_kb) AS jml_kb, SUM(grafik_rmh) AS jml_rmh,
-            SUM(grafik_lahan) AS jml_lahan,
-            SUM(grafik_mpkp) AS jml_mpkp, SUM(grafik_mpkl) AS jml_mpkl, SUM(grafik_mpkbg) AS jml_mpkbg 
-            FROM grafik 
-            WHERE grafik_bln = '$bln' AND grafik_thn = '$thn'")) or die("Query : ".mysql_error());
-        $jml_perkantoran = $cek['jml_perkantoran']; $jml_mpkp = $cek['jml_mpkp'];  
-        $jml_udj = $cek['jml_udj'];                 $jml_mpkl = $cek['jml_mpkl'];
-        $jml_industri = $cek['jml_industri'];       $jml_mpkbg = $cek['jml_mpkbg'];
-        $jml_kb = $cek['jml_kb'];
-        $jml_rmh = $cek['jml_rmh'];
-        $jml_lahan = $cek['jml_lahan'];
-
-        //===Jika query dari cek, menghasilkan NULL record===
-        if($jml_mpkp == NULL && $jml_mpkl == NULL && $jml_mpkbg == NULL && $jml_perkantoran == NULL && $jml_udj == NULL && $jml_industri == NULL && $jml_kb == NULL && $jml_rmh == NULL && $jml_lahan == NULL){
-            $jml_perkantoran = '0'; $jml_mpkp = '0';  
-            $jml_udj = '0';         $jml_mpkl = '0';
-            $jml_industri = '0';    $jml_mpkbg = '0';
-            $jml_kb = '0';
-            $jml_rmh = '0';
-            $jml_lahan = '0';        
-        }
-        /*
-        1 = perkantoran     4 = kb
-        2 = udj             5 = rumah
-        3 = industri        6 = lahan/sawah
-        */
-        $master_id = $row['ID_MASTER'];
-        if($master_id == '1' && $proteksi == 'MPKP'){
-            $add_perkantoran = $jml_perkantoran + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '1' && $proteksi == 'MPKL'){
-            $add_perkantoran = $jml_perkantoran + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '1' && $proteksi == 'MPKBG'){
-            $add_perkantoran = $jml_perkantoran + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$add_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '2' && $proteksi == 'MPKP'){
-            $add_udj = $jml_udj + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '2' && $proteksi == 'MPKL'){
-            $add_udj = $jml_udj + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '2' && $proteksi == 'MPKBG'){
-            $add_udj = $jml_udj + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$add_udj','$jml_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '3' && $proteksi == 'MPKP'){
-            $add_industri = $jml_industri + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());    
-        }else if($master_id == '3' && $proteksi == 'MPKL'){
-            $add_industri = $jml_industri + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());   
-        }else if($master_id == '3' && $proteksi == 'MPKBG'){
-            $add_industri = $jml_industri + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$add_industri','$jml_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());   
-        }else if($master_id == '4' && $proteksi == 'MPKP'){
-            $add_kb = $jml_kb + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '4' && $proteksi == 'MPKL'){
-            $add_kb = $jml_kb + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '4' && $proteksi == 'MPKBG'){
-            $add_kb = $jml_kb + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$add_kb','$jml_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '5' && $proteksi == 'MPKP'){
-            $add_rmh = $jml_rmh + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '5' && $proteksi == 'MPKL'){
-            $add_rmh = $jml_rmh + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '5' && $proteksi == 'MPKBG'){
-            $add_rmh = $jml_rmh + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$add_rmh','$jml_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '6' && $proteksi == 'MPKP'){
-            $add_lahan = $jml_lahan + 1; $add_mpkp = $jml_mpkp + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$add_mpkp','$jml_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '6' && $proteksi == 'MPKL'){
-            $add_lahan = $jml_lahan + 1; $add_mpkl = $jml_mpkl + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$add_mpkl','$jml_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
-        }else if($master_id == '6' && $proteksi == 'MPKBG'){
-            $add_lahan = $jml_lahan + 1; $add_mpkbg = $jml_mpkbg + 1;
-            $grafik = mysql_query("INSERT INTO grafik
-                    VALUES (NULL,'$bln','$thn',
-                    '$jml_mpkp','$jml_mpkl','$add_mpkbg',
-                    '','',
-                    '','','','','',
-                    '$jml_perkantoran','$jml_udj','$jml_industri','$jml_kb','$jml_rmh','$add_lahan')") or die("Query : ".mysql_error());
-        }
-
-
-        $luas = $p * $l;
+        //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
-                                resiko_id = '$id',
+                                resiko_id = '$pasca_id',
                                 resiko_tanggal = '$tgl',
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
@@ -328,12 +171,136 @@ if ($_POST) {
                                 tinggi = '$t',
                                 pasokan_air_minimum = '$minim',
                                 penerapan_air = '$laju',
-                                pengangkutan_air = '$hasil',
-                                tipe_proteksi = '$proteksi'
-                                WHERE resiko_id = '$id'") or die(mysql_error());
-		if($update && $grafik){
-			header("Location: ../../pasca/pasca?msg=notif&nama=$nama&id=$id");
-		}
+                                pengangkutan_air = '$angkut',
+                                tipe_proteksi = '$proteksi',
+                                resiko_status = 'yes'
+                                WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
+
+        if($insert && $update){
+        ?>
+            <script type="text/javascript">
+                function myFunction() {
+                    swal({
+                        title: "Great Work and Well Done!",
+                        text: "Keep Fire in Your Life.",
+                        imageUrl: '../../assets/img/thumbs-up.jpg'
+                    });
+                    document.location = '../../beranda/index.php';
+                }
+
+                //document.location = 'beranda/index.php';
+            </script>
+        <?php
+        }else{
+            echo "Gagal Update";
+        }
+
+    }else if(!empty($penyebabBaru)){
+        $insert = mysql_query("INSERT INTO pasca
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            VALUES 
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
+            '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
+
+        //=== PENYEBAB LAIN ===
+        $id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
+        $id_pasca = $id['pasca_id'];
+        $insert_pLain = mysql_query("INSERT INTO penyebab_lain (`lain_ID`, `pasca_id`, `penyebab_id`, `lain_tgl`, `lain_nama`) VALUES ('','$id_pasca','$penyebab','$tgl','$penyebabBaru')") or die("Query: ".mysql_error());
+
+        //=== R E SI K O ===
+        $update = mysql_query("UPDATE resiko SET
+                                resiko_id = '$pasca_id',
+                                resiko_tanggal = '$tgl',
+                                nama_pelapor = '$nama',
+                                nomor_telp ='$no',
+                                alamat_pelapor = '$alamat',
+                                ID_BANGUNAN = '$bangunan',
+                                DESA_ID = '$desa',
+                                KECAMATAN_ID = '$kecamatan',
+                                ID_SUMBER = '$sumber',
+                                exposure = '$exposure',
+                                tepol = '$tepol',
+                                panjang= '$p',
+                                lebar = '$l',
+                                tinggi = '$t',
+                                pasokan_air_minimum = '$minim',
+                                penerapan_air = '$laju',
+                                pengangkutan_air = '$angkut',
+                                tipe_proteksi = '$proteksi',
+                                resiko_status = 'yes'
+                                WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
+
+        if($insert && $insert_pLain && $update){
+        ?>
+            <script type="text/javascript">
+                function myFunction() {
+                    swal({
+                        title: "Great Work and Well Done!",
+                        text: "Keep Fire in Your Life.",
+                        imageUrl: '../../assets/img/thumbs-up.jpg'
+                    });
+                    document.location = '../../beranda/index.php';
+                }
+
+                //document.location = 'beranda/index.php';
+            </script>
+        <?php
+        }else{
+            echo "Gagal Update";
+        }
+
+    }else{
+        $insert = mysql_query("INSERT INTO pasca
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            VALUES 
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
+            '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
+
+        //=== R E SI K O ===
+        $update = mysql_query("UPDATE resiko SET
+                                resiko_id = '$pasca_id',
+                                resiko_tanggal = '$tgl',
+                                nama_pelapor = '$nama',
+                                nomor_telp ='$no',
+                                alamat_pelapor = '$alamat',
+                                ID_BANGUNAN = '$bangunan',
+                                DESA_ID = '$desa',
+                                KECAMATAN_ID = '$kecamatan',
+                                ID_SUMBER = '$sumber',
+                                exposure = '$exposure',
+                                tepol = '$tepol',
+                                panjang= '$p',
+                                lebar = '$l',
+                                tinggi = '$t',
+                                pasokan_air_minimum = '$minim',
+                                penerapan_air = '$laju',
+                                pengangkutan_air = '$angkut',
+                                tipe_proteksi = '$proteksi',
+                                resiko_status = 'yes'
+                                WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
+
+        if($insert && $update){
+        ?>
+            <script type="text/javascript">
+                function myFunction() {
+                    swal({
+                        title: "Great Work and Well Done!",
+                        text: "Keep Fire in Your Life.",
+                        imageUrl: '../../assets/img/thumbs-up.jpg'
+                    });
+                    document.location = '../../beranda/index.php';
+                }
+
+                //document.location = 'beranda/index.php';
+            </script>
+        <?php
+        }else{
+            echo "Gagal Update";
+        }
     }
+
+
 }
 ?>
+    </body>
+</html>

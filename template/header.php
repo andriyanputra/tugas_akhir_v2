@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="../assets/css-ace/select2.css" />
         <link rel="stylesheet" href="../assets/css-ace/bootstrap-editable.css" />
         <link rel="stylesheet" href="../assets/css-ace/fullcalendar.css" />
+        <link rel="stylesheet" href="../assets/css-ace/bootstrap-timepicker.css" />
         <!--fonts-->
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />

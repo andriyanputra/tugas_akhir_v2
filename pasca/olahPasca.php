@@ -171,7 +171,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     Pasca Kebakaran
                                     <small>
                                         <i class="icon-double-angle-right"></i>
-                                        Lihat Kejadian
+                                        Olah Kejadian
                                     </small>
                                 </h1>
                             </div><!--/.page-header-->
@@ -181,228 +181,318 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <!--PAGE CONTENT BEGINS-->
                                     <div class="row-fluid">
                                         <div class="span12">
-                                        <?php $r = mysql_fetch_assoc($query); ?>
+                                            <?php 
+                                                $r = mysql_fetch_assoc($query); 
+                                                $luas = $r['panjang'] * $r['lebar'];
+                                                $tgl = $r['resiko_tanggal'];
+                                                $pukul = date('H:i', strtotime($tgl));
+                                            ?>
                                             <div class="widget-box">
-                                                    <div class="widget-header widget-hea1der-small header-color-blue2">
-                                                        <h6>
-                                                            Peta Desa Kecamatan <?= $r['KECAMATAN_NAMA']; ?>
-                                                        </h6>
+                                                <div class="widget-header widget-hea1der-small header-color-red">
+                                                    <h6>
+                                                        Peta Desa Kecamatan <?= $r['KECAMATAN_NAMA']; ?>
+                                                    </h6>
 
-                                                        <div class="widget-toolbar">
-                                                            <a href="#" data-action="reload">
-                                                                <i class="icon-refresh"></i>
-                                                            </a>
+                                                    <div class="widget-toolbar">
+                                                        <a href="#" data-action="reload">
+                                                            <i class="icon-refresh"></i>
+                                                        </a>
 
-                                                            <a href="#" data-action="collapse">
-                                                                <i class="icon-chevron-up"></i>
-                                                            </a>
-                                                        </div>
+                                                        <a href="#" data-action="collapse">
+                                                            <i class="icon-chevron-up"></i>
+                                                        </a>
                                                     </div>
+                                                </div>
 
-                                                    <div class="widget-body">
-                                                        <div class="widget-main padding-4">
-                                                            <div class="slim-scroll" data-height="200">
-                                                                <div class="content">
-                                                                    <p align="center">
-                                                                        <img src="../assets/img/sda/large/<?= $r['KECAMATAN_DIR']; ?>" width="829" height="441" id="gambar2"></p>
-                                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-4">
+                                                        <div class="slim-scroll" data-height="200">
+                                                            <div class="content">
+                                                                <p align="center">
+                                                                    <img src="../assets/img/sda/large/<?= $r['KECAMATAN_DIR']; ?>" width="829" height="441" id="gambar2"></p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                            </div>
+                                                </div>
+                                            </div><!--widget box-->
                                         </div>
-                                       
                                     </div>
                                     <div class="space-6"></div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                            <?php
-                                            if (isset($_GET['msg'])) {
-                                                if ($_GET['msg'] == 'notif') {
-                                            ?>
-                                            <div class="alert alert-block alert-warning">
-                                                <button type="button" class="close" data-dismiss="alert">
-                                                    <i class="icon-remove"></i>
-                                                </button>
+                                    <div class="row-fluid">
+                                        <?php
+                                        if (isset($_GET['msg'])) {
+                                            if ($_GET['msg'] == 'notif') {
+                                        ?>
+                                        <div class="alert alert-block alert-warning">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="icon-remove"></i>
+                                            </button>
 
-                                                <i class="icon-exclamation-sign red"></i>
+                                            <i class="icon-exclamation-sign red"></i>
 
-                                                &nbsp;&nbsp; 
-                                                <strong class="red">
-                                                    <?php echo $_GET['nama'];?>
-                                                </strong>
-                                                melaporkan terjadinya kebakaran dan telah di padamkan oleh petugas. Mohon untuk ditindaklanjuti. 
-                                            </div>
-                                            <?php 
-                                                }
+                                            &nbsp;&nbsp; 
+                                            <strong class="red">
+                                                <?php echo $_GET['nama'];?>
+                                            </strong>
+                                            melaporkan terjadinya kebakaran dan telah di padamkan oleh petugas. Mohon untuk ditindaklanjuti. 
+                                        </div>
+                                        <?php 
+                                            }else if($_GET['msg'] == 'error'){
+                                                ?>
+                                                <div class="alert alert-block alert-warning">
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="icon-remove"></i>
+                                                    </button>
+
+                                                    <i class="icon-exclamation-sign red"></i>
+
+                                                    &nbsp;&nbsp; 
+                                                    Mohon untuk mengisi lama perjalanan atau lama pemadaman !!
+                                                </div>
+                                                <?php
                                             }
-                                            //while($r = mysql_fetch_array($query)){
-                                            ?>
+                                        }
+                                        //while($r = mysql_fetch_array($query)){
+                                        ?>
 
-                                                 <form class="form-horizontal" id="validation-form" method="POST" action="proses/submit.php">
-                                                    <div class="row-fluid">
-                                                        <div class="span12">
-                                                            <input type="hidden" name="pasca_id" value="<?=$_GET['id']?>"/>
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="nama">Nama Pelapor :</label>
+                                             <form class="form-horizontal" id="validation-form" method="POST" action="proses/submit.php">
+                                                <input type="hidden" name="pasca_id" value="<?=$_GET['id']?>"/>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="nama">Nama Pelapor :</label>
 
-                                                                <div class="controls">
-                                                                    <input type="text" name="nama" id="nama" readonly value="<?=$r['nama_pelapor']?>"/>
-                                                                </div>
+                                                            <div class="controls">
+                                                                <input type="text" name="nama" id="nama" readonly value="<?=$r['nama_pelapor']?>"/>
+                                                                <span class="tooltip-error" data-rel="tooltip" data-placement="right" title="Barang Habis Pakai.">
+                                                                    <a href="#pesan" role="button" class="btn btn-danger pull-right span2" data-toggle="modal">
+                                                                        <i class="icon-envelope icon-only bigger-150"></i>
+                                                                    </a>
+                                                                </span>
                                                             </div>
+                                                        </div>
 
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="alamat">Alamat :</label>
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="alamat">Alamat :</label>
 
-                                                                <div class="controls">
-                                                                    <textarea class="span6" name="alamat" id="alamat" readonly><?php echo $r['alamat_pelapor'].' Ds. '.$r['DESA_NAMA'].', Kec. '.$r['KECAMATAN_NAMA'].', Kab. Sidoarjo.' ?></textarea>
-                                                                </div>
+                                                            <div class="controls">
+                                                                <textarea class="span6" name="alamat" id="alamat" readonly><?php echo $r['alamat_pelapor'].' Ds. '.$r['DESA_NAMA'].', Kec. '.$r['KECAMATAN_NAMA'].', Kab. Sidoarjo.' ?></textarea>
                                                             </div>
+                                                        </div>
 
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="bangunan">Bangunan Terbakar :</label>
-                                                                
-                                                                <div class="controls">
-                                                                    <input type="text" class="span6" name="bangunan" id="bangunan" readonly value="<?=$r['NAMA_BANGUNAN']?>">
-                                                                    <input name="check" class="ace-switch ace-switch-2" type="checkbox" onclick="showMe('bangunan_baru', 'luas_baru')" data-rel="tooltip" title="Apakah terdapat bangunan terbakar selain bangunan di samping ?" data-placement="bottom" />
-                                                                    <span class="lbl"></span>
-                                                                </div>
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="bangunan">Bangunan Terbakar :</label>
+                                                            
+                                                            <div class="controls">
+                                                                <input type="text" class="span6" name="bangunan" id="bangunan" readonly value="<?=$r['NAMA_BANGUNAN']?>">
+                                                                <input name="check" class="ace-switch ace-switch-2" type="checkbox" onclick="showMe('bangunan_baru', 'luas_baru')" data-rel="tooltip" title="Apakah terdapat bangunan terbakar selain bangunan di samping ?" data-placement="bottom" />
+                                                                <span class="lbl"></span>
                                                             </div>
+                                                        </div>
 
-                                                            <div id="bangunan_baru" style="display:none">
-                                                                <div class="control-group">
-                                                                    <label class="control-label" ></label>
-                                                                    <div class="controls">
-                                                                        <select id="bangunan_tbaru" name="bangunan_tbaru" class="">
-                                                                            <option value=""/>Pilih Bangunan...
-                                                                            <?php 
-                                                                            $bangunan1 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
-                                                                                                        INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
-                                                                                                        ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
-                                                                            $group = array();
-                                                                                while ($r = mysql_fetch_assoc($bangunan1)){
-                                                                                    $group[$r['NAMA_MASTER']][] = $r;
+                                                        <div id="bangunan_baru" style="display:none">
+                                                            <div class="control-group">
+                                                                <label class="control-label" ></label>
+                                                                <div class="controls">
+                                                                    <select id="bangunan_tbaru" name="bangunan_tbaru" class="">
+                                                                        <option value=""/>Pilih Bangunan...
+                                                                        <?php 
+                                                                        $bangunan1 = mysql_query("SELECT b.NAMA_MASTER, a.NAMA_BANGUNAN, a.TINGKAT_BANGUNAN FROM bangunan AS a
+                                                                                                    INNER JOIN master_bangunan AS b ON (a.ID_MASTER = b.ID_MASTER)
+                                                                                                    ORDER BY a.NAMA_BANGUNAN ASC")or die("Query failed: " . mysql_error());
+                                                                        $group = array();
+                                                                            while ($r = mysql_fetch_assoc($bangunan1)){
+                                                                                $group[$r['NAMA_MASTER']][] = $r;
+                                                                            }
+                                                                            foreach ($group as $key => $value) {
+                                                                                echo '<optgroup label="'.$key.'">';
+                                                                                foreach ($value as $values) {
+                                                                                    echo "<option value=".$values['TINGKAT_BANGUNAN'].">".$values['NAMA_BANGUNAN']."";
                                                                                 }
-                                                                                foreach ($group as $key => $value) {
-                                                                                    echo '<optgroup label="'.$key.'">';
-                                                                                    foreach ($value as $values) {
-                                                                                        echo "<option value=".$values['TINGKAT_BANGUNAN'].">".$values['NAMA_BANGUNAN']."";
-                                                                                    }
-                                                                                    echo '</optgroup>';
-                                                                                } 
-                                                                            ?>
-                                                                            <!--<option value="<?php //echo $r['TINGKAT_BANGUNAN']; ?>"><?php //echo $r['NAMA_BANGUNAN']; ?></option>-->
-                                                                        </select>
-                                                                        <!--<input type="text" name="bangunan_baru" value="" placeholder="Bangunan Terbakar...">-->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="penyebab">Penyebab Kebakaran :</label>
-                                                                <?php
-                                                                        $q = mysql_query("SELECT * FROM penyebab") or die("Query failed: " . mysql_error());
+                                                                                echo '</optgroup>';
+                                                                            } 
                                                                         ?>
-                                                                <div class="controls">
-                                                                 <select id="penyebab" name="penyebab">
-                                                                                <option value="" />Pilih Penyebab
-                                                                                <?php while ($p = mysql_fetch_array($q)): ?>
-                                                                                    <option value="<?php echo $p['penyebab_id']; ?>"><?php echo $p['penyebab_nama']; ?></option>
-                                                                                <?php endwhile; ?>
+                                                                        <!--<option value="<?php //echo $r['TINGKAT_BANGUNAN']; ?>"><?php //echo $r['NAMA_BANGUNAN']; ?></option>-->
                                                                     </select>
-                                                                    <!--<select id="penyebab" name="penyebab">
-                                                                        <option value="" />Pilih Penyebab...
-                                                                        <option value="BBM" />Bahan Bakar Minyak
-                                                                        <option value="KPR/LPG" />Kompor Gas
-                                                                        <option value="LST" />Listrik
-                                                                        <option value="RK" />Rokok
-                                                                        <option value="LAIN" />Lain-lain
-                                                                    </select>
-                                                                    <input name="check2" class="ace-switch ace-switch-2" type="checkbox" onclick="showMe_('penyebab_baru')" data-rel="tooltip" title="Penyebab kebakaran tidak terdapat dalam list ?" data-placement="bottom" />
-                                                                    <span class="lbl"></span>-->
+                                                                    <!--<input type="text" name="bangunan_baru" value="" placeholder="Bangunan Terbakar...">-->
                                                                 </div>
                                                             </div>
-
-                                                            <div id="penyebab_baru" style="display:none">
-                                                                <div class="control-group">
-                                                                    <div class="controls">
-                                                                        <input type="text" name="penyebab_baru" value="" placeholder="Nama Penyebab...">
-                                                                    </div>
+                                                        </div>
+                                                        
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="perjalanan">Lama Perjalanan :</label>
+                                                            <div class="controls">
+                                                                <div class="input-append bootstrap-timepicker">
+                                                                    <input disabled type="text" id="start" class="input-small" name="awal_perjalanan" value="<?=$pukul;?>"/>
+                                                                    <span class="add-on">
+                                                                        <i class="icon-time"></i>
+                                                                    </span>
+                                                                </div>
+                                                                -
+                                                                <div class="input-append bootstrap-timepicker">
+                                                                    <input id="timepicker1" type="text" class="input-small" name="akhir_perjalanan" value=""/>
+                                                                    <span class="add-on">
+                                                                        <i class="icon-time"></i>
+                                                                    </span>
+                                                                </div>
+                                                                &nbsp;=&nbsp;
+                                                                <div class="input-append bootstrap-timepicker">
+                                                                    <input disabled type="text" id="hasil" class="input-small" name="hasil_perjalanan" value=""/>
+                                                                    <span class="add-on">
+                                                                        <i class="icon-time"></i>
+                                                                    </span>
                                                                 </div>
                                                             </div>
+                                                        </div>
 
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="perjalanan">Lama Pemadaman :</label>
+                                                            <div class="controls">
+                                                                <div class="input-append bootstrap-timepicker">
+                                                                    <input id="timepicker2" type="text" class="input-small" name="pemadaman" value=""/>
+                                                                    <span class="add-on">
+                                                                        <i class="icon-time"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="penyebab">Penyebab Kebakaran :</label>
+                                                            <?php
+                                                                    $q = mysql_query("SELECT * FROM penyebab") or die("Query failed: " . mysql_error());
+                                                                    ?>
+                                                            <div class="controls">
+                                                             <select id="penyebab" name="penyebab">
+                                                                            <option value="" />Pilih Penyebab
+                                                                            <?php while ($p = mysql_fetch_array($q)): ?>
+                                                                                <option value="<?php echo $p['penyebab_id']; ?>"><?php echo $p['penyebab_nama']; ?></option>
+                                                                            <?php endwhile; ?>
+                                                                </select>
+                                                                <!--<select id="penyebab" name="penyebab">
+                                                                    <option value="" />Pilih Penyebab...
+                                                                    <option value="BBM" />Bahan Bakar Minyak
+                                                                    <option value="KPR/LPG" />Kompor Gas
+                                                                    <option value="LST" />Listrik
+                                                                    <option value="RK" />Rokok
+                                                                    <option value="LAIN" />Lain-lain
+                                                                </select>
+                                                                <input name="check2" class="ace-switch ace-switch-2" type="checkbox" onclick="showMe_('penyebab_baru')" data-rel="tooltip" title="Penyebab kebakaran tidak terdapat dalam list ?" data-placement="bottom" />
+                                                                <span class="lbl"></span>-->
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="penyebab_baru" style="display:none">
                                                             <div class="control-group">
-                                                                <label class="control-label" for="luas">Luas Area Terbakar :</label>
+                                                                <div class="controls">
+                                                                    <input type="text" name="penyebab_baru" value="" placeholder="Nama Penyebab...">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="luas">Luas Area Terbakar :</label>
+                                                            
+                                                            <div class="controls">
+                                                                <input type="text" name="luas" id="luas" readonly value="<?=$luas?>">&nbsp;m<sup>2</sup>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="luas_baru" style="display:none">
+                                                            <div class="control-group">
+                                                                <div class="controls">
+                                                                    <input type="text" class="biaya" name="luas_total" value="" placeholder="Luas Keseluruhan Bangunan..." data-a-sep="">&nbsp;m<sup>2</sup>
+                                                                </div>
+                                                            </div>
+                                                        </div>                                                
+
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="korban">Jumlah Korban :</label>
+
+                                                            <div class="controls">
+                                                                <input type="text" class="korban" data-m-dec="0" id="korban_luka" name="korban_luka" placeholder="Korban Luka..." value="">
+                                                                <input type="text" class="korban" data-m-dec="0" id="korban_meninggal" name="korban_meninggal" placeholder="Korban Meninggal..." value="">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="control-group">
+                                                            <label class="control-label" for="biaya">Estimasi Biaya Kerugian:</label>
+
+                                                            <div class="controls">
+                                                                <div class="span3 input-prepend">
+                                                                    <span class="add-on">
+                                                                        <i class="icon-money"></i>
+                                                                    </span>
+
+                                                                    <input type="text" id="biaya" name="biaya" placeholder="Biaya Kerugian..." value="" class="biaya" data-a-sep="." data-a-dec="," data-a-sign="Rp. "/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-actions">
+                                                            <div class="pull-right">
+                                                                <button class="btn" onclick="location.reload();">
+                                                                    <i class="icon-repeat bigger-110"></i>
+                                                                    Reset
+                                                                </button>
+                                                            &nbsp; &nbsp; &nbsp;
+                                                                <button class="btn btn-info" type="submit">
+                                                                    Submit
+                                                                    <i class="icon-ok"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- end row-fluid -->
+                                                
+                                                <!--Modal-->
+                                                <div id="pesan" class="modal hide fade" tabindex="-1">
+                                                    <div class="modal-header no-padding">
+                                                        <div class="table-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <dd>&nbsp;</dd>
+                                                            <dd align="center">Laporan Barang Habis Pakai</dd>
+                                                            <dd>&nbsp;</dd>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-body no-padding">
+                                                        <div class="row-fluid">
+                                                            <div class="space-6"></div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="No">No :</label>
                                                                 
                                                                 <div class="controls">
-                                                                    <input type="text" name="luas" id="luas" readonly value="<?=$luas?>">&nbsp;m<sup>2</sup>
+                                                                    <input type="text" name="" id="" value="">&nbsp;m<sup>2</sup>
                                                                 </div>
                                                             </div>
+                                                            <p align="center">
+                                                                <img src="../assets/img/pam1.jpg"></p>
+                                                            <br/>
+                                                            <p align="left">
+                                                            <blockquote>
+                                                                <small>
+                                                                    Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                                </small>
+                                                            </blockquote>
+                                                            </p>
+                                                        </div>
+                                                    </div>
 
-                                                            <div id="luas_baru" style="display:none">
-                                                                <div class="control-group">
-                                                                    <div class="controls">
-                                                                        <input type="text" class="biaya" name="luas_total" value="" placeholder="Luas Keseluruhan Bangunan..." data-a-sep="">&nbsp;m<sup>2</sup>
-                                                                    </div>
-                                                                </div>
-                                                            </div>                                                
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                            <i class="icon-ok"></i>
+                                                            Ok
+                                                        </button>
+                                                    </div>
+                                                </div>
 
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="korban">Jumlah Korban :</label>
-
-                                                                <div class="controls">
-                                                                    <input type="text" class="korban" data-m-dec="0" id="korban_luka" name="korban_luka" placeholder="Korban Luka..." value="">
-                                                                    <input type="text" class="korban" data-m-dec="0" id="korban_meninggal" name="korban_meninggal" placeholder="Korban Meninggal..." value="">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="biaya">Estimasi Biaya Kerugian:</label>
-
-                                                                <div class="controls">
-                                                                    <div class="span3 input-prepend">
-                                                                        <span class="add-on">
-                                                                            <i class="icon-money"></i>
-                                                                        </span>
-
-                                                                        <input type="text" id="biaya" name="biaya" placeholder="Biaya Kerugian..." value="" class="biaya" data-a-sep="." data-a-dec="," data-a-sign="Rp. "/>
-                                                                    </div>
-
-                                                                    <!--<span class="input-icon input-icon-right">
-                                                                        <input type="text" id="biaya" name="biaya" placeholder="Biaya Kerugian..." value="" class="biaya" data-a-sep="." data-a-dec="," data-a-sign="Rp. "/>
-                                                                        <i class="icon-money"></i>
-                                                                    </span>-->
-
-                                                                    <!--<input type="text" id="biaya" name="biaya" placeholder="Biaya Kerugian..." value="">-->
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-actions">
-                                                                <div class="pull-right">
-                                                                    <button class="btn" onclick="location.reload();">
-                                                                        <i class="icon-repeat bigger-110"></i>
-                                                                        Reset
-                                                                    </button>
-                                                                &nbsp; &nbsp; &nbsp;
-                                                                    <button class="btn btn-info" type="submit">
-                                                                        Submit
-                                                                        <i class="icon-ok"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-
-                                                        </div><!-- end span12 --> 
-                                                    </div><!-- end row-fluid --> 
-                                                </form>
-                                            </div>
-
+                                            </form>
+                                    </div><!--/.row-fluid-->
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
                         </div><!--/.page-content-->
-                    </div>
-                </div>
 
                 <?php
                 //include '../template/footer.php';
@@ -459,6 +549,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
 <script src="../assets/js-ace/chosen.jquery.min.js"></script>
 <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
+<script src="../assets/js-ace/date-time/bootstrap-timepicker.min.js"></script>
 <script src="../assets/js-ace/autoNumeric.js"></script>
 <script src="../assets/js-ace/jquery.validate.min.js"></script>
 <script src="../assets/js-ace/select2.min.js"></script>
@@ -537,21 +628,53 @@ $(document).ready(function(){
                 if($(this).attr("value")=="3" || $(this).attr("value")=="4"){
                     $("#penyebab_baru").hide();
                 }
+                if($(this).attr("value")==""){
+                    $("#penyebab_baru").hide();
+                }
             });
         }).change();
     });
-    /*function showMe_(box1) {
 
-        var chboxs = document.getElementsByName("check2");
-        var vis1 = "none";
-        for (var i = 0; i < chboxs.length; i++) {
-            if (chboxs[i].checked) {
-                vis1 = "block";
-                break;
-            }
-        }
-        document.getElementById(box1).style.display = vis1;
-    }*/
+    $('#timepicker1').timepicker({
+        minuteStep: 1,
+        showSeconds: false,
+        showMeridian: false
+    })
+    $('#timepicker2').timepicker({
+        minuteStep: 1,
+        showSeconds: false,
+        showMeridian: false
+    })
+
+    
+</script>
+<script type="text/javascript">
+    $(function(){
+        var timespent = function(){
+            var valuestart = $("#start").val(),
+                  valuestop = $("#timepicker1").val();
+
+            valuestart = valuestart.split(":");
+            valuestop = valuestop.split(":");
+
+            var timeStart = new Date(0, 0, 0, valuestart[0], valuestart[1], 0);
+            var timeEnd =  new Date(0, 0, 0, valuestop[0], valuestop[1], 0);
+
+            var diff = timeEnd.getTime() - timeStart.getTime(), hours = Math.floor(diff / 1000 / 60 / 60);
+            diff -= hours * 1000 * 60 * 60;
+            var minutes = Math.floor(diff / 1000 / 60);
+            console.log("start: "+timeStart+", end: "+timeEnd+", diff: "+diff);
+                
+            return (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
+        };
+
+        //var hourDiff = timeEnd - timeStart;
+
+        $('#timepicker1').change(function(){
+            $('#hasil').val( timespent() );
+            
+        });
+    });
 </script>
 <script type="text/javascript">
     // scrollables
@@ -576,6 +699,12 @@ $(document).ready(function(){
             errorClass: 'help-inline',
             focusInvalid: false,
             rules: {
+                perjalanan: {
+                    required: true
+                },
+                pemadaman:{
+                    required: true
+                },
                 bangunan_tbaru: {
                     required: true
                 },
@@ -657,14 +786,6 @@ $(document).ready(function(){
         });
     });
 
-    // scrollables
-            $('.slim-scroll').each(function() {
-                var $this = $(this);
-                $this.slimScroll({
-                    height: $this.data('height') || 100,
-                    railVisible: true
-                });
-            });
 
     $(function() {
         ///////////////////////////////////////////

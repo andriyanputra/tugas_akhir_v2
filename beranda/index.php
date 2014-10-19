@@ -173,7 +173,21 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->
+                                     <?php
+                                    if (isset($_GET['msg'])) {
+                                        if ($_GET['msg'] == 'success') {
+                                            ?>
+                                    <div class="alert alert-block alert-success">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <i class="icon-remove"></i>
+                                        </button>
 
+                                        <i class="icon-ok green"></i>
+
+                                    </div>
+                                    <?php
+                                }else{
+                                    ?>
                                     <div class="alert alert-block alert-success">
                                         <button type="button" class="close" data-dismiss="alert">
                                             <i class="icon-remove"></i>
@@ -191,7 +205,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </strong>
                             </div>
 
-                            <?php
+                                    <?php 
+                                }
+                            }
+                                    
                                 $query_id = mysql_fetch_assoc(mysql_query("SELECT resiko_id FROM resiko ORDER BY resiko_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
                                 $resiko_id = $query_id['resiko_id'];
                                 $query = mysql_query("SELECT * FROM kecamatan AS a
@@ -220,121 +237,121 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 $thn = date('Y', strtotime($r['resiko_tanggal']));
                                 $jam = date('H:i:s', strtotime($r['resiko_tanggal']));
                             ?>
-                            <!--===================KEJADIAN KEBAKARAN=================-->
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <h4 class="header smaller lighter red">
-                                        <span>
-                                            <i class="icon-fire-extinguisher"></i>
-                                            Kejadian Kebakaran Terakhir Kali
-                                        </span><!--/span-->
-                                    </h4>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="span4">
-                                                <div class="widget-box light-border">
-                                                    <div class="widget-header widget-header-flat widget-header-small header-color-red">
-                                                        <h5 class="smaller">Kecamatan <?=$r['KECAMATAN_NAMA']?></h5>
-                                                    </div>
+                                        <!--===================KEJADIAN KEBAKARAN=================-->
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <h4 class="header smaller lighter red">
+                                                    <span>
+                                                        <i class="icon-fire-extinguisher"></i>
+                                                        Kejadian Kebakaran Terakhir Kali
+                                                    </span><!--/span-->
+                                                </h4>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="span4">
+                                                            <div class="widget-box light-border">
+                                                                <div class="widget-header widget-header-flat widget-header-small header-color-red">
+                                                                    <h5 class="smaller">Kecamatan <?=$r['KECAMATAN_NAMA']?></h5>
+                                                                </div>
 
-                                                    <div class="widget-body">
-                                                        <div class="widget-main">
-                                                            <img src="../assets/img/sda/small/<?= $r['KECAMATAN_DIR']; ?>"></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><!--/.span4-->
-                                            <div class="span8">
-                                                <dl class="dl-horizontal">
-                                                    <dt>Tanggal</dt>
-                                                    <dd><?php echo $hari.', '.$tgl.' '.$bln.' '.$thn.'. Pukul '.$jam.'.'; ?></dd>
-                                                    <dt>Nama Pelapor</dt>
-                                                    <dd><?php echo $r['nama_pelapor']; ?></dd>
-                                                    <dt>Lokasi</dt>
-                                                    <dd><?php echo $r['alamat_pelapor'].' Ds. '.$r['DESA_NAMA'].', Kec. '.$r['KECAMATAN_NAMA'].', Kab. Sidoarjo.';?></dd>
-                                                    <dt>Bangunan</dt>
-                                                    <dd><?php echo $r['NAMA_BANGUNAN'].' ('.$r['NAMA_MASTER'].').' ?></dd>
-                                                    <dt>Luas Bangunan</dt>
-                                                    <dd><?php echo $r['panjang'].' x '.$r['lebar'].' m<sup>2</sup>' ?></dd>
-                                                    <dt></dt><dd><a href="../pasca/view?id=<?php echo $r['resiko_id']; ?>">Selanjutnya . . .</a></dd>
-                                                </dl>
-                                            </div><!--/.span8-->
-                                        </div><!--/.span12-->
-                                    </div><!--/.row-fluid-->
-                                    <div class="space-6"></div>
-                                    <div class="pull-right">
-                                        <a href="../pasca/pasca" class="btn btn-small btn-danger">
-                                            <i class="icon-rss bigger-150 middle"></i>
+                                                                <div class="widget-body">
+                                                                    <div class="widget-main">
+                                                                        <img src="../assets/img/sda/small/<?= $r['KECAMATAN_DIR']; ?>"></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div><!--/.span4-->
+                                                        <div class="span8">
+                                                            <dl class="dl-horizontal">
+                                                                <dt>Tanggal</dt>
+                                                                <dd><?php echo $hari.', '.$tgl.' '.$bln.' '.$thn.'. Pukul '.$jam.'.'; ?></dd>
+                                                                <dt>Nama Pelapor</dt>
+                                                                <dd><?php echo $r['nama_pelapor']; ?></dd>
+                                                                <dt>Lokasi</dt>
+                                                                <dd><?php echo $r['alamat_pelapor'].' Ds. '.$r['DESA_NAMA'].', Kec. '.$r['KECAMATAN_NAMA'].', Kab. Sidoarjo.';?></dd>
+                                                                <dt>Bangunan</dt>
+                                                                <dd><?php echo $r['NAMA_BANGUNAN'].' ('.$r['NAMA_MASTER'].').' ?></dd>
+                                                                <dt>Luas Bangunan</dt>
+                                                                <dd><?php echo $r['panjang'].' x '.$r['lebar'].' m<sup>2</sup>' ?></dd>
+                                                                <dt></dt><dd><a href="../pasca/view?id=<?php echo $r['resiko_id']; ?>">Selanjutnya . . .</a></dd>
+                                                            </dl>
+                                                        </div><!--/.span8-->
+                                                    </div><!--/.span12-->
+                                                </div><!--/.row-fluid-->
+                                                <div class="space-6"></div>
+                                                <div class="pull-right">
+                                                    <a href="../pasca/pasca" class="btn btn-small btn-danger">
+                                                        <i class="icon-rss bigger-150 middle"></i>
 
-                                            Lihat lebih banyak kejadian
-                                            <i class="icon-on-right icon-arrow-right"></i>
-                                        </a>
-                                    </div><!--/.pull-right-->
-                                </div><!--/.span12-->
+                                                        Lihat lebih banyak kejadian
+                                                        <i class="icon-on-right icon-arrow-right"></i>
+                                                    </a>
+                                                </div><!--/.pull-right-->
+                                            </div><!--/.span12-->
+                                        </div><!--/.row-fluid-->
+                                        <!--===================END KEJADIAN KEBAKARAN=================-->
+
+                                        <!--===================GRAFIK=================-->
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <h4 class="header smaller lighter green">
+                                                    <span>
+                                                        <i class="icon-bar-chart"></i>
+                                                         Grafik Kejadian Kebakaran
+                                                    </span><!--/span-->
+                                                </h4>
+                                                <div class="row-fluid">
+                                                    <div class="span12">    
+                                                        <div class="span6">
+                                                            <div class="widget-box">
+                                                                <div class="widget-header widget-header-flat widget-header-small header-color-green">
+                                                                    <h5>
+                                                                        <!--<i class="icon-bar-chart"></i>-->
+                                                                        Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. 2013.
+                                                                    </h5>
+                                                                </div>
+
+                                                                <div class="widget-body">
+                                                                    <div class="widget-main">
+                                                                        <div id="pie-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                                                                    </div><!--/widget-main-->
+                                                                </div><!--/widget-body-->
+                                                            </div><!--/widget-box-->
+                                                        </div><!--/.span6-->
+                                                        <div class="span6">
+                                                            <div class="widget-box">
+                                                                <div class="widget-header widget-header-flat widget-header-small header-color-green">
+                                                                    <h5>
+                                                                        <!--<i class="icon-bar-chart"></i>-->
+                                                                        Bencana Kebakaran Berdasarkan pada Tipe Proteksi Th. 2013.
+                                                                    </h5>
+                                                                </div>
+
+                                                                <div class="widget-body">
+                                                                    <div class="widget-main">
+                                                                        <div id="line-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                                                                    </div><!--/widget-main-->
+                                                                </div><!--/widget-body-->
+                                                            </div><!--/widget-box-->
+                                                        </div><!--/.span6-->
+                                                    </div><!--/.span12-->
+                                                </div><!--/.row-fluid-->
+                                                <div class="space-6"></div>
+                                                <div class="pull-right">
+                                                    <a href="../grafik/grafik" class="btn btn-small btn-success">
+                                                        <i class="icon-rss bigger-150 middle"></i>
+
+                                                        Lihat lebih banyak grafik
+                                                        <i class="icon-on-right icon-arrow-right"></i>
+                                                    </a>
+                                                </div><!--/.pull-right-->
+                                            </div><!--/.span12-->
+                                        </div><!--/.row-fluid-->
+                                        <!--===================END GRAFIK=================-->
+                                    <!--PAGE CONTENT ENDS-->
+                                </div><!--/.span-->
                             </div><!--/.row-fluid-->
-                            <!--===================END KEJADIAN KEBAKARAN=================-->
-
-                            <!--===================GRAFIK=================-->
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <h4 class="header smaller lighter green">
-                                        <span>
-                                            <i class="icon-bar-chart"></i>
-                                             Grafik Kejadian Kebakaran
-                                        </span><!--/span-->
-                                    </h4>
-                                    <div class="row-fluid">
-                                        <div class="span12">    
-                                            <div class="span6">
-                                                <div class="widget-box">
-                                                    <div class="widget-header widget-header-flat widget-header-small header-color-green">
-                                                        <h5>
-                                                            <!--<i class="icon-bar-chart"></i>-->
-                                                            Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. 2013.
-                                                        </h5>
-                                                    </div>
-
-                                                    <div class="widget-body">
-                                                        <div class="widget-main">
-                                                            <div id="pie-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
-                                                        </div><!--/widget-main-->
-                                                    </div><!--/widget-body-->
-                                                </div><!--/widget-box-->
-                                            </div><!--/.span6-->
-                                            <div class="span6">
-                                                <div class="widget-box">
-                                                    <div class="widget-header widget-header-flat widget-header-small header-color-green">
-                                                        <h5>
-                                                            <!--<i class="icon-bar-chart"></i>-->
-                                                            Bencana Kebakaran Berdasarkan pada Tipe Proteksi Th. 2013.
-                                                        </h5>
-                                                    </div>
-
-                                                    <div class="widget-body">
-                                                        <div class="widget-main">
-                                                            <div id="line-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
-                                                        </div><!--/widget-main-->
-                                                    </div><!--/widget-body-->
-                                                </div><!--/widget-box-->
-                                            </div><!--/.span6-->
-                                        </div><!--/.span12-->
-                                    </div><!--/.row-fluid-->
-                                    <div class="space-6"></div>
-                                    <div class="pull-right">
-                                        <a href="../grafik/grafik" class="btn btn-small btn-success">
-                                            <i class="icon-rss bigger-150 middle"></i>
-
-                                            Lihat lebih banyak grafik
-                                            <i class="icon-on-right icon-arrow-right"></i>
-                                        </a>
-                                    </div><!--/.pull-right-->
-                                </div><!--/.span12-->
-                            </div><!--/.row-fluid-->
-                            <!--===================END GRAFIK=================-->
-                            <!--PAGE CONTENT ENDS-->
-                        </div><!--/.span-->
-                    </div><!--/.row-fluid-->
-                </div><!--/.page-content-->
+                        </div><!--/.page-content-->
 
 
 

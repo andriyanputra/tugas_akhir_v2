@@ -235,11 +235,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                             <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
                                                             <td>
                                                                 <div class="hidden-phone visible-desktop action-buttons">
-                                                                    <a class="green" href="olahPasca?id=<?php echo $res['resiko_id']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                    <a class="red cek" href="" id="<?php echo $res['resiko_id']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                                         <i class="icon-edit bigger-130"></i>
                                                                     </a>
 
-                                                                    <a class="red order-delete" href="view?id=<?php echo $res['resiko_id']; ?>" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                    <a class="blue cek" href="" id="<?php echo $res['resiko_id']; ?>" class="tooltip-error" data-rel="tooltip" title="Selengkapnya">
                                                                         <i class="icon-zoom-in bigger-130"></i>
                                                                     </a>
                                                                 </div>
@@ -317,59 +317,50 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <script src="../assets/js-ace/chosen.jquery.min.js"></script>
 <script src="../assets/js-ace/jquery.dataTables.min.js"></script>
 <script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+<script src="../assets/js-ace/bootbox.min.js"></script>
 <script src="../assets/js-ace/autoNumeric.js"></script>
 <!--ace scripts-->
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
 <script type="text/javascript">
-    function showUser(str) {
-        if (str=="") {
-            document.getElementById("kejadian").innerHTML="";
-            return;
-        } 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        } else { // code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function() {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                document.getElementById("kejadian").innerHTML=xmlhttp.responseText;
-            }
-        }
-          xmlhttp.open("GET","proses/cari?cari="+str,true);
-          xmlhttp.send();
-    }
-    var htmlobjek;
-            $(document).ready(function() {
-                //apabila terjadi event onchange terhadap object <select id=kecamatan>
-                $("#kecamatan_").change(function() {
-                    var kecamatan = $("#kecamatan_").val();
-                    $.ajax({
-                        url: "ambildesa.php",
-                        data: "kec=" + kecamatan,
-                        cache: false,
-                        success: function(msg) {
-                            //jika data sukses diambil dari server kita tampilkan
-                            //di <select id=desa>
-                            $("#desa").html(msg);
-                        }
+/*    $(document).ready(function() {
+
+                $("#kecamatan").change(function() {
+                    $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
+                    $.get('akec.php?kecamatan=' + $(this).val(), function(data) {
+                        $("#desa").html(data);
+                        $('#loader').slideUp(200, function() {
+                            $(this).remove();
+                        });
                     });
                 });
-                /*$("#kota").change(function() {
-                    var kota = $("#kota").val();
+            });*/
+    $(function() {
+        $(document).on(ace.click_event, ".cek", function(e) {
+            var id = $(this).attr('id');
+            e.preventDefault();
+            bootbox.confirm("Mohon untuk menunggu . . .", function(result) {
+                if (result) {
+                    //sent request to delete order with given id
                     $.ajax({
-                        url: "ambilkecamatan.php",
-                        data: "kota=" + kota,
-                        cache: false,
-                        success: function(msg) {
-                            $("#kec").html(msg);
+                        type: 'get',
+                        url: 'proses/cekData.php',
+                        data: 'cek=' + id,
+                        success: function(data) {
+                            if (data == '1') {
+                                bootbox.alert("Data berhasil diselesaikan !");
+                                window.location.replace("view?id="+id);
+                            } else {
+                                bootbox.alert("Maaf data belum terselesaikan !");
+                                window.location.replace("olahPasca?id="+id);
+                            }
                         }
                     });
-                });*/
+                }
             });
+        });
+    });
 </script>
 <script type="text/javascript">
     jQuery(function($) {

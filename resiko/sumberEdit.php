@@ -37,7 +37,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <!--page specific plugin styles-->
                     <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
-                    <link rel="shortcut icon" href="../assets/img/favicon.ico">
+                    <link rel="shortcut icon" href="../assets/img/favicon.png">
                     <script src='../assets/js-zoom/jquery-1.8.3.min.js'></script>
                     <script src='../assets/js-zoom/jquery.elevatezoom.js'></script>
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
