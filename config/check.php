@@ -23,12 +23,12 @@ $log = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip= '" . $nip . "'"); /
         if ($remember == "1") { //if the Remember me is checked, it will create a cookie.
             setcookie("pegawai_nomor", $nip, time() + 7600, "/", ""); //here we are setting a cookie named username, with the Username on the database that will last 48 hours and will be set on the understandesign.com domain. This is an optional parameter.
 
-            header("Location: ../beranda/index.php");
+            header("Location: ../beranda/index.php?msg=log_in");
             exit();
         } else if ($remember == "") { //if the Remember me isn't checked, it will create a session.
             $_SESSION['pegawai_nomor'] = $nip;
 
-            header("Location: ../beranda/index.php");
+            header("Location: ../beranda/index.php?msg=log_in");
             exit();
         }
     }

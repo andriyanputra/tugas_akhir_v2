@@ -35,5 +35,13 @@ function get_time_difference($time1, $time2) {
     
     return date("H:i:s", strtotime("1980-01-01 00:00:00") + ($time2 - $time1));
 } 
+
+        $bln = date('l');
+        if($bln == 'Sunday')$bln = 'Minggu';else if($bln == 'Monday')$bln = 'Senin';
+        else if($bln == 'Tuesday')$bln = 'Selasa';else if($bln == 'Wednesday')$bln = 'Rabu';
+        else if($bln == 'Thursday')$bln = 'Kamis';else if($bln == 'Friday')$bln = 'Jumat';
+        else if($bln == 'Saturday')$bln = 'Sabtu';
+
+        echo $bln;
 ?>
 

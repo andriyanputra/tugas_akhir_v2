@@ -40,53 +40,72 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                             <ul class="nav ace-nav pull-right">
 
-                                <li class="grey">
+                                <li class="green">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                        <i class="icon-bell-alt icon-animated-bell"></i>
-                                        <span class="badge badge-important">8</span>
+                                        <i class="icon-envelope icon-animated-vertical"></i>
+                                        <span class="badge badge-success">5</span>
                                     </a>
 
-                                    <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-closer">
+                                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
                                         <li class="nav-header">
-                                            <i class="icon-warning-sign"></i>
-                                            8 Notifications
+                                            <i class="icon-envelope-alt"></i>
+                                            5 Messages
                                         </li>
 
                                         <li>
                                             <a href="#">
-                                                <div class="clearfix">
-                                                    <span class="pull-left">
-                                                        <i class="btn btn-mini no-hover btn-pink icon-comment"></i>
-                                                        Comment Regu Pemadam
+                                                <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Alex:</span>
+                                                        Ciao sociis natoque penatibus et auctor ...
                                                     </span>
-                                                    <span class="pull-right badge badge-info">+5</span>
-                                                </div>
-                                            </a>
-                                        </li>
 
-                                        <li>
-                                            <a href="#">
-                                                <i class="btn btn-mini btn-primary icon-user"></i>
-                                                Ricky just signed up as an admin ...
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <div class="clearfix">
-                                                    <span class="pull-left">
-                                                        <i class="btn btn-mini no-hover btn-success icon-shopping-cart"></i>
-                                                        Inventaris Barang
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>a moment ago</span>
                                                     </span>
-                                                    <span class="pull-right badge badge-success">+2</span>
-                                                </div>
+                                                </span>
                                             </a>
                                         </li>
 
+                                        <li>
+                                            <a href="#">
+                                                <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Susan:</span>
+                                                        Vestibulum id ligula porta felis euismod ...
+                                                    </span>
+
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>20 minutes ago</span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </li>
 
                                         <li>
                                             <a href="#">
-                                                See all notifications
+                                                <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Bob:</span>
+                                                        Nullam quis risus eget urna mollis ornare ...
+                                                    </span>
+
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>3:15 pm</span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                See all messages
                                                 <i class="icon-arrow-right"></i>
                                             </a>
                                         </li>
@@ -185,7 +204,15 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 $r = mysql_fetch_assoc($query); 
                                                 $luas = $r['panjang'] * $r['lebar'];
                                                 $tgl = $r['resiko_tanggal'];
+                                                $id = $r['resiko_id'];
+                                                $tanggal = date('j F Y', strtotime($tgl));
+                                                $hari = date('l', strtotime($tgl));
+                                                if($hari == 'Sunday')$hari = 'Minggu';else if($hari == 'Monday')$hari = 'Senin';
+                                                else if($hari == 'Tuesday')$hari = 'Selasa';else if($hari == 'Wednesday')$hari = 'Rabu';
+                                                else if($hari == 'Thursday')$hari = 'Kamis';else if($hari == 'Friday')$hari = 'Jumat';
+                                                else if($hari == 'Saturday')$hari = 'Sabtu';
                                                 $pukul = date('H:i', strtotime($tgl));
+                                                $no_barang = date('mdy-s');
                                             ?>
                                             <div class="widget-box">
                                                 <div class="widget-header widget-hea1der-small header-color-red">
@@ -260,15 +287,18 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 <div class="row-fluid">
                                                     <div class="span12">
                                                         <div class="control-group">
+                                                            <span class="tooltip-error blink" data-rel="tooltip" data-placement="right" title="Barang Habis Pakai.">
+                                                                <a href="#pesan" role="button" class="btn btn-danger span2" data-toggle="modal">
+                                                                    <i class="icon-envelope icon-only bigger-150"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="control-group">
                                                             <label class="control-label" for="nama">Nama Pelapor :</label>
 
                                                             <div class="controls">
                                                                 <input type="text" name="nama" id="nama" readonly value="<?=$r['nama_pelapor']?>"/>
-                                                                <span class="tooltip-error" data-rel="tooltip" data-placement="right" title="Barang Habis Pakai.">
-                                                                    <a href="#pesan" role="button" class="btn btn-danger pull-right span2" data-toggle="modal">
-                                                                        <i class="icon-envelope icon-only bigger-150"></i>
-                                                                    </a>
-                                                                </span>
                                                             </div>
                                                         </div>
 
@@ -444,49 +474,89 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         </div>
                                                     </div>
                                                 </div><!-- end row-fluid -->
-                                                
+                                            </form>
+
+                                            <?php
+                                                if($_POST['add_pesan'] == 'Kirim'){
+                                                    $no_ = $_POST['no_barang'];
+                                                    $tujuan = $_POST['tujuan_'];
+                                                    $nama_barang = $_POST['nama_barang'];
+                                                    $jml_barang = $_POST['jml_barang'];
+                                                    $isi_pesan = $_POST['isi_pesan'];
+
+                                                    $addPesan = mysql_query("INSERT INTO pesan VALUES 
+                                                                                //(NULL,'$no_','$pasca_id','$nama_barang','$jml_barang','$isi_pesan','0')");
+                                                    if($addPesan){
+                                            ?>
+                                            <script language="JavaScript">
+                                                setTimeout(function() {
+                                                    swal("Pesan Terkirim!", "Pesan Anda telah terkirim ke Kepala Dinas", "success")
+                                                }, 200);
+                                            </script>
+                                            <?php
+                                                    //}else{
+                                                        //die("Query : ".mysql_error());
+                                                    //}
+                                                }
+                                            ?>
+
+                                            <form action="" method="post">
                                                 <!--Modal-->
                                                 <div id="pesan" class="modal hide fade" tabindex="-1">
                                                     <div class="modal-header no-padding">
                                                         <div class="table-header">
                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                             <dd>&nbsp;</dd>
-                                                            <dd align="center">Laporan Barang Habis Pakai</dd>
+                                                            <dd align="center"><i class="icon-envelope icon-only bigger-150"></i>&nbsp;&nbsp;Laporan Barang Habis Pakai</dd>
                                                             <dd>&nbsp;</dd>
                                                         </div>
                                                     </div>
 
                                                     <div class="modal-body no-padding">
                                                         <div class="row-fluid">
-                                                            <div class="space-6"></div>
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="No">No :</label>
+                                                            <div class="span12">
+                                                                <div class="space-6"></div>
+
+                                                                <dl class="dl-horizontal">
+                                                                    <dt>No :</dt>
+                                                                    <dd>
+                                                                        <input readonly type="text" class="span4" name="no_barang" id="" value="<?php echo 'SK-'.$no_barang; ?>">
+                                                                        &nbsp;&nbsp;&nbsp;ID Kebakaran : <input readonly type="text" class="span2" name="" id="" value="<?php echo '#'.$id; ?>">
+                                                                    </dd>
+                                                                    <dt>Tanggal Kejadian :</dt>
+                                                                    <dd><?php echo $hari.', '.$tanggal; ?></dd>
+                                                                    <dt>Tujuan :</dt>
+                                                                    <dd><a href="#">Kepala Bidang</a><input type="hidden" class="span2" name="tujuan_" id="" value="Kepala Bidang"></dd>
+                                                                    <dt>Nama Barang : </dt>
+                                                                    <dd>
+                                                                        <input type="text" autocomplete="off" required id="nama_barang" name="nama_barang" placeholder="Nama Barang..." value="">
+                                                                        <input type="text" autocomplete="off" required id="jml_barang" class="span2 korban" name="jml_barang" placeholder="Jml..." value="">
+                                                                    </dd>
+                                                                    <div class="space-6"></div>
+                                                                    <dt>Isi Pesan :</dt>
+                                                                    <dd><textarea class="" required name="isi_pesan" id="isi_pesan" placeholder="Deskripsi Pesan..."></textarea></dd>
+                                                                </dl>
+
                                                                 
-                                                                <div class="controls">
-                                                                    <input type="text" name="" id="" value="">&nbsp;m<sup>2</sup>
-                                                                </div>
+                                                                <p align="left">
+                                                                <blockquote>
+                                                                    <small>
+                                                                        Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
+                                                                    </small>
+                                                                </blockquote>
+                                                                </p>
                                                             </div>
-                                                            <p align="center">
-                                                                <img src="../assets/img/pam1.jpg"></p>
-                                                            <br/>
-                                                            <p align="left">
-                                                            <blockquote>
-                                                                <small>
-                                                                    Berdasarkan PERMEN PU No. 20 Tahun 2009 Tentang Pedoman Teknis Manajemen Proteksi Kebakaran di Perkotaan.
-                                                                </small>
-                                                            </blockquote>
-                                                            </p>
                                                         </div>
                                                     </div>
 
                                                     <div class="modal-footer">
-                                                        <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                        <input type="submit" class="span3 btn-success pull-right done" name="add_pesan" value="Kirim">
+                                                        <!--<button class="btn btn-small btn-success pull-right" data-dismiss="modal">
                                                             <i class="icon-ok"></i>
                                                             Ok
-                                                        </button>
+                                                        </button>-->
                                                     </div>
                                                 </div>
-
                                             </form>
                                     </div><!--/.row-fluid-->
                                     <!--PAGE CONTENT ENDS-->
@@ -552,12 +622,39 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <script src="../assets/js-ace/date-time/bootstrap-timepicker.min.js"></script>
 <script src="../assets/js-ace/autoNumeric.js"></script>
 <script src="../assets/js-ace/jquery.validate.min.js"></script>
-<script src="../assets/js-ace/select2.min.js"></script>
+<script src="../assets/js-ace/sweet-alert.js"></script>
 <!--ace scripts-->
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function () {
+        var intputElements = document.getElementsByTagName("input");
+        var txtareaElements = document.getElementsByTagName("textarea");
+        for (var i = 0; i < intputElements.length; i++) {
+            intputElements[i].oninvalid = function (e) {
+                e.target.setCustomValidity("");
+                if (!e.target.validity.valid) {
+                    if (e.target.name == "nama_barang") {
+                        e.target.setCustomValidity("Mohon untuk mengisi kolom nama barang.");
+                    }
+                    else if(e.target.name == "jml_barang"){
+                        e.target.setCustomValidity("Mohon untuk mengisi kolom jumlah barang.");
+                    }
+                }
+            };
+        }
+        for (var i = 0; i < txtareaElements.length; i++) {
+            txtareaElements[i].oninvalid = function (e) {
+                e.target.setCustomValidity("");
+                if (!e.target.validity.valid) {
+                    if (e.target.name == "isi_pesan") {
+                        e.target.setCustomValidity("Mohon untuk mengisi kolom isi pesan.");
+                    }
+                }
+            };
+        }
+    })
 </script>
 <script type="text/javascript">
     jQuery(function($) {

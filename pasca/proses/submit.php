@@ -23,7 +23,8 @@ if ($_POST) {
         $akhir = $_POST['akhir_perjalanan'];
         $pemadaman = $_POST['pemadaman'];
     }
-
+    
+    
     //============================== R E S I K O===================================
     $query = mysql_query("SELECT * FROM bangunan AS a
                     INNER JOIN resiko AS b ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
@@ -65,9 +66,12 @@ if ($_POST) {
         return date("H:i", strtotime("1980-01-01 00:00:00") + ($time2 - $time1));
     } 
     $hasil = beda_waktu($awal,$akhir);
-    //echo $nama.'<br>'.$alamat.'<br>'.$awal.'<br>'.$akhir.'<br>'.$hasil.'<br>'.$pemadaman.'<br>';
-    //echo $bangunan.'<br>'.$bangunanBaru.'<br>'.$penyebab.'<br>'.$penyebabBaru.'<br>';
-    //echo $luas.'<br>'.$luas_total.'<br>'.$korban_luka.'<br>'.$korban_meninggal.'<br>'.$biaya.'<br>'.$pasca_id.'<br>'.$pasca_status;
+    $check = $_POST['check'];
+    /*echo $check.'<br>';
+    echo $nama.'<br>'.$alamat.'<br>'.$awal.'<br>'.$akhir.'<br>'.$hasil.'<br>'.$pemadaman.'<br>';
+    echo $no_.'<br>'.$tujuan.'<br>'.$nama_barang.'<br>'.$jml_barang.'<br>'.$isi_pesan.'<br>';
+    echo $bangunan.'<br>'.$bangunanBaru.'<br>'.$penyebab.'<br>'.$penyebabBaru.'<br>';
+    echo $luas.'<br>'.$luas_total.'<br>'.$korban_luka.'<br>'.$korban_meninggal.'<br>'.$biaya.'<br>'.$pasca_id.'<br>'.$pasca_status;*/
 ?>
 <!DOCTYPE html>
     <html lang="en">
@@ -92,7 +96,7 @@ if ($_POST) {
         </head>
     <body onpageshow="myFunction()">
 <?php
-    if (!empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru)) {
+    if ($check == 'on' && !empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru)) {
         $insert = mysql_query("INSERT INTO pasca
             (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
              VALUES 
@@ -146,7 +150,7 @@ if ($_POST) {
             echo "Gagal Update";
         }
 
-    }else if(!empty($bangunanBaru) && !empty($luas_total)){
+    }else if($check == 'on' && !empty($bangunanBaru) && !empty($luas_total)){
         $insert = mysql_query("INSERT INTO pasca
             (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
              VALUES 

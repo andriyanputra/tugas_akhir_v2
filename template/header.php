@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="../assets/css-ace/bootstrap-editable.css" />
         <link rel="stylesheet" href="../assets/css-ace/fullcalendar.css" />
         <link rel="stylesheet" href="../assets/css-ace/bootstrap-timepicker.css" />
+        <link rel="stylesheet" type="text/css" href="../assets/css-ace/sweet-alert.css">
         <!--fonts-->
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
@@ -51,6 +52,52 @@
         <style type="text/css">
             body,td,th {
                 font-family: "Open Sans";
+            }
+            .blink {
+              -moz-animation-duration: 800ms;
+              -moz-animation-name: blink;
+              -moz-animation-iteration-count: infinite;
+              -moz-animation-direction: alternate;
+              
+              -webkit-animation-duration: 800ms;
+              -webkit-animation-name: blink;
+              -webkit-animation-iteration-count: infinite;
+              -webkit-animation-direction: alternate;
+              
+              animation-duration: 800ms;
+              animation-name: blink;
+              animation-iteration-count: infinite;
+              animation-direction: alternate;
+            }
+
+            @-moz-keyframes blink {
+              from {
+                opacity: 1;
+              }
+              
+              to {
+                opacity: 0;
+              }
+            }
+
+            @-webkit-keyframes blink {
+              from {
+                opacity: 1;
+              }
+              
+              to {
+                opacity: 0;
+              }
+            }
+
+            @keyframes blink {
+              from {
+                opacity: 1;
+              }
+              
+              to {
+                opacity: 0;
+              }
             }
         </style>
         <!--inline styles related to this page-->
