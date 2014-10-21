@@ -32,114 +32,116 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <ul class="nav ace-nav pull-right">
 
                                 <li class="green">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-envelope icon-animated-vertical"></i>
-                                    <span class="badge badge-success">5</span>
-                                </a>
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        <i class="icon-envelope icon-animated-vertical"></i>
+                                        <span class="badge badge-success">5</span>
+                                    </a>
 
-                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
-                                    <li class="nav-header">
-                                        <i class="icon-envelope-alt"></i>
-                                        5 Messages
-                                    </li>
+                                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
+                                        <li class="nav-header">
+                                            <i class="icon-envelope-alt"></i>
+                                            5 Messages
+                                        </li>
 
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Alex:</span>
-                                                    Ciao sociis natoque penatibus et auctor ...
+                                        <li>
+                                            <a href="#">
+                                                <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Alex:</span>
+                                                        Ciao sociis natoque penatibus et auctor ...
+                                                    </span>
+
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>a moment ago</span>
+                                                    </span>
                                                 </span>
+                                            </a>
+                                        </li>
 
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>a moment ago</span>
+                                        <li>
+                                            <a href="#">
+                                                <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Susan:</span>
+                                                        Vestibulum id ligula porta felis euismod ...
+                                                    </span>
+
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>20 minutes ago</span>
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </a>
-                                    </li>
+                                            </a>
+                                        </li>
 
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Susan:</span>
-                                                    Vestibulum id ligula porta felis euismod ...
+                                        <li>
+                                            <a href="#">
+                                                <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue">Bob:</span>
+                                                        Nullam quis risus eget urna mollis ornare ...
+                                                    </span>
+
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>3:15 pm</span>
+                                                    </span>
                                                 </span>
+                                            </a>
+                                        </li>
 
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>20 minutes ago</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Bob:</span>
-                                                    Nullam quis risus eget urna mollis ornare ...
-                                                </span>
-
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>3:15 pm</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            See all messages
-                                            <i class="icon-arrow-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                        <li>
+                                            <a href="#">
+                                                See all messages
+                                                <i class="icon-arrow-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li class="light-blue">
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                        <?php ?>
                                         <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                         <span class="user-info">
                                             <small>Welcome,</small>
-                                            <?php
-                                            echo $row['pegawai_nama'];
-                                        }
-                                        ?>    
-                                    </span>
+                                            <?php echo $row['pegawai_nama']; ?>    
+                                        </span>
 
-                                    <i class="icon-caret-down"></i>
-                                </a>
+                                        <i class="icon-caret-down"></i>
+                                    </a>
 
-                                <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
-                                    <li>
-                                        <a href="profile?nip=<?= $row['pegawai_nip']; ?>">
-                                            <i class="icon-user"></i>
-                                            Profile
-                                        </a>
-                                    </li>
+                                        <li>
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-user"></i>
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
 
-                                    <li class="divider"></li>
+                                        <li class="divider"></li>
 
-                                    <li>
-                                        <a href="../login/logout">
-                                            <i class="icon-off"></i>
-                                            Logout
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul><!--/.ace-nav-->
-                    </div><!--/.container-fluid-->
-                </div><!--/.navbar-inner-->
-            </div>
+                                        <li>
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-off"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul><!--/.ace-nav-->
+                        </div><!--/.container-fluid-->
+                    </div><!--/.navbar-inner-->
+                </div>
 
             <div class="main-container container-fluid">
                 <a class="menu-toggler" id="menu-toggler" href="#">
@@ -207,8 +209,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     $d = mysql_fetch_assoc($qry);
                                     ?>
 
-                                    <div>
-                                        <div id="user-profile-1" class="user-profile row-fluid">
+                                    <div id="user-profile-1" class="user-profile row-fluid">
                                             <div class="span3 center">
                                                 <div>
                                                     <span class="profile-picture">
@@ -240,7 +241,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             </div>
 
                                             <div class="span9">
-
                                                 <div class="space-12"></div>
                                                 <div class="center">
                                                     <span class="hidden btn btn-app btn-small btn-light no-hover">
@@ -346,8 +346,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         </div>
                                                     </div>
                                                 <?php } ?>
-
-                                            </div>
+                                                </div>
 
                                             <div class="space-20"></div>
 
@@ -362,130 +361,68 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         <a href="#" data-action="reload">
                                                             <i class="icon-refresh blue"></i>
                                                         </a>
-
-                                                        &nbsp;
-                                                        <a href="#" class="pink">
-                                                            <i class="icon-trash"></i>
-                                                        </a>
                                                     </div>
                                                 </div>
 
                                                 <div class="widget-body">
                                                     <div class="widget-main padding-8">
                                                         <div id="profile-feed-1" class="profile-feed">
-                                                            <div class="profile-activity clearfix">
-                                                                <div>
-                                                                    <img class="pull-left" alt="Andri's avatar" src="../assets/img/a.jpg" />
-                                                                    <a class="user" href="#"> Andriyan </a>
-                                                                    changed his profile photo.
-                                                                    <a href="#">Take a look</a>
+                                                            <?php
+                                                            $cek_log = mysql_query("SELECT a.pegawai_nama, b.login_date, b.logout_date
+                                                                                    FROM pegawai AS a INNER JOIN log_user AS b
+                                                                                    ON (a.pegawai_nip = b.pegawai_nip)
+                                                                                    WHERE a.pegawai_nip = '".$_GET['nip']."'") or die("Query : ".mysql_error());
+                                                            $cek = mysql_fetch_assoc($cek_log);
+                                                            $cek_nama = $cek['pegawai_nama'];
+                                                            $cek_login_date = $cek['login_date'];
+                                                            $cek_logout_date = $cek['logout_date'];
 
-                                                                    <div class="time">
-                                                                        <i class="icon-time bigger-110"></i>
-                                                                        an hour ago
-                                                                    </div>
-                                                                </div>
+                                                            function datediff($tgl1, $tgl2){
+                                                                $tgl1 = (is_string($tgl1) ? strtotime($tgl1) : $tgl1);
+                                                                $tgl2 = (is_string($tgl2) ? strtotime($tgl2) : $tgl2);
+                                                                $diff_secs = abs($tgl1 - $tgl2);
+                                                                $base_year = min(date("Y", $tgl1), date("Y", $tgl2));
+                                                                $diff = mktime(0, 0, $diff_secs, 1, 1, $base_year);
+                                                                return array( "years" => date("Y", $diff) - $base_year,
+                                                                "months_total" => (date("Y", $diff) - $base_year) * 12 + date("n", $diff) - 1,
+                                                                "months" => date("n", $diff) - 1,
+                                                                "days_total" => floor($diff_secs / (3600 * 24)),
+                                                                "days" => date("j", $diff) - 1,
+                                                                "hours_total" => floor($diff_secs / 3600),
+                                                                "hours" => date("G", $diff),
+                                                                "minutes_total" => floor($diff_secs / 60),
+                                                                "minutes" => (int) date("i", $diff),
+                                                                "seconds_total" => $diff_secs,
+                                                                "seconds" => (int) date("s", $diff)  );
+                                                            }
 
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="icon-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="icon-remove bigger-125"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="profile-activity clearfix">
-                                                                <div>
-                                                                    <img class="pull-left" alt="Susan Smith's avatar" src="../assets/img/avatar1.png" />
-                                                                    <a class="user" href="#"> Susan Smith </a>
-
-                                                                    is now friends with Alex Doe.
-                                                                    <div class="time">
-                                                                        <i class="icon-time bigger-110"></i>
-                                                                        2 hours ago
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="icon-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="icon-remove bigger-125"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="profile-activity clearfix">
-                                                                <div>
-                                                                    <img class="pull-left" alt="David Palms's avatar" src="../assets/img/avatar4.png" />
-                                                                    <a class="user" href="#"> David Palms </a>
-
-                                                                    left a comment on Alex's wall.
-                                                                    <div class="time">
-                                                                        <i class="icon-time bigger-110"></i>
-                                                                        8 hours ago
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="icon-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="icon-remove bigger-125"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-
+                                                            $a = datediff($cek_login_date, date("Y/m/d/ h:m:s"));
+                                                            $b = datediff($cek_logout_date, date("Y/m/d/ h:m:s"));
+                                                            
+                                                            ?>
                                                             <div class="profile-activity clearfix">
                                                                 <div>
                                                                     <i class="pull-left thumbicon icon-key btn-info no-hover"></i>
-                                                                    <a class="user" href="#"> Andriyan </a>
+                                                                    <a class="user" href="#"> <?php echo $cek_nama; ?> </a>
 
                                                                     logged in.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        12 hours ago
+                                                                        <?php echo $a[hours]; ?> jam yang lalu.
                                                                     </div>
-                                                                </div>
-
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="icon-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="icon-remove bigger-125"></i>
-                                                                    </a>
                                                                 </div>
                                                             </div>
 
                                                             <div class="profile-activity clearfix">
                                                                 <div>
                                                                     <i class="pull-left thumbicon icon-off btn-inverse no-hover"></i>
-                                                                    <a class="user" href="#"> Andriyan </a>
+                                                                    <a class="user" href="#"> <?php echo $cek_nama; ?> </a>
 
                                                                     logged out.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        16 hours ago
+                                                                        <?php echo $b[hours]; ?> jam yang lalu.
                                                                     </div>
-                                                                </div>
-
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="icon-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="icon-remove bigger-125"></i>
-                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -506,7 +443,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
+                                    
                                 </div>
 
                                 <!--PAGE CONTENT ENDS-->
@@ -519,6 +456,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     include '../template/footer.php';
                 }
             }
+        }
             ?>
             </body>
             </html>

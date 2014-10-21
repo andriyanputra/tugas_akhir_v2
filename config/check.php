@@ -20,6 +20,7 @@ $log = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip= '" . $nip . "'"); /
         }
         
     if ($loginok == TRUE) { //if it is the same password, script will continue.
+        $update_log = mysql_query("UPDATE log_user SET login_date = NOW() WHERE pegawai_nip = '$nip'") or die("Query : ".mysql_error());
         if ($remember == "1") { //if the Remember me is checked, it will create a cookie.
             setcookie("pegawai_nomor", $nip, time() + 7600, "/", ""); //here we are setting a cookie named username, with the Username on the database that will last 48 hours and will be set on the understandesign.com domain. This is an optional parameter.
 

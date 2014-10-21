@@ -118,16 +118,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                     <li>
-                                        <a href="profile?nip=<?= $row['pegawai_nip']; ?>">
+                                        <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                             <i class="icon-user"></i>
                                             Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                            <i class="icon-cog"></i>
+                                            Log User
                                         </a>
                                     </li>
 
                                     <li class="divider"></li>
 
                                     <li>
-                                        <a href="../login/logout">
+                                        <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
                                             <i class="icon-off"></i>
                                             Logout
                                         </a>

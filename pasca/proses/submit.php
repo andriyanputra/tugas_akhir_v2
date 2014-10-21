@@ -94,7 +94,7 @@ if ($_POST) {
             <!--inline styles related to this page-->
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         </head>
-    <body onpageshow="myFunction()">
+    <body>
 <?php
     if ($check == 'on' && !empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru)) {
         $insert = mysql_query("INSERT INTO pasca
@@ -134,16 +134,15 @@ if ($_POST) {
         if($insert && $insert_pLain && $update){
         ?>
         <script type="text/javascript">
-            function myFunction() {
+            setTimeout(function() {
                 swal({
                     title: "Great Work and Well Done!",
                     text: "Keep Fire in Your Life.",
                     imageUrl: '../../assets/img/thumbs-up.jpg'
                 });
-                document.location = '../../beranda/index.php';
-            }
-
-            //document.location = 'beranda/index.php';
+            }, 200);
+            
+            document.location = '../../beranda/index.php';
         </script>
         <?php
         }else{
@@ -182,18 +181,17 @@ if ($_POST) {
 
         if($insert && $update){
         ?>
-            <script type="text/javascript">
-                function myFunction() {
-                    swal({
-                        title: "Great Work and Well Done!",
-                        text: "Keep Fire in Your Life.",
-                        imageUrl: '../../assets/img/thumbs-up.jpg'
-                    });
-                    document.location = '../../beranda/index.php';
-                }
-
-                //document.location = 'beranda/index.php';
-            </script>
+        <script type="text/javascript">
+            setTimeout(function() {
+                swal({
+                    title: "Great Work and Well Done!",
+                    text: "Keep Fire in Your Life.",
+                    imageUrl: '../../assets/img/thumbs-up.jpg'
+                });
+            }, 200);
+            
+            document.location = '../../beranda/index.php';
+        </script>
         <?php
         }else{
             echo "Gagal Update";
@@ -237,16 +235,15 @@ if ($_POST) {
         if($insert && $insert_pLain && $update){
         ?>
             <script type="text/javascript">
-                function myFunction() {
+                setTimeout(function() {
                     swal({
                         title: "Great Work and Well Done!",
                         text: "Keep Fire in Your Life.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
                     });
-                    document.location = '../../beranda/index.php';
-                }
-
-                //document.location = 'beranda/index.php';
+                }, 200);
+                
+                document.location = '../../beranda/index.php';
             </script>
         <?php
         }else{
@@ -286,16 +283,15 @@ if ($_POST) {
         if($insert && $update){
         ?>
             <script type="text/javascript">
-                function myFunction() {
+                setTimeout(function() {
                     swal({
                         title: "Great Work and Well Done!",
                         text: "Keep Fire in Your Life.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
                     });
-                    document.location = '../../beranda/index.php';
-                }
-
-                //document.location = 'beranda/index.php';
+                }, 200);
+                
+                document.location = '../../beranda/index.php';
             </script>
         <?php
         }else{

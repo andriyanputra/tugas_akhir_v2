@@ -118,16 +118,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
                                     <li>
-                                        <a href="profile?nip=<?= $row['pegawai_nip']; ?>">
+                                        <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
                                             <i class="icon-user"></i>
                                             Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                            <i class="icon-cog"></i>
+                                            Log User
                                         </a>
                                     </li>
 
                                     <li class="divider"></li>
 
                                     <li>
-                                        <a href="../login/logout">
+                                        <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
                                             <i class="icon-off"></i>
                                             Logout
                                         </a>
@@ -426,17 +432,24 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 <label class = "control-label">Level:</label>
 
                                                                 <div class = "controls">
-                                                                    <div id="1">
+                                                                    <div id="4">
                                                                         <label class="inline">
                                                                             <input name = "level" value = "1" type = "checkbox"/>
                                                                             <span class="lbl"> Admin (Staff Administrasi Umum)</span>
                                                                         </label>
                                                                     </div>
 
-                                                                    <div id="2">
+                                                                    <div id="1">
                                                                         <label class="inline">
                                                                             <input name = "level" value = "2" type = "checkbox" />
                                                                             <span class="lbl"> Kepala Bidang</span>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <div id="2">
+                                                                        <label class="inline">
+                                                                            <input name = "level" value ="3" type = "checkbox" />
+                                                                            <span class="lbl"> Kepala Seksi Oprasional</span>
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -606,27 +619,37 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 // ========================Akhir Jam========================================== //
 
     var option = document.getElementsByName("jabatan");
-    var l_admin = document.getElementById("1");
-    var l_kepala = document.getElementById("2");
+    var l_admin = document.getElementById("4");
+    var l_kepala = document.getElementById("1");
+    var l_kepala_op = document.getElementById("2");
     var level = document.getElementById("level");
     pass.style.display = "none";  // hide
     level.style.display = "none";  // hide
     l_admin.style.display = "none";  // hide
     l_kepala.style.display = "none";  // hide
+    l_kepala_op.style.display = "none";  // hide
     for (var i = 0; i < option.length; i++) {
         option[i].onclick = function() {
             var val = this.value;
-            if (val == '1') {
+            if (val == '4') {
                 level.style.display = 'block';
                 pass.style.display = 'block';
-                l_admin.style.display = 'none';
+                l_admin.style.display = 'block';
+                l_kepala_op.style.display = 'none';
+                l_kepala.style.display = 'none';
+            } else if (val == '1') {
+                level.style.display = 'block';
+                pass.style.display = 'block';
                 l_kepala.style.display = 'block';
-            } else if (val == '4') {
+                l_kepala_op.style.display = 'none';
+                l_admin.style.display = 'none';
+            } else if (val == '2'){
                 level.style.display = 'block';
                 pass.style.display = 'block';
                 l_kepala.style.display = 'none';
-                l_admin.style.display = 'block';
-            } else {
+                l_kepala_op.style.display = 'block';
+                l_admin.style.display = 'none';
+            }else {
                 level.style.display = 'none';
                 pass.style.display = 'none';
                 l_admin.style.display = 'none';

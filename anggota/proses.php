@@ -73,8 +73,9 @@ if (isset($_POST['submit'])) {
                                             '$pass1', 
                                             '$nama_file_upload'
                                             )";
+                    $add_log = mysql_query("INSERT INTO log_user VALUES (NULL, '$nip', NOW(), NOW(), '-')");
                     $result = mysql_query($query);
-                    if ($result) {
+                    if ($result && $add_log) {
                         header('Location:list.php?msg=success1');
                     } else {
                         header('Location:tambah.php?msg=error');

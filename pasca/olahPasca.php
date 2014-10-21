@@ -113,10 +113,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </li>
                                 <li class="light-blue">
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?= $row['pegawai_nama']; ?>" />
+                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
                                         <span class="user-info">
                                             <small>Welcome,</small>
-                                            <?= $row['pegawai_nama']; ?>    
+                                            <?php echo $row['pegawai_nama']; ?>    
                                         </span>
 
                                         <i class="icon-caret-down"></i>
@@ -130,11 +130,17 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 Profile
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
 
                                         <li class="divider"></li>
 
                                         <li>
-                                            <a href="../login/logout">
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
                                                 <i class="icon-off"></i>
                                                 Logout
                                             </a>
@@ -479,25 +485,32 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <?php
                                                 if($_POST['add_pesan'] == 'Kirim'){
                                                     $no_ = $_POST['no_barang'];
-                                                    $tujuan = $_POST['tujuan_'];
+                                                    $kepala_bidang = $_POST['kepala_bidang'];
+                                                    $admin = $_POST['admin'];
                                                     $nama_barang = $_POST['nama_barang'];
                                                     $jml_barang = $_POST['jml_barang'];
                                                     $isi_pesan = $_POST['isi_pesan'];
+                                                    $id = $_POST['id'];
 
-                                                    $addPesan = mysql_query("INSERT INTO pesan VALUES 
-                                                                                //(NULL,'$no_','$pasca_id','$nama_barang','$jml_barang','$isi_pesan','0')");
-                                                    if($addPesan){
+                                                    $jabatan = mysql_fetch_assoc(mysql_query("SELECT b.jabatan_nama FROM pegawai AS a 
+                                                                                            INNER JOIN jabatan AS b ON (a.jabatan_id = b.jabatan_id)
+                                                                                            WHERE a.pegawai_nip ='" . $_SESSION['pegawai_nomor'] . "' OR a.pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'")) or die("Query : ".mysql_error());
+                                                    $nama_jabatan = $jabatan['jabatan_nama'];
+                                                    if($kepala_bidang){
+                                                        $addPesan = mysql_query("INSERT INTO pesan VALUES 
+                                                                    (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nama_jabatan','$kepala_bidang')");
+                                                        
                                             ?>
-                                            <script language="JavaScript">
-                                                setTimeout(function() {
-                                                    swal("Pesan Terkirim!", "Pesan Anda telah terkirim ke Kepala Dinas", "success")
-                                                }, 200);
-                                            </script>
-                                            <?php
-                                                    //}else{
-                                                        //die("Query : ".mysql_error());
-                                                    //}
-                                                }
+                                                        <script language="JavaScript">
+                                                            setTimeout(function() {
+                                                                swal("Pesan Terkirim!", "Pesan Anda telah terkirim ke Kepala Dinas", "success")
+                                                            }, 200);
+                                                        </script>
+                                                        <?php
+                                                    }else{
+                                                        die("Query : ".mysql_error());
+                                                    }
+                                            }
                                             ?>
 
                                             <form action="" method="post">
@@ -521,18 +534,27 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     <dt>No :</dt>
                                                                     <dd>
                                                                         <input readonly type="text" class="span4" name="no_barang" id="" value="<?php echo 'SK-'.$no_barang; ?>">
-                                                                        &nbsp;&nbsp;&nbsp;ID Kebakaran : <input readonly type="text" class="span2" name="" id="" value="<?php echo '#'.$id; ?>">
+                                                                        &nbsp;&nbsp;&nbsp;<b>ID Kebakaran :</b> <input readonly type="text" class="span2" name="id" id="" value="<?php echo '#'.$id; ?>">
                                                                     </dd>
                                                                     <dt>Tanggal Kejadian :</dt>
                                                                     <dd><?php echo $hari.', '.$tanggal; ?></dd>
                                                                     <dt>Tujuan :</dt>
-                                                                    <dd><a href="#">Kepala Bidang</a><input type="hidden" class="span2" name="tujuan_" id="" value="Kepala Bidang"></dd>
+                                                                    <dd>
+                                                                        <label>
+                                                                            <input name="kepala_bidang" class="ace-checkbox-2" type="checkbox" required/>
+                                                                            <span class="lbl"> Kepala Bidang</span>
+                                                                        </label>
+                                                                        <label>
+                                                                            <input name="admin" class="ace-checkbox-2" type="checkbox" />
+                                                                            <span class="lbl"> Administrator (Lain)</span>
+                                                                        </label>
+                                                                    </dd>
                                                                     <dt>Nama Barang : </dt>
                                                                     <dd>
                                                                         <input type="text" autocomplete="off" required id="nama_barang" name="nama_barang" placeholder="Nama Barang..." value="">
                                                                         <input type="text" autocomplete="off" required id="jml_barang" class="span2 korban" name="jml_barang" placeholder="Jml..." value="">
                                                                     </dd>
-                                                                    <div class="space-6"></div>
+                                                                    <!--<div class="space-6"></div>-->
                                                                     <dt>Isi Pesan :</dt>
                                                                     <dd><textarea class="" required name="isi_pesan" id="isi_pesan" placeholder="Deskripsi Pesan..."></textarea></dd>
                                                                 </dl>

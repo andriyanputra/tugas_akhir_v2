@@ -1,47 +1,51 @@
 <?php
+include 'config/koneksi.php';
+$cek_log = mysql_query("SELECT a.pegawai_nama, b.login_date
+                        FROM pegawai AS a INNER JOIN log_user AS b
+                        ON (a.pegawai_nip = b.pegawai_nip)
+                        WHERE a.pegawai_nip = '115623003'") or die("Query : ".mysql_error());
+$cek = mysql_fetch_assoc($cek_log);
+$cek_nama = $cek['pegawai_nama'];
+$cek_log_date = $cek['login_date'];
 
-// example 1 
-$time1 = "08:00:00"; 
-$time2 = "13:40:00"; 
 
-echo "Time difference: ".get_time_difference($time1, $time2)." hours<br/>"; 
 
-// example 2 
-$time1 = "22:00:00"; 
-$time2 = "04:00:00"; 
+function datediff($tgl1, $tgl2){
+    $tgl1 = (is_string($tgl1) ? strtotime($tgl1) : $tgl1);
+    $tgl2 = (is_string($tgl2) ? strtotime($tgl2) : $tgl2);
+    $diff_secs = abs($tgl1 - $tgl2);
+    $base_year = min(date("Y", $tgl1), date("Y", $tgl2));
+    $diff = mktime(0, 0, $diff_secs, 1, 1, $base_year);
+    return array( "years" => date("Y", $diff) - $base_year,
+    "months_total" => (date("Y", $diff) - $base_year) * 12 + date("n", $diff) - 1,
+    "months" => date("n", $diff) - 1,
+    "days_total" => floor($diff_secs / (3600 * 24)),
+    "days" => date("j", $diff) - 1,
+    "hours_total" => floor($diff_secs / 3600),
+    "hours" => date("G", $diff),
+    "minutes_total" => floor($diff_secs / 60),
+    "minutes" => (int) date("i", $diff),
+    "seconds_total" => $diff_secs,
+    "seconds" => (int) date("s", $diff)  );
+ }
 
-echo "Time difference: ".get_time_difference($time1, $time2)." hours<br/>"; 
+$a = datediff($cek_log_date, date("Y/m/d/ h:m:s"));
+ 
+echo ''.$a[years].'tahun, '.$a[months].'bulan, '.$a[days].'hari, '.$a[hours].' jam, '.$a[minutes].' menit, '.$a[seconds].' detik';
 
-/*function get_time_difference($time1, $time2) 
-{ 
-    $time1 = strtotime("1/1/1980 $time1"); 
-    $time2 = strtotime("1/1/1980 $time2"); 
-     
-    if ($time2 < $time1) 
-    { 
-        $time2 = $time2 + 86400; 
-    } 
-     
-    return ($time2 - $time1) / 3600; 
-     
-} */
-function get_time_difference($time1, $time2) {
-    $time1 = strtotime("1980-01-01 $time1");
-    $time2 = strtotime("1980-01-01 $time2");
-    
-    if ($time2 < $time1) {
-        $time2 += 86400;
-    }
-    
-    return date("H:i:s", strtotime("1980-01-01 00:00:00") + ($time2 - $time1));
-} 
 
-        $bln = date('l');
-        if($bln == 'Sunday')$bln = 'Minggu';else if($bln == 'Monday')$bln = 'Senin';
-        else if($bln == 'Tuesday')$bln = 'Selasa';else if($bln == 'Wednesday')$bln = 'Rabu';
-        else if($bln == 'Thursday')$bln = 'Kamis';else if($bln == 'Friday')$bln = 'Jumat';
-        else if($bln == 'Saturday')$bln = 'Sabtu';
-
-        echo $bln;
+$hari = date('l', strtotime($cek_log_date));
+                                                            if($hari == 'Sunday')$hari = 'Minggu';else if($hari == 'Monday')$hari = 'Senin';
+                                                            else if($hari == 'Tuesday')$hari = 'Selasa';else if($hari == 'Wednesday')$hari = 'Rabu';
+                                                            else if($hari == 'Thursday')$hari = 'Kamis';else if($hari == 'Friday')$hari = 'Jumat';
+                                                            else if($hari == 'Saturday')$hari = 'Sabtu';
+                                                            $bln = date('F', strtotime($cek_log_date));
+                                                            if($bln == 'January')$bln = 'Jan';else if($bln == 'February')$bln = 'Feb';
+                                                            else if($bln == 'March')$bln = 'Mar';else if($bln == 'April')$bln = 'Apr';
+                                                            else if($bln == 'May')$bln = 'Mei';else if($bln == 'June')$bln = 'Jun';
+                                                            else if($bln == 'July')$bln = 'Jul';else if($bln == 'August')$bln = 'Agt';
+                                                            else if($bln == 'September')$bln = 'Sep';else if($bln == 'October')$bln = 'Okt';
+                                                            else if($bln == 'November')$bln = 'Nov';else if($bln == 'December')$bln = 'Des';
+                                                            $thn = date('Y', strtotime($cek_log_date));
 ?>
 

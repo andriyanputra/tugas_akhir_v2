@@ -11,9 +11,10 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT * FROM pegawai,jabatan
-      WHERE jabatan.jabatan_id = pegawai.jabatan_id
-      ORDER BY pegawai_nip") or die("Query failed: " . mysql_error());
+    $query = mysql_query("SELECT a.pegawai_nip, a.pegawai_nama, b.NAMA_LEVEL_USER, c.login_date, c.logout_date, c.log_ket
+                            FROM pegawai AS a INNER JOIN level_user AS b ON (a.id_level_user = b.ID_LEVEL_USER)
+                                INNER JOIN log_user AS c ON (a.pegawai_nip = c.pegawai_nip)
+                                ORDER BY c.log_id") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -163,7 +164,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <i class="icon-angle-right arrow-icon"></i>
                                 </span>
                             </li>
-                            <li class="active">Anggota Pemadam</li>
+                            <li class="active">Log User</li>
                         </ul><!--.breadcrumb-->
                         <div class="pull-right">
                             <script>
@@ -185,7 +186,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <div class="page-content">
                         <div class="page-header position-relative">
                             <h1>
-                                Anggota Pemadam
+                                Log User
                                 <small>
                                     <i class="icon-double-angle-right"></i>
                                     Overview
@@ -197,76 +198,31 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="span12">
                                 <!--PAGE CONTENT BEGINS-->
                                 <?php
-                                if (isset($_GET['msg'])) {
-                                    if ($_GET['msg'] == 'success1') {
-                                        ?>
-                                        <div class="alert alert-block alert-success">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="icon-remove"></i>
-                                            </button>
-
-                                            <i class="icon-ok green"></i>&nbsp;
-                                            <strong>Selamat</strong>, data berhasil ditambahkan.
-                                        </div>
-                                        <?php
-                                    } else if ($_GET['msg'] == 'success3') {
-                                        ?>
-                                        <div class="alert alert-block alert-success">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="icon-remove"></i>
-                                            </button>
-
-                                            <i class="icon-ok green"></i>&nbsp;
-                                            Data berhasil dihapus.
-                                        </div>
-                                        <?php
-                                    } else if ($_GET['msg'] == 'error') {
-                                        ?>
-                                        <div class="alert alert-block alert-error">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="icon-remove"></i>
-                                            </button>
-
-                                            <i class="icon-remove"></i>
-                                            Terjadi kesalahan url sistem.
-                                        </div>
-                                        <?php
-                                    } else if ($_GET['msg'] == 'success2') {
-                                        ?>
-                                        <div class="alert alert-block alert-success">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="icon-remove"></i>
-                                            </button>
-
-                                            <i class="icon-ok green"></i>&nbsp;
-                                            Data berhasil diperbaharui.
-                                        </div>
-                                        <?php
-                                    }
-                                }
+                                
                                 ?>
                                 <div class = "space-6"></div>
-                                <div class = "pull-right">
+                                <!--<div class = "pull-right">
                                     <a href = "tambah">
                                         <button class = "btn btn-mini btn-primary btn-block" data-rel = "tooltip" title = "Tambah Pegawai">
                                             <i class = "icon-plus bigger-130"></i>
                                             <strong>Tambah Data</strong>
                                         </button>
                                     </a>
-                                </div>
+                                </div>-->
                                 <div class = "space-18"></div>
                                 <div class = "table-header center">
-                                    Daftar Anggota Pemadam Kebakaran
+                                    Log User (Data Historis User)
                                 </div>
-                                <table id = "pegawai" class = "table table-striped table-bordered table-hover">
+                                <table id = "historis" class = "table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th class = "center">No.</th>
                                             <th>Nomor Induk</th>
                                             <th>Nama</th>
-                                            <th>Alamat</th>
-                                            <th>No. Telepon</th>
-                                            <th>Jabatan</th>
+                                            <th>Level User</th>
+                                            <th>Login Terakhir</th>
+                                            <th>Logout Terakhir</th>
+                                            <th>Keterangan</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -280,23 +236,12 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 <td><?php echo '' . $no . '.'; ?></td>
                                                 <td><?php echo $data['pegawai_nip']; ?></td>
                                                 <td><?php echo $data['pegawai_nama']; ?></td>
-                                                <td><?php echo $data['pegawai_alamat']; ?></td>
-                                                <td><?php echo $data['pegawai_no_telp']; ?></td>
-                                                <td><?php echo $data['jabatan_nama']; ?></td>
-                                                <td class="td-actions">
-                                                    <div class="hidden-phone visible-desktop action-buttons">
-                                                        <a class="blue" href="profile?nip=<?php echo $data['pegawai_nip']; ?>" class="tooltip-info" data-rel="tooltip" title="View">
-                                                            <i class="icon-zoom-in bigger-130"></i>
-                                                        </a>
-
-                                                        <a class="green" href="edit?nip=<?php echo $data['pegawai_nip']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                            <i class="icon-pencil bigger-130"></i>
-                                                        </a>
-
-                                                        <a class="red" href="prosesHapus?nip=<?php echo $data['pegawai_nip']; ?>" onclick="return confirm('Are you sure you want to delete?')" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                            <i class="icon-trash bigger-130"></i>
-                                                        </a>
-                                                    </div>
+                                                <td><?php echo $data['NAMA_LEVEL_USER']; ?></td>
+                                                <td><?php echo $data['login_date']; ?></td>
+                                                <td><?php echo $data['logout_date']; ?></td>
+                                                <td><?php echo $data['log_ket']; ?></td>
+                                                <td>
+                                                <a href="#">Selengkapnya...</a>
                                                 </td>
                                             </tr>
 
@@ -436,7 +381,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 // ========================Akhir Jam========================================== //
 
     $(document).ready(function() {
-        var table = $('#pegawai').DataTable();
+        var table = $('#historis').DataTable();
     });
 </script>
 </body>

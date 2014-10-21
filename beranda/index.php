@@ -35,18 +35,34 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 <li class="green">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="icon-envelope icon-animated-vertical"></i>
-                                        <span class="badge badge-success">5</span>
+                                        <?php
+                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0") or die("Query : ".mysql_error());
+                                        $jml_pesan = mysql_num_rows($cek_pesan);
+                                        if($jml_pesan > 0){
+                                            echo "<span class='badge badge-success'>$jml_pesan</span>";
+                                        }else{
+                                            echo "<span class='badge badge-success'>0</span>";
+                                        }
+                                        ?>
                                     </a>
 
                                     <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
                                         <li class="nav-header">
                                             <i class="icon-envelope-alt"></i>
-                                            5 Messages
+                                            <?php 
+                                            if($jml_pesan > 0){
+                                                echo "$jml_pesan Pesan";
+                                            }else{
+                                                echo "0 Pesan";
+                                            }
+                                            ?>
                                         </li>
-
+                                        
+                                        <?php
+                                            for($i=0; $i<2; $i++){
+                                        ?>
                                         <li>
                                             <a href="#">
-                                                <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
                                                 <span class="msg-body">
                                                     <span class="msg-title">
                                                         <span class="blue">Alex:</span>
@@ -60,41 +76,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 </span>
                                             </a>
                                         </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-                                                <span class="msg-body">
-                                                    <span class="msg-title">
-                                                        <span class="blue">Susan:</span>
-                                                        Vestibulum id ligula porta felis euismod ...
-                                                    </span>
-
-                                                    <span class="msg-time">
-                                                        <i class="icon-time"></i>
-                                                        <span>20 minutes ago</span>
-                                                    </span>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-                                                <span class="msg-body">
-                                                    <span class="msg-title">
-                                                        <span class="blue">Bob:</span>
-                                                        Nullam quis risus eget urna mollis ornare ...
-                                                    </span>
-
-                                                    <span class="msg-time">
-                                                        <i class="icon-time"></i>
-                                                        <span>3:15 pm</span>
-                                                    </span>
-                                                </span>
-                                            </a>
-                                        </li>
-
+                                        <?php
+                                            }
+                                        ?>
                                         <li>
                                             <a href="#">
                                                 See all messages
@@ -123,11 +107,17 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 Profile
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
 
                                         <li class="divider"></li>
 
                                         <li>
-                                            <a href="../login/logout">
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
                                                 <i class="icon-off"></i>
                                                 Logout
                                             </a>
@@ -135,7 +125,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     </ul>
                                 </li>
                             </ul><!--/.ace-nav-->
-                        </div><!--/.container-fluid-->
+                        </div><!--/.cont
+                        ainer-fluid-->
                     </div><!--/.navbar-inner-->
                 </div>
 
