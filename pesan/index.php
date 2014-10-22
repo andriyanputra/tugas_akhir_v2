@@ -11,10 +11,8 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.pegawai_nip, a.pegawai_nama, b.NAMA_LEVEL_USER, c.login_date, c.logout_date, c.log_ket
-                            FROM pegawai AS a INNER JOIN level_user AS b ON (a.id_level_user = b.ID_LEVEL_USER)
-                                INNER JOIN log_user AS c ON (a.pegawai_nip = c.pegawai_nip)
-                                ORDER BY c.log_id") or die("Query failed: " . mysql_error());
+    $query = mysql_query("SELECT * FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
+                        WHERE b.pesan_untuk = 'Administrator' GROUP BY b.id ORDER BY b.id ASC LIMIT 3") or die("Query : ".mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -164,7 +162,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <i class="icon-angle-right arrow-icon"></i>
                                 </span>
                             </li>
-                            <li class="active">Log User</li>
+                            <li class="active">Pesan</li>
                         </ul><!--.breadcrumb-->
                         <div class="pull-right">
                             <script>
@@ -186,7 +184,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <div class="page-content">
                         <div class="page-header position-relative">
                             <h1>
-                                Log User
+                                Pesan
                                 <small>
                                     <i class="icon-double-angle-right"></i>
                                     Overview
@@ -211,17 +209,18 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 </div>-->
                                 <div class = "space-18"></div>
                                 <div class = "table-header center">
-                                    Log User (Data Historis User)
+                                    Pesan (Peralatan/Bahan Habis Pakai)
                                 </div>
-                                <table id = "historis" class = "table table-striped table-bordered table-hover">
+                                <table id = "pesan" class = "table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th class = "center">No.</th>
-                                            <th>Nomor Induk</th>
-                                            <th>Nama</th>
-                                            <th>Level User</th>
-                                            <th>Login Terakhir</th>
-                                            <th>Logout Terakhir</th>
+                                            <th>No. Pesan</th>
+                                            <th>No. Kejadian</th>
+                                            <th>Tanggal Pesan</th>
+                                            <th>Nama Peralatan/Bahan</th>
+                                            <th>Status Pesan</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
 
@@ -232,11 +231,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             ?>
                                             <tr>
                                                 <td><?php echo '' . $no . '.'; ?></td>
-                                                <td><?php echo $data['pegawai_nip']; ?></td>
-                                                <td><?php echo $data['pegawai_nama']; ?></td>
-                                                <td><?php echo $data['NAMA_LEVEL_USER']; ?></td>
-                                                <td><?php echo $data['login_date']; ?></td>
-                                                <td><?php echo $data['logout_date']; ?></td>
+                                                <td><?php echo $data['pesan_id']; ?></td>
+                                                <td><?php echo $data['resiko_id']; ?></td>
+                                                <td><?php echo date('d-m-Y H:i A',strtotime($data['resiko_tanggal'])); ?></td>
+                                                <td><?php echo $data['pesan_nama']; ?></td>
+                                                <?php
+                                                    if($data['pesan_status'] == 0){
+                                                        echo '<td>Belum dibaca</td>';
+                                                    }else if($data['pesan_status'] == 1){
+                                                        echo '<td>Sudah dibaca</td>';
+                                                    }
+                                                ?>
+                                                <td>
+                                                    <a href="detail?id=<?php echo $data['pesan_id']; ?>">
+                                                        Detail...
+                                                    </a>
+                                                </td>
                                             </tr>
 
                                             <?php
@@ -375,7 +385,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 // ========================Akhir Jam========================================== //
 
     $(document).ready(function() {
-        var table = $('#historis').DataTable();
+        var table = $('#pesan').DataTable();
     });
 </script>
 </body>

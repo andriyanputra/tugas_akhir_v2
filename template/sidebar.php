@@ -108,7 +108,7 @@
             <ul class="submenu">
 
                 <li>
-                    <a href="../resiko/peta">
+                    <a href="../laporan/">
                         <i class="icon-double-angle-right"></i>
                         Laporan Kebakaran
                     </a>

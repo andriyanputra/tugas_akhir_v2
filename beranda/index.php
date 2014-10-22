@@ -12,7 +12,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 }
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
-    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
+    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "'");
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -36,7 +36,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="icon-envelope icon-animated-vertical"></i>
                                         <?php
-                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0") or die("Query : ".mysql_error());
+                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='Administrator'") or die("Query : ".mysql_error());
                                         $jml_pesan = mysql_num_rows($cek_pesan);
                                         if($jml_pesan > 0){
                                             echo "<span class='badge badge-success'>$jml_pesan</span>";
@@ -59,19 +59,33 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         </li>
                                         
                                         <?php
-                                            for($i=0; $i<2; $i++){
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal
+                                                                    FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
+                                                                    WHERE b.pesan_status = 0 AND b.pesan_untuk='Administrator'
+                                                                    GROUP BY b.id ORDER BY b.id ASC
+                                                                    LIMIT 3") or die("Query : ".mysql_error());
+                                            while($pesan = mysql_fetch_array($q_pesan)){
                                         ?>
                                         <li>
-                                            <a href="#">
+                                            <a href="../pesan/detail?id=<?php echo $pesan['id'];?>">
                                                 <span class="msg-body">
                                                     <span class="msg-title">
-                                                        <span class="blue">Alex:</span>
-                                                        Ciao sociis natoque penatibus et auctor ...
+                                                        <span class="blue"><?php echo $pesan['pesan_dari'].': ' ?></span>
+                                                        <?php
+                                                            $isi = $pesan['pesan_isi'];
+                                                            $potong_isi = substr($isi,0,50);
+                                                            echo $potong_isi.'...';
+                                                        ?>
                                                     </span>
 
                                                     <span class="msg-time">
                                                         <i class="icon-time"></i>
-                                                        <span>a moment ago</span>
+                                                        <span>
+                                                            <?php
+                                                                $p_tgl = date('H:i:s A', strtotime($pesan['resiko_tanggal']));
+                                                                echo $p_tgl;
+                                                            ?>
+                                                        </span>
                                                     </span>
                                                 </span>
                                             </a>
@@ -80,8 +94,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             }
                                         ?>
                                         <li>
-                                            <a href="#">
-                                                See all messages
+                                            <a href="../pesan/">
+                                                Lihat Semua Pemberitahuan
                                                 <i class="icon-arrow-right"></i>
                                             </a>
                                         </li>
@@ -399,23 +413,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
         <i class="icon-double-angle-up icon-only bigger-110"></i>
     </a>
-
-    <!--basic scripts-->
-
-    <!--[if !IE]>-->
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-    <!--<![endif]-->
-
-    <!--[if IE]>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <![endif]-->
-
-    <!--[if !IE]>-->
-
     <script type="text/javascript">
-                                    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->

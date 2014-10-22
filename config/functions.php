@@ -4,7 +4,7 @@ session_start(); //start session
 }
 include 'config.php'; //include the config.php file
 
-//login chech function
+//login check function
 function loggedin() {
     if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
         $loggedin = TRUE;

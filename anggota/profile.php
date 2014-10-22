@@ -242,47 +242,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                             <div class="span9">
                                                 <div class="space-12"></div>
-                                                <div class="center">
-                                                    <span class="hidden btn btn-app btn-small btn-light no-hover">
-                                                        <span class="bigger-150 blue"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-light no-hover">
-                                                        <span class="bigger-150 blue"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-light no-hover">
-                                                        <span class="bigger-150 blue"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-light no-hover">
-                                                        <span class="bigger-150 blue"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-yellow no-hover">
-                                                        <span class="bigger-175"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-pink no-hover">
-                                                        <span class="bigger-175"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-grey no-hover">
-                                                        <span class="bigger-175"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
-                                                    <span class="hidden btn btn-app btn-small btn-success no-hover">
-                                                        <span class="bigger-175"></span>
-                                                        <span class="smaller-90"></span>
-                                                    </span>
-
+                                                <div class="pull-right">
                                                     <a href="edit?nip=<?= $d['pegawai_nip']; ?>">
                                                         <button class="btn btn-small btn-primary" data-rel="tooltip" title="Edit Pegawai">
                                                             <i class="icon-edit"></i>
@@ -290,7 +250,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         </button>
                                                     </a>
                                                 </div>
-
+                                                <br>
+                                                <br>
                                                 <div class="space-6"></div>
 
                                                 <div class="profile-user-info profile-user-info-striped">
@@ -396,8 +357,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 "seconds" => (int) date("s", $diff)  );
                                                             }
 
-                                                            $a = datediff($cek_login_date, date("Y/m/d/ h:m:s"));
-                                                            $b = datediff($cek_logout_date, date("Y/m/d/ h:m:s"));
+                                                            $a = datediff($cek_login_date, date("Y/m/d/ H:i:s"));
+                                                            $b = datediff($cek_logout_date, date("Y/m/d/ H:i:s"));
                                                             
                                                             ?>
                                                             <div class="profile-activity clearfix">
@@ -408,7 +369,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     logged in.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        <?php echo $a[hours]; ?> jam yang lalu.
+                                                                        <?php echo $a[hours].' jam, '.$a[minutes].' menit, '.$a[seconds].' detik'; ?> yang lalu.
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -421,7 +382,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     logged out.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        <?php echo $b[hours]; ?> jam yang lalu.
+                                                                        <?php echo $b[hours].' jam, '.$b[minutes].' menit, '.$b[seconds].' detik'; ?> yang lalu.
                                                                     </div>
                                                                 </div>
                                                             </div>

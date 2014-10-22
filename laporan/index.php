@@ -11,10 +11,9 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.pegawai_nip, a.pegawai_nama, b.NAMA_LEVEL_USER, c.login_date, c.logout_date, c.log_ket
-                            FROM pegawai AS a INNER JOIN level_user AS b ON (a.id_level_user = b.ID_LEVEL_USER)
-                                INNER JOIN log_user AS c ON (a.pegawai_nip = c.pegawai_nip)
-                                ORDER BY c.log_id") or die("Query failed: " . mysql_error());
+    $query = mysql_query("SELECT * FROM pegawai,jabatan
+                          WHERE jabatan.jabatan_id = pegawai.jabatan_id
+                          ORDER BY pegawai_nip") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -164,7 +163,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <i class="icon-angle-right arrow-icon"></i>
                                 </span>
                             </li>
-                            <li class="active">Log User</li>
+                            <li class="active">Laporan Kejadian</li>
                         </ul><!--.breadcrumb-->
                         <div class="pull-right">
                             <script>
@@ -186,7 +185,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                     <div class="page-content">
                         <div class="page-header position-relative">
                             <h1>
-                                Log User
+                                Laporan Kejadian
                                 <small>
                                     <i class="icon-double-angle-right"></i>
                                     Overview
@@ -197,51 +196,68 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         <div class="row-fluid">
                             <div class="span12">
                                 <!--PAGE CONTENT BEGINS-->
-                                <?php
-                                
-                                ?>
                                 <div class = "space-6"></div>
-                                <!--<div class = "pull-right">
-                                    <a href = "tambah">
-                                        <button class = "btn btn-mini btn-primary btn-block" data-rel = "tooltip" title = "Tambah Pegawai">
-                                            <i class = "icon-plus bigger-130"></i>
-                                            <strong>Tambah Data</strong>
-                                        </button>
-                                    </a>
-                                </div>-->
-                                <div class = "space-18"></div>
+                                <form class="form-inline center" />
+                                    Tampilkan Berdasarkan :&nbsp;&nbsp;
+                                    <select class="span2">
+                                        <option/>Pilih Bulan...
+                                        <option/>Jan
+                                        <option/>Feb
+                                        <option/>Mar
+                                        <option/>Mei
+                                        <option/>Jun
+                                        <option/>Jul
+                                        <option/>Agt
+                                        <option/>Sep
+                                        <option/>Okt
+                                        <option/>Nov
+                                        <option/>Des
+                                    </select>
+                                    <select class="span2">
+                                        <option/>Pilih Tahun...
+                                        <option/>2013
+                                        <option/>2014
+                                    </select>
+
+                                    <button onclick="return false;" class="btn btn-danger btn-small">
+                                        Login
+                                        <i class="icon-search bigger-110"></i>
+                                    </button>
+                                </form>
                                 <div class = "table-header center">
-                                    Log User (Data Historis User)
+                                    Laporan Kejadian Kebakaran Bulanan di Kab. Sidoarjo
                                 </div>
-                                <table id = "historis" class = "table table-striped table-bordered table-hover">
+                                <table id = "laporan" class = "table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th class = "center">No.</th>
-                                            <th>Nomor Induk</th>
-                                            <th>Nama</th>
-                                            <th>Level User</th>
-                                            <th>Login Terakhir</th>
-                                            <th>Logout Terakhir</th>
+                                            <th>Bulan Kejadian</th>
+                                            <th>Jumlah Kejadian</th>
+                                            <th>Jumlah Bangunan Terbakar</th>
+                                            <th>Jumlah Korban</th>
+                                            <th>Jumlah Nominal Kerugian</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <?php
-                                        $no = 1;
-                                        while ($data = mysql_fetch_array($query)) {
+                                        //$no = 1;
+                                        //while ($data = mysql_fetch_array($query)) {
                                             ?>
                                             <tr>
-                                                <td><?php echo '' . $no . '.'; ?></td>
-                                                <td><?php echo $data['pegawai_nip']; ?></td>
-                                                <td><?php echo $data['pegawai_nama']; ?></td>
-                                                <td><?php echo $data['NAMA_LEVEL_USER']; ?></td>
-                                                <td><?php echo $data['login_date']; ?></td>
-                                                <td><?php echo $data['logout_date']; ?></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
 
                                             <?php
-                                            $no++;
-                                        }
+                                            //$no++;
+                                        //}
                                         ?>
                                     </tbody>
                                 </table>
@@ -375,7 +391,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 // ========================Akhir Jam========================================== //
 
     $(document).ready(function() {
-        var table = $('#historis').DataTable();
+        var table = $('#pegawai').DataTable();
     });
 </script>
 </body>
