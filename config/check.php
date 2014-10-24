@@ -21,7 +21,7 @@ $remember = $_POST['remember'];
         }
         
     if ($loginok == TRUE) { //if it is the same password, script will continue.
-        //$update_log = mysql_query("UPDATE log_user SET login_date = NOW() WHERE pegawai_nip = '$nip'") or die("Query : ".mysql_error());
+        $update_log = mysql_query("UPDATE log_user SET login_date = NOW() WHERE pegawai_nip = '$nip'") or die("Query : ".mysql_error());
         if ($remember == "1") { //if the Remember me is checked, it will create a cookie.
             /*if($db_level == 2){
                 header("Location: ../kepala_bidang");

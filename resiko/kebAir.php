@@ -434,7 +434,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 } else {
                                                                     die(mysql_error());
                                                                 }
-                                                                $result_tgl = date_create($result['resiko_tanggal']);
+                                                                $result_tgl = date_create($result['resiko_tanggal_start']);
                                                                 ?>
                                                                 <!--POTENSI-->
                                                                 <div id="potensi" class="tab-pane">

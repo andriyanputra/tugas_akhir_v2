@@ -11,9 +11,6 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT * FROM pegawai,jabatan
-                          WHERE jabatan.jabatan_id = pegawai.jabatan_id
-                          ORDER BY pegawai_nip") or die("Query failed: " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -197,70 +194,58 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             <div class="span12">
                                 <!--PAGE CONTENT BEGINS-->
                                 <div class = "space-6"></div>
-                                <form class="form-inline center" />
+                                <form class="form-inline center" method="post" />
                                     Tampilkan Berdasarkan :&nbsp;&nbsp;
-                                    <select class="span2">
-                                        <option/>Pilih Bulan...
-                                        <option/>Jan
-                                        <option/>Feb
-                                        <option/>Mar
-                                        <option/>Mei
-                                        <option/>Jun
-                                        <option/>Jul
-                                        <option/>Agt
-                                        <option/>Sep
-                                        <option/>Okt
-                                        <option/>Nov
-                                        <option/>Des
+                                    <select class="span2" id="bulan">
+                                        <option value=""/>Pilih Bulan...
+                                        <option value="Jan"/>Jan
+                                        <option value="Feb"/>Feb
+                                        <option value="Mar"/>Mar
+                                        <option value="Apr"/>Apr
+                                        <option value="Mei"/>Mei
+                                        <option value="Jun"/>Jun
+                                        <option value="Jul"/>Jul
+                                        <option value="Agt"/>Agt
+                                        <option value="Sep"/>Sep
+                                        <option value="Okt"/>Okt
+                                        <option value="Nov"/>Nov
+                                        <option value="Des"/>Des
                                     </select>
-                                    <select class="span2">
-                                        <option/>Pilih Tahun...
-                                        <option/>2013
-                                        <option/>2014
+                                    <select class="span2" id="tahun">
+                                        <option value="" />Pilih Tahun...
+                                        <option value="2013" />2013
+                                        <option value="2014" />2014
                                     </select>
 
-                                    <button onclick="return false;" class="btn btn-danger btn-small">
-                                        Login
+                                    <!--<input type="button" id="button" value="Cari" />-->
+                                    <button id="button" onclick="return false;" class="btn btn-danger btn-small">
+                                        Cari
                                         <i class="icon-search bigger-110"></i>
                                     </button>
                                 </form>
                                 <div class = "table-header center">
                                     Laporan Kejadian Kebakaran Bulanan di Kab. Sidoarjo
                                 </div>
-                                <table id = "laporan" class = "table table-striped table-bordered table-hover">
+                                <table id = "result" class = "table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th class = "center">No.</th>
-                                            <th>Bulan Kejadian</th>
-                                            <th>Jumlah Kejadian</th>
-                                            <th>Jumlah Bangunan Terbakar</th>
-                                            <th>Jumlah Korban</th>
-                                            <th>Jumlah Nominal Kerugian</th>
-                                            <th>Action</th>
-                                        </tr>
+                                           <th rowspan="2" class="center">No.</th>
+                                           <th rowspan="2" class="center">Bulan Kejadian</th>
+                                           <th rowspan="2" class="center">Jumlah Kejadian</th>
+                                           <th rowspan="2" class="center">Jumlah Bangunan Terbakar</th>
+                                           <th colspan="2" class="center">Jumlah Korban</th>
+                                           <th rowspan="2" class="center">Jumlah Nominal Kerugian</th>
+                                           <th rowspan="2" class="center">Action</th>
+                                         </tr>
+                                         <tr>
+                                           <th class="center">Korban Luka</th>
+                                           <th class="center">Korban Meninggal</th>
+                                         </tr>
                                     </thead>
 
-                                    <tbody>
-                                        <?php
-                                        //$no = 1;
-                                        //while ($data = mysql_fetch_array($query)) {
-                                            ?>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-
-                                            <?php
-                                            //$no++;
-                                        //}
-                                        ?>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
+                                <!--<div id="error_msg_box"      ></div>-->
                                 <!--PAGE CONTENT ENDS-->
                             </div><!--/.span-->
                         </div><!--/.row-fluid-->
@@ -319,25 +304,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     <i class="icon-double-angle-up icon-only bigger-110"></i>
 </a>
 
-<!--basic scripts-->
-
-<!--[if !IE]>-->
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-<!--<![endif]-->
-
-<!--[if IE]>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<![endif]-->
-
-<!--[if !IE]>-->
-
 <script type="text/javascript">
-                                            window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
 </script>
-
-<!--<![endif]-->
 
 <script type="text/javascript">
     if ("ontouchend" in document)
@@ -348,8 +319,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <!--page specific plugin scripts-->
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
-<script src="../assets/js-ace/jquery.dataTables.min.js"></script>
-<script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>
+<!--<script src="../assets/js-ace/jquery.dataTables.min.js"></script>
+<script src="../assets/js-ace/jquery.dataTables.bootstrap.js"></script>-->
+<script src="../assets/js-ace/sweet-alert.js"></script>
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
 
@@ -389,10 +361,43 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     }
     setInterval(showTime, 500);
 // ========================Akhir Jam========================================== //
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        function search(){
 
-    $(document).ready(function() {
-        var table = $('#pegawai').DataTable();
+          var bulan=$("#bulan").val();
+          var tahun=$("#tahun").val();
+
+          if(bulan!="" && tahun!=""){
+            //$("#result").html("<img src='img/ajax-loader.gif'/>");
+             $.ajax({
+                type:"post",
+                url:"get_report.php",
+                data:{bulan:bulan, tahun:tahun},
+                success:function(data){
+                    $("table#result tbody").html(data);
+                    //$("#result").html(data);
+                    $("#search").val("");
+                }
+            });
+        }else if(bulan==""||tahun==""){
+            setTimeout(function() {
+                swal("Oops...", "Mohon untuk memilih bulan dan tahun !", "error");
+            }, 200);
+        } 
+    }
+
+    $("#button").click(function(){
+        search();
     });
+
+    $('#search').keyup(function(e) {
+        if(e.keyCode == 13) {
+            search();
+        }
+    });
+});
 </script>
 </body>
 </html>

@@ -12,7 +12,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT a.nama_pelapor, a.resiko_tanggal, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, d.KECAMATAN_DIR, a.alamat_pelapor
+    $query = mysql_query("SELECT a.nama_pelapor, a.resiko_tanggal_start, b.DESA_NAMA, c.NAMA_BANGUNAN, d.KECAMATAN_NAMA, d.KECAMATAN_DIR, a.alamat_pelapor
                         FROM resiko AS a INNER JOIN desa AS b
                             ON (a.DESA_ID = b.DESA_ID)
                         INNER JOIN bangunan AS c

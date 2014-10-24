@@ -233,7 +233,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                 <td><?php echo '' . $no . '.'; ?></td>
                                                 <td><?php echo $data['pesan_id']; ?></td>
                                                 <td><?php echo $data['resiko_id']; ?></td>
-                                                <td><?php echo date('d-m-Y H:i A',strtotime($data['resiko_tanggal'])); ?></td>
+                                                <td><?php echo date('d-m-Y H:i A',strtotime($data['resiko_tanggal_start'])); ?></td>
                                                 <td><?php echo $data['pesan_nama']; ?></td>
                                                 <?php
                                                     if($data['pesan_status'] == 0){

@@ -315,24 +315,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 center: 'title',
                                 right: 'month,agendaWeek,agendaDay'
                             },
-                            events: [
-                                {
-                                    title: 'All Day Event',
-                                    start: new Date(y, m, 1),
-                                    className: 'label-important'
-                                },
-                                {
-                                    title: 'Long Event',
-                                    start: new Date(y, m, d - 5),
-                                    end: new Date(y, m, d - 2),
-                                    className: 'label-success'
-                                },
-                                {
-                                    title: 'Some Event',
-                                    start: new Date(y, m, d - 3, 16, 0),
-                                    allDay: false
-                                }]
-                                    ,
+                            events: "json.php",
                             editable: true,
                             droppable: true, // this allows things to be dropped onto the calendar !!!
                             drop: function(date, allDay) { // this function is called when something is dropped
@@ -390,11 +373,11 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
                                 var form = $("<form class='form-inline'><label>Change event name &nbsp;</label></form>");
                                 form.append("<input autocomplete=off type=text value='" + calEvent.title + "' /> ");
-                                form.append("<button type='submit' class='btn btn-small btn-success'><i class='icon-ok'></i> Save</button>");
+                                //form.append("<button type='submit' class='btn btn-small btn-success'><i class='icon-ok'></i> Save</button>");
 
                                 var div = bootbox.dialog(form,
                                         [
-                                            {
+                                            /*{
                                                 "label": "<i class='icon-trash'></i> Delete Event",
                                                 "class": "btn-small btn-danger",
                                                 "callback": function() {
@@ -403,7 +386,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     })
                                                 }
                                             }
-                                            ,
+                                            ,*/
                                             {
                                                 "label": "<i class='icon-remove'></i> Close",
                                                 "class": "btn-small"

@@ -115,7 +115,7 @@
                 </li>
 
                 <li>
-                    <a href="../grafik/grafik">
+                    <a href="../grafik/">
                         <i class="icon-double-angle-right"></i>
                         Grafik Kebakaran
                     </a>

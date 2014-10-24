@@ -209,7 +209,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                             <?php 
                                                 $r = mysql_fetch_assoc($query); 
                                                 $luas = $r['panjang'] * $r['lebar'];
-                                                $tgl = $r['resiko_tanggal'];
+                                                $tgl = $r['resiko_tanggal_start'];
                                                 $id = $r['resiko_id'];
                                                 $tanggal = date('j F Y', strtotime($tgl));
                                                 $hari = date('l', strtotime($tgl));

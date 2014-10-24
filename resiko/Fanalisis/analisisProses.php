@@ -72,6 +72,7 @@ if ($_POST) {
                                     VALUES
                                     ('',
                                     NOW(),
+                                    '',
                                     '$pelapor',
                                     '$telp',
                                     '$jalan',
@@ -101,6 +102,7 @@ if ($_POST) {
                                     VALUES
                                     ('',
                                     NOW(),
+                                    '',
                                     '$pelapor',
                                     '$telp',
                                     '$jalan',
@@ -143,6 +145,7 @@ if ($_POST) {
                                     VALUES
                                     ('',
                                     NOW(),
+                                    '',
                                     '$pelapor',
                                     '$telp',
                                     '$jalan',
@@ -171,6 +174,7 @@ if ($_POST) {
               VALUES
               ('',
               NOW(),
+              '',
               '$pelapor',
               '$telp',
               '$jalan',

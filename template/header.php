@@ -34,21 +34,7 @@ date_default_timezone_set('Asia/Jakarta');
 
         <!--ace styles-->
         <script type="text/javascript" src="../assets/js-ace/jquery.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-                $("#kecamatan").change(function() {
-                    $(this).after('<span class="help-inline"><div id="loader"><img src="../assets/img/loading.gif" alt="loading subcategory" /></div></span>');
-                    $.get('kecamatan.php?kecamatan=' + $(this).val(), function(data) {
-                        $("#desa").html(data);
-                        $('#loader').slideUp(200, function() {
-                            $(this).remove();
-                        });
-                    });
-                });
-
-            });
-        </script>
+        
         <link rel="stylesheet" href="../assets/css-ace/ace.min.css" />
         <link rel="stylesheet" href="../assets/css-ace/ace-responsive.min.css" />
         <link rel="stylesheet" href="../assets/css-ace/ace-skins.min.css" />

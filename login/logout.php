@@ -1,9 +1,11 @@
 <?php
 include ("../config/koneksi.php");
 date_default_timezone_set('Asia/Jakarta');
-session_start(); //start session
+//session_start(); //start session
 //destroy session
+//session_destroy();
 session_destroy();
+$_SESSION = array();
 
 //unset cookies
 setcookie("pegawai_nomor", $nip, time() - 7600, "/", "");

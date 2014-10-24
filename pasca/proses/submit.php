@@ -24,7 +24,6 @@ if ($_POST) {
         $pemadaman = $_POST['pemadaman'];
     }
     
-    
     //============================== R E S I K O===================================
     $query = mysql_query("SELECT * FROM bangunan AS a
                     INNER JOIN resiko AS b ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
@@ -35,7 +34,7 @@ if ($_POST) {
     } else {
         die(mysql_error());
     }
-    $tgl = $row['resiko_tanggal'];
+    $tgl = $row['resiko_tanggal_start'];
     $awal = date('H:i', strtotime($tgl));          
     $nama = $row['nama_pelapor'];
     $no = $row['nomor_telp'];
@@ -111,7 +110,8 @@ if ($_POST) {
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$pasca_id',
-                                resiko_tanggal = '$tgl',
+                                resiko_tanggal_start = '$tgl',
+                                resiko_tanggal_end = NOW(),
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',
@@ -159,7 +159,8 @@ if ($_POST) {
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$pasca_id',
-                                resiko_tanggal = '$tgl',
+                                resiko_tanggal_start = '$tgl',
+                                resiko_tanggal_end = NOW(),
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',
@@ -212,7 +213,8 @@ if ($_POST) {
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$pasca_id',
-                                resiko_tanggal = '$tgl',
+                                resiko_tanggal_start = '$tgl',
+                                resiko_tanggal_end = NOW(),
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',
@@ -260,7 +262,8 @@ if ($_POST) {
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$pasca_id',
-                                resiko_tanggal = '$tgl',
+                                resiko_tanggal_start = '$tgl',
+                                resiko_tanggal_end = NOW(),
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',
