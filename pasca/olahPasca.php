@@ -26,8 +26,6 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
-
-            <body>
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
@@ -291,15 +289,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                              <form class="form-horizontal" id="validation-form" method="POST" action="proses/submit.php">
                                                 <input type="hidden" name="pasca_id" value="<?=$_GET['id']?>"/>
                                                 <div class="row-fluid">
-                                                    <div class="span12">
+                                                    <div class="row-fluid">
                                                         <div class="control-group">
-                                                            <span class="tooltip-error blink" data-rel="tooltip" data-placement="right" title="Barang Habis Pakai.">
-                                                                <a href="#pesan" role="button" class="btn btn-danger span2" data-toggle="modal">
+                                                            <span class="tooltip-error" data-rel="tooltip" data-placement="right" title="Barang Habis Pakai.">
+                                                                <a href="#pesan" role="button" class="btn btn-danger btn-large" data-toggle="modal">
                                                                     <i class="icon-envelope icon-only bigger-150"></i>
                                                                 </a>
                                                             </span>
+                                                            <span class="tooltip-error" data-rel="tooltip" data-placement="right" title="Foto Pasca Kejadian Kebakaran.">
+                                                                <a href="#foto" role="button" class="btn btn-large btn-info" data-toggle="modal">
+                                                                    <i class="icon-picture icon-only bigger-150"></i>
+                                                                </a>
+                                                            </span>
                                                         </div>
+                                                    </div><!-- end row-fluid -->
 
+                                                    <div class="row-fluid">
                                                         <div class="control-group">
                                                             <label class="control-label" for="nama">Nama Pelapor :</label>
 
@@ -478,7 +483,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div><!-- end row-fluid -->
                                                 </div><!-- end row-fluid -->
                                             </form>
 
@@ -596,6 +601,56 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </div>
                                                 </div>
                                             </form>
+
+                                            <form action="" method="post">
+                                                <div id="foto" class="modal hide" tabindex="-1">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="blue bigger center">Foto Pasca Kejadian Kebakaran</h4>
+                                                    </div>
+
+                                                    <div class="modal-body overflow-visible">
+                                                        <div class="row-fluid">
+                                                            <div class="span5">
+                                                                <div class="space"></div>
+                                                                <input type="file" id="file_foto"/>
+                                                            </div>
+
+                                                            <div class="vspace"></div>
+
+                                                            <div class="span7">
+                                                                <div class="control-group">
+                                                                    <label class="control-label" for="id-foto">ID Foto</label>
+
+                                                                    <div class="controls">
+                                                                        <input readonly type="text" class="span2" name="foto_id" value="<?php echo $id; ?>">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="control-group">
+                                                                    <label class="control-label" for="nama_foto">Nama Foto</label>
+
+                                                                    <div class="controls">
+                                                                        <input type="text" id="nama_foto" name="nama_foto" required placeholder="Judul Foto..." value="" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-small" data-dismiss="modal">
+                                                            <i class="icon-remove"></i>
+                                                            Cancel
+                                                        </button>
+
+                                                        <button class="btn btn-small btn-primary">
+                                                            <i class="icon-ok"></i>
+                                                            Simpan
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                     </div><!--/.row-fluid-->
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
@@ -665,6 +720,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
 <script src="../assets/js-ace/ace.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         var intputElements = document.getElementsByTagName("input");
@@ -674,10 +730,13 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                 e.target.setCustomValidity("");
                 if (!e.target.validity.valid) {
                     if (e.target.name == "nama_barang") {
-                        e.target.setCustomValidity("Mohon untuk mengisi kolom nama barang.");
+                        e.target.setCustomValidity("Mohon untuk mengisi field nama barang.");
                     }
                     else if(e.target.name == "jml_barang"){
-                        e.target.setCustomValidity("Mohon untuk mengisi kolom jumlah barang.");
+                        e.target.setCustomValidity("Mohon untuk mengisi field jumlah barang.");
+                    }
+                    else if(e.target.name == "nama_foto"){
+                        e.target.setCustomValidity("Mohon untuk mengisi field nama foto.");
                     }
                 }
             };
@@ -695,6 +754,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     })
 </script>
 <script type="text/javascript">
+$(function(){
     jQuery(function($) {
         $('.biaya').autoNumeric('init');
     });
@@ -782,9 +842,8 @@ $(document).ready(function(){
     })
 
     
-</script>
-<script type="text/javascript">
-    $(function(){
+
+    
         var timespent = function(){
             var valuestart = $("#start").val(),
                   valuestop = $("#timepicker1").val();
@@ -809,9 +868,7 @@ $(document).ready(function(){
             $('#hasil').val( timespent() );
             
         });
-    });
-</script>
-<script type="text/javascript">
+
     // scrollables
     $('.slim-scroll').each(function() {
         var $this = $(this);
@@ -820,12 +877,7 @@ $(document).ready(function(){
             railVisible: true
         });
     });
-    function myFunction()
-    {
-        window.location.reload();
-    }
-</script>
-<script type="text/javascript">
+
     $(function() {
         $('#validation-form').show();
         //documentation : http://docs.jquery.com/Plugins/Validation/validate
@@ -928,6 +980,49 @@ $(document).ready(function(){
             $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
         })
     });
+
+   $('#file_foto').ace_file_input({
+        style:'well',
+        btn_choose : "Drop images here or click to choose",
+        no_icon : "icon-picture",
+        btn_change:null,
+        droppable:true,
+        thumbnail:'small',
+        before_change : function(files, dropped) {
+            var allowed_files = [];
+            for(var i = 0 ; i < files.length; i++) {
+                var file = files[i];
+                if(typeof file === "string") {
+                    //IE8 and browsers that don't support File Object
+                    if(! (/\.(jpe?g|png|gif|bmp)$/i).test(file) ) return false;
+                }
+                else {
+                    var type = $.trim(file.type);
+                    if( ( type.length > 0 && ! (/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
+                            || ( type.length == 0 && ! (/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
+                        ) continue;//not an image so don't keep this file
+                }
+                
+                allowed_files.push(file);
+            }
+            if(allowed_files.length == 0) return false;
+
+            return allowed_files;
+        }
+    });
+    
+    //chosen plugin inside a modal will have a zero width because the select element is originally hidden
+    //and its width cannot be determined.
+    //so we set the width after modal is show
+    $('#foto').on('show', function () {
+        $(this).find('.chzn-container').each(function(){
+            $(this).find('a:first-child').css('width' , '200px');
+            $(this).find('.chzn-drop').css('width' , '210px');
+            $(this).find('.chzn-search input').css('width' , '200px');
+        });
+    });
+
+});
 </script>
 </body>
 </html>
