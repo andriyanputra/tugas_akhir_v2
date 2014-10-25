@@ -36,7 +36,8 @@ if ($_POST) {
         } else {
             die(mysql_error());
         }
-        $tgl = $row['resiko_tanggal_start'];
+        $tgl_start = $row['resiko_tanggal_start'];
+        $tgl_end = $row['resiko_tanggal_end'];
         $nama = $row['nama_pelapor'];
         $no = $row['nomor_telp'];
         $alamat = $row['alamat_pelapor'];
@@ -56,8 +57,8 @@ if ($_POST) {
         $luas = $p * $l;
         $update = mysql_query("UPDATE resiko SET
                                 resiko_id = '$id',
-                                resiko_tanggal_start = '$tgl',
-                                resiko_tanggal_end = NULL,
+                                resiko_tanggal_start = '$tgl_start',
+                                resiko_tanggal_end = '$tgl_end',
                                 nama_pelapor = '$nama',
                                 nomor_telp ='$no',
                                 alamat_pelapor = '$alamat',

@@ -263,111 +263,102 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                         var m = date.getMonth();
                         var y = date.getFullYear();
 
-
+                        
                         var calendar = $('#calendar').fullCalendar({
-                            buttonText: {
+                             buttonText: {
                                 prev: '<i class="icon-chevron-left"></i>',
                                 next: '<i class="icon-chevron-right"></i>'
                             },
+                        
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
                                 right: 'month,agendaWeek,agendaDay'
                             },
                             events: "json.php",
+                            eventColor: '#d15b47',
                             editable: true,
                             droppable: true, // this allows things to be dropped onto the calendar !!!
                             drop: function(date, allDay) { // this function is called when something is dropped
-
+                            
                                 // retrieve the dropped element's stored Event Object
                                 var originalEventObject = $(this).data('eventObject');
                                 var $extraEventClass = $(this).attr('data-class');
-
-
+                                
+                                
                                 // we need to copy it, so that multiple events don't have a reference to the same object
                                 var copiedEventObject = $.extend({}, originalEventObject);
-
+                                
                                 // assign it the date that was reported
                                 copiedEventObject.start = date;
                                 copiedEventObject.allDay = allDay;
-                                if ($extraEventClass)
-                                    copiedEventObject['className'] = [$extraEventClass];
-
+                                if($extraEventClass) copiedEventObject['className'] = [$extraEventClass];
+                                
                                 // render the event on the calendar
                                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                                 $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
+                                
                                 // is the "remove after drop" checkbox checked?
                                 if ($('#drop-remove').is(':checked')) {
                                     // if so, remove the element from the "Draggable Events" list
                                     $(this).remove();
                                 }
-
+                                
                             }
                             ,
-                            selectable: true,
+                            selectable: false,
                             selectHelper: true,
                             select: function(start, end, allDay) {
-
+                                
                                 bootbox.prompt("New Event Title:", function(title) {
                                     if (title !== null) {
                                         calendar.fullCalendar('renderEvent',
-                                                {
-                                                    title: title,
-                                                    start: start,
-                                                    end: end,
-                                                    allDay: allDay
-                                                },
-                                        true // make the event "stick"
-                                                );
+                                            {
+                                                title: title,
+                                                start: start,
+                                                end: end,
+                                                alamat: alamat,
+                                                kecamatan: kecamatan,
+                                                desa: desa,
+                                                allDay: allDay
+                                            },
+                                            true // make the event "stick"
+                                        );
                                     }
                                 });
-
+                                
 
                                 calendar.fullCalendar('unselect');
-
+                                
                             }
                             ,
                             eventClick: function(calEvent, jsEvent, view) {
 
-                                var form = $("<form class='form-inline'><label>Change event name &nbsp;</label></form>");
-                                form.append("<input autocomplete=off type=text value='" + calEvent.title + "' /> ");
-                                //form.append("<button type='submit' class='btn btn-small btn-success'><i class='icon-ok'></i> Save</button>");
-
+                                var form = $("<form class='form-inline'><label>Deskripsi Kejadian : </form>");
+                                form.append(" <textarea class='span4' disabled>Tipe Bangunan: " + calEvent.title + ". Lokasi Kejadian : "+calEvent.alamat+" Ds. "+calEvent.desa+", Kec. "+calEvent.kecamatan+", Kab. Sidoarjo. </textarea></label>");
+                                
                                 var div = bootbox.dialog(form,
-                                        [
-                                            /*{
-                                                "label": "<i class='icon-trash'></i> Delete Event",
-                                                "class": "btn-small btn-danger",
-                                                "callback": function() {
-                                                    calendar.fullCalendar('removeEvents', function(ev) {
-                                                        return (ev._id == calEvent._id);
-                                                    })
-                                                }
-                                            }
-                                            ,*/
-                                            {
-                                                "label": "<i class='icon-remove'></i> Close",
-                                                "class": "btn-small"
-                                            }
-                                        ]
-                                        ,
-                                        {
-                                            // prompts need a few extra options
-                                            "onEscape": function() {
-                                                div.modal("hide");
-                                            }
-                                        }
+                                    [
+                                    {
+                                        "label" : "<i class='icon-remove'></i> Close",
+                                        "class" : "btn-small"
+                                    }
+                                    ]
+                                    ,
+                                    {
+                                        // prompts need a few extra options
+                                        "onEscape": function(){div.modal("hide");}
+                                    }
                                 );
-
-                                form.on('submit', function() {
+                                
+                                form.on('submit', function(){
                                     calEvent.title = form.find("input[type=text]").val();
                                     calendar.fullCalendar('updateEvent', calEvent);
                                     div.modal("hide");
                                     return false;
                                 });
-
-
+                                
+                            
                                 //console.log(calEvent.id);
                                 //console.log(jsEvent);
                                 //console.log(view);
@@ -376,10 +367,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 //$(this).css('border-color', 'red');
 
                             }
-
+                            
                         });
-
-
                     })
                 </script>
                 <?php
