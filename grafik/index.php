@@ -1,8 +1,7 @@
 <?php
 //
 include '../template/header.php';
-?>
-<?php
+
 include '../config/functions.php'; //include function.php - very important
 include '../config/koneksi.php';
 

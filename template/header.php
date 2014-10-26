@@ -22,7 +22,7 @@ date_default_timezone_set('Asia/Jakarta');
         <!--page specific plugin styles-->
         <link rel="stylesheet" href="../assets/css-ace/jquery-ui-1.10.3.custom.min.css" />
         <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
-        <link rel="stylesheet" href="../assets/css-ace/jquery.gritter.css" />
+        <link rel="stylesheet" href="../assets/css-ace/colorbox.css" />
         <link rel="stylesheet" href="../assets/css-ace/select2.css" />
         <link rel="stylesheet" href="../assets/css-ace/bootstrap-editable.css" />
         <link rel="stylesheet" href="../assets/css-ace/fullcalendar.css" />

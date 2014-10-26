@@ -314,12 +314,14 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     if (title !== null) {
                                         calendar.fullCalendar('renderEvent',
                                             {
+                                                id: id,
                                                 title: title,
                                                 start: start,
                                                 end: end,
                                                 alamat: alamat,
                                                 kecamatan: kecamatan,
                                                 desa: desa,
+                                                korban: korban,
                                                 allDay: allDay
                                             },
                                             true // make the event "stick"
@@ -334,9 +336,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                             ,
                             eventClick: function(calEvent, jsEvent, view) {
 
-                                var form = $("<form class='form-inline'><label>Deskripsi Kejadian : </form>");
-                                form.append(" <textarea class='span4' disabled>Tipe Bangunan: " + calEvent.title + ". Lokasi Kejadian : "+calEvent.alamat+" Ds. "+calEvent.desa+", Kec. "+calEvent.kecamatan+", Kab. Sidoarjo. </textarea></label>");
-                                
+                                var form = $("<form class='form-inline'><p>Nama korban : </form>");
+                                form.append("<input type=text readonly value="+calEvent.korban+" /><p>Bangunan : </p><input readonly type=text value="+calEvent.title+"/><p>Lokasi kejadian : </p><textarea class='span4' disabled>"+calEvent.alamat+
+                                    " Ds. "+calEvent.desa+", Kec. "+calEvent.kecamatan+", Kab. Sidoarjo.</textarea></p><a href=../pasca/view?id="+calEvent.id+">Selengkapnya...</a>");
+                                //
                                 var div = bootbox.dialog(form,
                                     [
                                     {

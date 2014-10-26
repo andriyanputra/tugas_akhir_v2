@@ -2,17 +2,6 @@
 //
 include '../template/header.php';
 
-//===================================
-//Buat daftar nama bulan
-$bulan = array("January", "Pebruary", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Okotober", "Nopember", "Desember");
-//Buat daftar nama hari dalam bahasa indonesia
-$hari = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu");
-$month = intval(date('m')) - 1;
-$days = date('w');
-$tgl_angka = date('d');
-$year = date('Y');
-?>
-<?php
 include '../config/functions.php'; //include function.php - very important
 include '../config/koneksi.php';
 
@@ -30,11 +19,11 @@ if (isset($_COOKIE['rePass'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
-            <body onload="setInterval('displayServerTime()', 1000);">
+            <body>
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
-                            <a href="#" class="brand">
+                            <a href="../beranda/index" class="brand">
                                 <small>
                                     <i class="icon-fire-extinguisher"></i>
                                     SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
@@ -157,9 +146,6 @@ if (isset($_COOKIE['rePass'])) {
                             <i class="icon-double-angle-left"></i>
                         </div>
                     </div>
-
-
-
                     <div class="main-content">
                         <div class="breadcrumbs" id="breadcrumbs">
                             <ul class="breadcrumb">
@@ -173,6 +159,22 @@ if (isset($_COOKIE['rePass'])) {
                                 </li>
                                 <li class="active">Ganti Password</li>
                             </ul><!--.breadcrumb-->
+
+                            <div class="pull-right">
+                                <script>
+                                    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                    var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+                                    var date = new Date();
+                                    var day = date.getDate();
+                                    var month = date.getMonth();
+                                    var thisDay = date.getDay(),
+                                            thisDay = myDays[thisDay];
+                                    var yy = date.getYear();
+                                    var year = (yy < 1000) ? yy + 1900 : yy;
+                                    document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                </script>
+                                , Pukul <span id="clock"></span>
+                            </div>
                         </div>
 
                         <div class="page-content">
@@ -200,34 +202,30 @@ if (isset($_COOKIE['rePass'])) {
                                                     </h3>
 
                                                     <div class="widget-toolbar no-border invoice-info">
-                                                        <span class="invoice-info-label">Tanggal:</span>
-                                                        <span class="blue">
-                                                            <?php
-                                                            echo '' . $hari[$days] . ', ' . $tgl_angka . ' ' . $bulan[$month] . ' ' . $year . '';
-                                                            ?>
-                                                        </span>
-
-                                                        <br />
-                                                        <span class="invoice-info-label">Pukul:</span>
-                                                        <span class="blue" id="clock"><?php print date('H : i : s'); ?></span>
+                                                        
                                                     </div>
                                                 </div>
+                                                <?php 
+                                                    if($_POST['submit']){
+                                                        $pass_baru = md5($_POST['pass_baru']);
+                                                        $update = mysql_query("UPDATE pegawai set pegawai_password ='" . $pass_baru . "' WHERE pegawai_nip = '" . $_COOKIE['rePass'] . "'") or die("Query : ".mysql_error());
+                                                        if ($update){
+                                                ?>
+                                                    <script language="JavaScript">
+                                                        setTimeout(function() {
+                                                            swal("Password Berhasil Diganti!", "", "success");
+                                                            document.location = 'login.php'
+                                                        }, 1000);
+                                                    </script>
+                                                <?php
 
+                                                        }
+                                                    }
+                                                ?>
                                                 <div class="widget-body">
                                                     <div class="widget-main">
                                                         <div class="row-fluid">
-                                                            <form class="form-horizontal" id="forget-password" method="post" action="../config/cekPass.php">
-
-                                                                <div class="control-group">
-                                                                    <label class="control-label" for="password">Password:</label>
-
-                                                                    <div class="controls">
-                                                                        <span class="input-icon input-icon-right">
-                                                                            <input type="password" name="pass_lama" id="pass_lama" />
-                                                                            <i class="icon-key"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
+                                                            <form class="form-horizontal" id="forget-password" method="post" action="">
 
                                                                 <div class="control-group">
                                                                     <label class="control-label" for="password">New Password:</label>
@@ -342,20 +340,8 @@ if (isset($_COOKIE['rePass'])) {
                 <!--<script src="../assets/js-ace/additional-methods.min.js"></script>-->
                 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
                 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
-                <script src="../assets/js-ace/jquery.gritter.min.js"></script>
-                <script src="../assets/js-ace/bootbox.min.js"></script>
-                <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
-                <script src="../assets/js-ace/jquery.easy-pie-chart.min.js"></script>
-                <script src="../assets/js-ace/jquery.hotkeys.min.js"></script>
-                <script src="../assets/js-ace/bootstrap-wysiwyg.min.js"></script>
-                <script src="../assets/js-ace/select2.min.js"></script>
-                <script src="../assets/js-ace/date-time/bootstrap-datepicker.min.js"></script>
-                <script src="../assets/js-ace/fuelux/fuelux.spinner.min.js"></script>
-                <script src="../assets/js-ace/fuelux/fuelux.wizard.min.js"></script>
-                <script src="../assets/js-ace/x-editable/bootstrap-editable.min.js"></script>
-                <script src="../assets/js-ace/x-editable/ace-editable.min.js"></script>
-                <script src="../assets/js-ace/jquery.maskedinput.min.js"></script>
                 <script src="../assets/js-ace/jquery.validate.min.js"></script>
+                <script src="../assets/js-ace/sweet-alert.js"></script>
 
                 <!--ace scripts-->
 
@@ -368,6 +354,40 @@ if (isset($_COOKIE['rePass'])) {
         }
     }
     ?>
+    <script type="text/javascript">
+        // ========================Jam========================================== //
+    function showTime() {
+        var a_p = "";
+        var today = new Date();
+        var curr_hour = today.getHours();
+        var curr_minute = today.getMinutes();
+        var curr_second = today.getSeconds();
+        if (curr_hour < 12) {
+            a_p = "AM";
+        } else {
+            a_p = "PM";
+        }
+        if (curr_hour == 0) {
+            curr_hour = 12;
+        }
+        if (curr_hour > 12) {
+            curr_hour = curr_hour - 12;
+        }
+        curr_hour = checkTime(curr_hour);
+        curr_minute = checkTime(curr_minute);
+        curr_second = checkTime(curr_second);
+        document.getElementById('clock').innerHTML = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    setInterval(showTime, 500);
+// ========================Akhir Jam========================================== //
+    </script>
     <script type="text/javascript">
         $(function() {
             //$('#forget-password').show();

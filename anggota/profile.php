@@ -335,10 +335,10 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                                     WHERE a.pegawai_nip = '".$_GET['nip']."'") or die("Query : ".mysql_error());
                                                             $cek = mysql_fetch_assoc($cek_log);
                                                             $cek_nama = $cek['pegawai_nama'];
-                                                            $cek_login_date = $cek['login_date'];
-                                                            $cek_logout_date = $cek['logout_date'];
+                                                            $cek_login_date = strtotime($cek['login_date']);
+                                                            $cek_logout_date = strtotime($cek['logout_date']);
 
-                                                            function datediff($tgl1, $tgl2){
+                                                            /*function datediff($tgl1, $tgl2){
                                                                 $tgl1 = (is_string($tgl1) ? strtotime($tgl1) : $tgl1);
                                                                 $tgl2 = (is_string($tgl2) ? strtotime($tgl2) : $tgl2);
                                                                 $diff_secs = abs($tgl1 - $tgl2);
@@ -358,8 +358,73 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                             }
 
                                                             $a = datediff($cek_login_date, date("Y/m/d/ H:i:s"));
-                                                            $b = datediff($cek_logout_date, date("Y/m/d/ H:i:s"));
-                                                            
+                                                            $b = datediff($cek_logout_date, date("Y/m/d/ H:i:s"));*/
+                                                            function timeAgo($time_ago){
+                                                                $cur_time   = time();
+                                                                $time_elapsed   = $cur_time - $time_ago;
+                                                                $seconds    = $time_elapsed ;
+                                                                $minutes    = round($time_elapsed / 60 );
+                                                                $hours      = round($time_elapsed / 3600);
+                                                                $days       = round($time_elapsed / 86400 );
+                                                                $weeks      = round($time_elapsed / 604800);
+                                                                $months     = round($time_elapsed / 2600640 );
+                                                                $years      = round($time_elapsed / 31207680 );
+                                                                // Seconds
+                                                                if($seconds <= 60){
+                                                                    echo "$seconds detik yang lalu.";
+                                                                }
+                                                                //Minutes
+                                                                else if($minutes <=60){
+                                                                    if($minutes==1){
+                                                                        echo "1 menit yang lalu.";
+                                                                    }
+                                                                    else{
+                                                                        echo "$minutes menit yang lalu.";
+                                                                    }
+                                                                }
+                                                                //Hours
+                                                                else if($hours <=24){
+                                                                    if($hours==1){
+                                                                        echo "1 jam yang lalu.";
+                                                                    }else{
+                                                                        echo "$hours jam yang lalu.";
+                                                                    }
+                                                                }
+                                                                //Days
+                                                                else if($days <= 7){
+                                                                    if($days==1){
+                                                                        echo "1 hari yang lalu.";
+                                                                    }else{
+                                                                        echo "$days hari yang lalu.";
+                                                                    }
+                                                                }
+                                                                //Weeks
+                                                                else if($weeks <= 4.3){
+                                                                    if($weeks==1){
+                                                                        echo "1 minggu yang lalu.";
+                                                                    }else{
+                                                                        echo "$weeks minggu yang lalu.";
+                                                                    }
+                                                                }
+                                                                //Months
+                                                                else if($months <=12){
+                                                                    if($months==1){
+                                                                        echo "1 bulan yang lalu.";
+                                                                    }else{
+                                                                        echo "$months bulan yang lalu.";
+                                                                    }
+                                                                }
+                                                                //Years
+                                                                else{
+                                                                    if($years==1){
+                                                                        echo "1 tahun yang lalu.";
+                                                                    }else{
+                                                                        echo "$years tahun yang lalu.";
+                                                                    }
+                                                                }
+                                                            }
+                                                            //$a = timeAgo($cek_login_date);
+                                                            //$b = timeAgo($cek_logout_date);
                                                             ?>
                                                             <div class="profile-activity clearfix">
                                                                 <div>
@@ -369,7 +434,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     logged in.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        <?php echo $a[hours].' jam, '.$a[minutes].' menit, '.$a[seconds].' detik'; ?> yang lalu.
+                                                                        <?php echo timeAgo($cek_login_date); ?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -382,7 +447,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                                     logged out.
                                                                     <div class="time">
                                                                         <i class="icon-time bigger-110"></i>
-                                                                        <?php echo $b[hours].' jam, '.$b[minutes].' menit, '.$b[seconds].' detik'; ?> yang lalu.
+                                                                        <?php echo timeAgo($cek_logout_date); ?>
                                                                     </div>
                                                                 </div>
                                                             </div>

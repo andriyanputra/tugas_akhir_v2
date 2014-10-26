@@ -78,12 +78,23 @@
         <li>
             <a href="../kalendar/kalendar">
                 <i class="icon-calendar"></i>
-
+                <?php
+                    $thn = date('Y');
+                    $bln = date('m');
+                    $cek = mysql_query("SELECT * FROM resiko WHERE resiko_tanggal_start BETWEEN '$thn-$bln-01' AND '$thn-$bln-31'") or die("Query : ".mysql_error());
+                    $jml = mysql_num_rows($cek);
+                ?>
                 <span class="menu-text">
                     Kalendar
-                    <span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
+                    <?php if($jml>0){ ?>
+                    <span class="badge badge-transparent tooltip-error" title="<?php echo $jml; ?>&nbsp;Important&nbsp;Events">
                         <i class="icon-info-sign red bigger-130"></i>
                     </span>
+                    <?php }else{ ?>
+                    <span class="badge badge-transparent tooltip-error" title="0&nbsp;Important&nbsp;Events">
+                        <i class="icon-info-sign red bigger-130"></i>
+                    </span>
+                    <?php } ?>
                 </span>
             </a>
         </li>

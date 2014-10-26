@@ -1,7 +1,7 @@
 <?php
 include ("../config/koneksi.php");
 date_default_timezone_set('Asia/Jakarta');
-//session_start(); //start session
+session_start(); //start session
 //destroy session
 //session_destroy();
 session_destroy();

@@ -1,34 +1,80 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 include 'config/koneksi.php';
-for($i=3; $i<=4; $i++){
-$log = mysql_query("SELECT * FROM resiko
-                    WHERE resiko_tanggal BETWEEN '2013-$i-01' AND '2013-$i-31'
-                    ORDER BY resiko_tanggal ASC") or die("Query : ".mysql_error());
-//if (mysql_num_rows($log)) {
-        while ($row = mysql_fetch_assoc($log)) { // this method will prevent SQL Injections. This will gather the password on the same row as the username.
-            //$db_password = $row[1]; //this will store that password on a variable
-            //if ($pass == $db_password) {   //this will check if the password inputted by the user is the same as the one stored on the database.
-                //$loginok = TRUE;
-                echo '<br><br>'.$i.'<br>';
-                echo $row['resiko_id'].'<br>';
-                echo $row['resiko_tanggal'].'<br>';
-                echo $row['nama_pelapor'].'<br>';
-                echo $row['nomor_telp'].'<br>';
-                echo $row['alamat_pelapor'].'<br>';
-                echo $row['ID_BANGUNAN'].'<br>';
-                echo $row['DESA_ID'].'<br>';
-                echo $row['KECAMATAN_ID'].'<br>';
-                echo $row['ID_SUMBER'].'<br>';
-                echo $row['exposure'].'<br>';
-                echo $row['tepol'].'<br>';
-                echo $row['panjang'].'<br>';echo $row['lebar'].'<br>';echo $row['tinggi'].'<br>';
-                echo $row['penerapan_air'].'<br>';echo $row['pengangkutan_air'].'<br>';echo $row['tipe_proteksi'].'<br>';
-                echo $row['resiko_status'];
-            //} else {
-                 //header('location:../login/login.php?msg=log_error01');
-                //exit();
-            }
-        //}
-    }
+$cek = mysql_query("SELECT * FROM pasca");
+$row = mysql_fetch_assoc($cek);
+$tgl = strtotime($row['pasca_lama_perjalanan']);
+//$jam = $row['resiko_tanggal_start'];
+
+function timeAgo($time_ago){
+	$cur_time 	= time();
+	$time_elapsed 	= $cur_time - $time_ago;
+	$seconds 	= $time_elapsed ;
+	$minutes 	= round($time_elapsed / 60 );
+	$hours 		= round($time_elapsed / 3600);
+	$days 		= round($time_elapsed / 86400 );
+	$weeks 		= round($time_elapsed / 604800);
+	$months 	= round($time_elapsed / 2600640 );
+	$years 		= round($time_elapsed / 31207680 );
+	// Seconds
+	if($seconds <= 60){
+		echo "$seconds seconds ago";
+	}
+	//Minutes
+	else if($minutes <=60){
+		if($minutes==1){
+			echo "one minute ago";
+		}
+		else{
+			echo "$minutes minutes ago";
+		}
+	}
+	//Hours
+	else if($hours <=24){
+		if($hours==1){
+			echo "an hour ago";
+		}else{
+			echo "$hours hours ago";
+		}
+	}
+	//Days
+	else if($days <= 7){
+		if($days==1){
+			echo "yesterday";
+		}else{
+			echo "$days days ago";
+		}
+	}
+	//Weeks
+	else if($weeks <= 4.3){
+		if($weeks==1){
+			echo "a week ago";
+		}else{
+			echo "$weeks weeks ago";
+		}
+	}
+	//Months
+	else if($months <=12){
+		if($months==1){
+			echo "a month ago";
+		}else{
+			echo "$months months ago";
+		}
+	}
+	//Years
+	else{
+		if($years==1){
+			echo "one year ago";
+		}else{
+			echo "$years years ago";
+		}
+	}
+}
+
+
+echo timeAgo($tgl).'<br>';
+echo $row['pasca_lama_perjalanan'];
+echo '<br>'.$jam;
+echo '<br>'.$tgl;
 
 ?>
