@@ -26,6 +26,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
+            <body>
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
@@ -495,7 +496,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     $nama_barang = $_POST['nama_barang'];
                                                     $jml_barang = $_POST['jml_barang'];
                                                     $isi_pesan = $_POST['isi_pesan'];
-                                                    $id = $_POST['id'];
+                                                    //$id = $_POST['id'];
 
                                                     $jabatan = mysql_fetch_assoc(mysql_query("SELECT a.pegawai_nip, b.jabatan_nama FROM pegawai AS a 
                                                                                             INNER JOIN jabatan AS b ON (a.jabatan_id = b.jabatan_id)
@@ -601,8 +602,53 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </div>
                                                 </div>
                                             </form>
+                                            
+                                            <?php
+                                                if($_POST['simpan']=='Simpan'){
+                                                    $foto = $_FILES['foto'] ['name']; // Mendapatkan nama gambar
+                                                    $type = $_FILES['foto']['type'];
+                                                    $ukuran = $_FILES['foto']['size'];
+                                                    $nama_foto = $_POST['nama_foto'];
 
-                                            <form action="" method="post">
+                                                    if ($ukuran > 1100000) {
+                                            ?>
+                                            <script language="JavaScript">
+                                                setTimeout(function() {
+                                                    swal("Terjadi Kesalahan", "Ukuran foto terlalu besar! Max: 1Mb", "error")
+                                                }, 200);
+                                            </script>
+                                            <?php
+                                                    }else{
+                                                        $lokasi = "../assets/img/foto-kejadian";
+                                                        $lokasi_foto = $_FILES['foto']['tmp_name'];
+                                                        $tgl = date("dmy");
+                                                        $nama_file_upload = $tgl . '-' . $foto;
+                                                        $alamatfile = $lokasi . $nama_file_upload;
+
+                                                        if (move_uploaded_file($lokasi_foto, $lokasi . "/" . $nama_file_upload)){
+                                                            $addFoto = mysql_query("INSERT INTO foto_resiko VALUES (NULL, '$id', '$nama_foto', '$nama_file_upload')") or die("Query : ".mysql_error());
+                                                            if($addFoto){
+                                            ?>
+                                            <script language="JavaScript">
+                                                setTimeout(function() {
+                                                    swal("Foto Disimpan!", "Selamat foto kejadian telah berhasil disimpan.", "success")
+                                                }, 200);
+                                            </script>
+                                            <?php
+                                                            }
+                                                        }else{
+                                            ?>
+                                            <script language="JavaScript">
+                                                setTimeout(function() {
+                                                    swal("Terjadi Kesalahan", "Maaf, terjadi kesalahan unggah foto.", "error")
+                                                }, 200);
+                                            </script>
+                                            <?php
+                                                        }       
+                                                    }
+                                                }
+                                            ?>
+                                            <form action="" method="post" enctype="multipart/form-data">
                                                 <div id="foto" class="modal hide" tabindex="-1">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -613,7 +659,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         <div class="row-fluid">
                                                             <div class="span5">
                                                                 <div class="space"></div>
-                                                                <input type="file" id="file_foto"/>
+                                                                <input type="file" name="foto" id="file_foto"/>
                                                             </div>
 
                                                             <div class="vspace"></div>
@@ -639,7 +685,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </div>
 
                                                     <div class="modal-footer">
-                                                        <button class="btn btn-small" data-dismiss="modal">
+                                                        <input type="submit" class="btn-success" name="simpan" value="Simpan">
+                                                        <!--<button class="btn btn-small" data-dismiss="modal">
                                                             <i class="icon-remove"></i>
                                                             Cancel
                                                         </button>
@@ -647,7 +694,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                         <button class="btn btn-small btn-primary">
                                                             <i class="icon-ok"></i>
                                                             Simpan
-                                                        </button>
+                                                        </button>-->
                                                     </div>
                                                 </div>
                                             </form>
@@ -722,6 +769,24 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <script src="../assets/js-ace/ace.min.js"></script>
 
 <script type="text/javascript">
+
+    function showMe(box1, box2) {
+
+        var chboxs = document.getElementsByName("check");
+        var vis1 = "none";
+        var vis2 = "none";
+        for (var i = 0; i < chboxs.length; i++) {
+            if (chboxs[i].checked) {
+                vis1 = "block";
+                vis2 = "block";
+                break;
+            }
+        }
+        document.getElementById(box1).style.display = vis1;
+        document.getElementById(box2).style.display = vis2;
+    }
+</script>
+<script type="text/javascript">
     $(document).ready(function () {
         var intputElements = document.getElementsByTagName("input");
         var txtareaElements = document.getElementsByTagName("textarea");
@@ -793,22 +858,6 @@ $(function(){
     }
     setInterval(showTime, 500);
 // ========================Akhir Jam========================================== //
-
-    function showMe(box1, box2) {
-
-        var chboxs = document.getElementsByName("check");
-        var vis1 = "none";
-        var vis2 = "none";
-        for (var i = 0; i < chboxs.length; i++) {
-            if (chboxs[i].checked) {
-                vis1 = "block";
-                vis2 = "block";
-                break;
-            }
-        }
-        document.getElementById(box1).style.display = vis1;
-        document.getElementById(box2).style.display = vis2;
-    }
 
 $(document).ready(function(){
         $("#penyebab").change(function(){

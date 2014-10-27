@@ -12,13 +12,12 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 
 if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
-    $query = mysql_query("SELECT * FROM resiko AS a INNER JOIN pasca AS b ON (a.resiko_id = b.resiko_id)
-                            INNER JOIN kecamatan AS c ON (c.KECAMATAN_ID = a.KECAMATAN_ID)
-                            INNER JOIN desa AS d ON (d.KECAMATAN_ID = c.KECAMATAN_ID)
-                            INNER JOIN bangunan AS e ON (e.ID_BANGUNAN = a.ID_BANGUNAN)
-                            INNER JOIN master_bangunan AS f ON (e.ID_MASTER = f.ID_MASTER)
-                            INNER JOIN foto_resiko AS g ON (a.resiko_id = g.resiko_id)
-                            WHERE a.resiko_id = '".$_GET['id']."'") or die(mysql_error());
+    $query = mysql_query("SELECT * FROM resiko AS a INNER JOIN pasca AS b ON (a.resiko_id = b.resiko_id) 
+        INNER JOIN kecamatan AS c ON (c.KECAMATAN_ID = a.KECAMATAN_ID)
+        INNER JOIN desa AS d ON (d.KECAMATAN_ID = c.KECAMATAN_ID)
+        INNER JOIN bangunan AS e ON (e.ID_BANGUNAN = a.ID_BANGUNAN)
+        INNER JOIN master_bangunan AS f ON (e.ID_MASTER = f.ID_MASTER)
+        WHERE a.resiko_id = '".$_GET['id']."' LIMIT 1") or die(mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -206,7 +205,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <!--PAGE CONTENT BEGINS-->
                                     <div class="row-fluid">
                                         <div class="span6">
-                                            <?php $r = mysql_fetch_assoc($query); ?>
+                                            <?php $r = mysql_fetch_array($query); ?>
                                             <div class="widget-box">
                                                 <div class="widget-header widget-hea1der-small header-color-blue2">
                                                     <h6>
@@ -316,21 +315,75 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </div>
                                                 </div>
                                                 <div class="control-group">
-                                                    <label class="control-label" for="tanggal"><b>Lama Perjalanan :</b></label>
-
+                                                    <label class="control-label" for="tanggal"><b>Lama Perjalanan dan Pemadaman :</b></label>
+                                                    <?php $waktu = mysql_fetch_assoc(mysql_query("SELECT HOUR(pasca_lama_perjalanan) AS jam, HOUR(pasca_penyelesaian) AS jam_selesai,
+                                                                                                MINUTE(pasca_lama_perjalanan) AS menit, MINUTE(pasca_penyelesaian) AS menit_selesai 
+                                                                                                FROM pasca WHERE resiko_id='".$_GET['id']."'")) or die("Query : ".mysql_error()); ?>
                                                     <div class="controls">
-                                                        
+                                                        <?php if($waktu['jam']==0 && $waktu['jam_selesai']==0){echo $waktu['menit'].' menit dan '.$waktu['menit_selesai'].' menit.';} ?>
+                                                        <?php if(($waktu['jam']!=0 && $waktu['menit']!=0) && ($waktu['jam_selesai']!=0 && $waktu['menit_selesai']!=0)){echo $waktu['jam'].' jam '.$waktu['menit'].' menit dan '.$waktu['jam_selesai'].' jam '.$waktu['menit_selesai'].' menit.';} ?>
+                                                        <?php if($waktu['menit']==0 && $waktu['menit_selesai']==0){echo $waktu['jam'].' jam dan '.$waktu['jam_selesai'].' jam.';} ?>
                                                     </div>
-                                                </div>        
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="penyebab"><b>Penyebab Kebakaran :</b></label>
+                                                    <?php 
+                                                        if($r['penyebab_id'] == '5'){
+                                                            $sebab = mysql_fetch_assoc(mysql_query("SELECT * FROM penyebab AS a
+                                                                                                INNER JOIN penyebab_lain AS b ON (a.penyebab_id = b.penyebab_id)
+                                                                                                INNER JOIN pasca AS c ON (a.penyebab_id = c.penyebab_id)
+                                                                                                WHERE c.resiko_id = '".$_GET['id']."'")) or die("Query : ".mysql_error());
+                                                    ?>
+                                                    <div class="controls">
+                                                        <?php echo 'Lain-lain : '.$sebab['lain_nama']; ?>
+                                                    </div>
+                                                    <?php
+                                                        }else{
+                                                    ?>
+                                                    <div class="controls">
+                                                        <?php echo $r['penyebab_nama']; ?>
+                                                    </div>
+                                                    <?php
+                                                        } 
+                                                    ?>
+                                                </div>  
+
+                                                <div class="control-group">
+                                                    <label class="control-label" for=""><b>Luas Kebakaran Total :</b></label>
+                                                    
+                                                    <div class="controls">
+                                                        <?php echo $r['pasca_luas'].' m<sup>2</sup>'; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for=""><b>Korban Kebakaran :</b></label>
+                                                    
+                                                    <div class="controls">
+                                                        <?php echo 'Luka = '.$r['pasca_luka'].' jiwa. <br>Meninggal = '.$r['pasca_meninggal'].' jiwa.'; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for=""><b>Biaya Kerugian :</b></label>
+                                                    
+                                                    <div class="controls">
+                                                        <?php echo 'Rp. '. number_format($r['pasca_biaya'], 2, ',', '.'); ?>
+                                                    </div>
+                                                </div>           
                                             </div><!--/.span-->
                                             <div class="span6">
                                                 <div class="widget-box">
-                                                    <div class="widget-header widget-hea1der-small header-color-red">
+                                                    <div class="widget-header widget-header-small header-color-red">
                                                         <h6>
                                                             Foto Lokasi Kejadian
                                                         </h6>
 
                                                         <div class="widget-toolbar">
+                                                            <span data-rel="tooltip" data-placement="right" title="Tambahkan Foto Lokasi Kejadian.">
+                                                                <a href="#foto" role="button" data-toggle="modal">
+                                                                    <i class="icon-plus white"></i>
+                                                                </a>
+                                                            </span>
+
                                                             <a href="#" data-action="reload">
                                                                 <i class="icon-refresh"></i>
                                                             </a>
@@ -342,20 +395,124 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                                     </div>
 
                                                     <div class="widget-body">
-                                                        <div class="widget-main padding-4">
-                                                            <div class="slim-scroll" data-height="200">
-                                                                <div class="content">
-                                                                    <a href="../assets/img/foto-kejadian/<?= $r['foto_dir']; ?>" title="<?php echo $r['foto_nama'];?>" data-rel="colorbox">
-                                                                        <img src="../assets/img/foto-kejadian/<?= $r['foto_dir']; ?>" width="829" height="441"/>
+                                                        <div class="widget-main">
+                                                            
+                                                                <?php
+                                                                    $foto = mysql_fetch_array(mysql_query("SELECT * FROM resiko AS a INNER JOIN foto_resiko AS b 
+                                                                        ON (a.resiko_id = b.resiko_id) WHERE a.resiko_id = '".$_GET['id']."'"));
+                                                                    if($foto['foto_dir']==''){
+                                                                        echo "<p class='alert alert-info center'>Tidak terdapat foto lokasi kejadian.</p>";
+                                                                    }else{
+                                                                ?>
+                                                                    <a href="../assets/img/foto-kejadian/<?= $foto['foto_dir']; ?>" title="<?php echo $foto['foto_nama'];?>" data-rel="colorbox">
+                                                                        <img src="../assets/img/foto-kejadian/<?= $foto['foto_dir']; ?>" width="829" height="441"/>
                                                                     </a>
-                                                                </div>
-                                                            </div>
+                                                                <?php
+                                                                    }
+                                                                ?>
+                                                                  
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div><!--/.span-->
                                         </div><!--/.row-fluid-->
+                                        
+                                        <?php
+                                            if($_POST['simpan']=='Simpan'){
+                                                $foto = $_FILES['foto'] ['name']; // Mendapatkan nama gambar
+                                                $type = $_FILES['foto']['type'];
+                                                $ukuran = $_FILES['foto']['size'];
+                                                $nama_foto = $_POST['nama_foto'];
+                                                $id = $_GET['id'];
 
+                                                if ($ukuran > 1100000) {
+                                        ?>
+                                        <script language="JavaScript">
+                                            setTimeout(function() {
+                                                swal("Terjadi Kesalahan", "Ukuran foto terlalu besar! Max: 1Mb", "error")
+                                            }, 200);
+                                        </script>
+                                        <?php
+                                                }else{
+                                                    $lokasi = "../assets/img/foto-kejadian";
+                                                    $lokasi_foto = $_FILES['foto']['tmp_name'];
+                                                    $tgl = date("dmy");
+                                                    $nama_file_upload = $tgl . '-' . $foto;
+                                                    $alamatfile = $lokasi . $nama_file_upload;
+
+                                                    if (move_uploaded_file($lokasi_foto, $lokasi . "/" . $nama_file_upload)){
+                                                        $addFoto = mysql_query("INSERT INTO foto_resiko VALUES (NULL, '$id', '$nama_foto', '$nama_file_upload')") or die("Query : ".mysql_error());
+                                                        if($addFoto){
+                                        ?>
+                                        <script language="JavaScript">
+                                            setTimeout(function() {
+                                                swal("Foto Disimpan!", "Selamat foto kejadian telah berhasil disimpan.", "success")
+                                            }, 200);
+                                        </script>
+                                        <?php
+                                                        }
+                                                    }else{
+                                        ?>
+                                        <script language="JavaScript">
+                                            setTimeout(function() {
+                                                swal("Terjadi Kesalahan", "Maaf, terjadi kesalahan unggah foto.", "error")
+                                            }, 200);
+                                        </script>
+                                        <?php
+                                                    }       
+                                                }
+                                            }
+                                        ?>
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            <div id="foto" class="modal hide" tabindex="-1">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="blue bigger center">Foto Pasca Kejadian Kebakaran</h4>
+                                                </div>
+
+                                                <div class="modal-body overflow-visible">
+                                                    <div class="row-fluid">
+                                                        <div class="span5">
+                                                            <div class="space"></div>
+                                                            <input type="file" name="foto" id="file_foto"/>
+                                                        </div>
+
+                                                        <div class="vspace"></div>
+
+                                                        <div class="span7">
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="id-foto">ID Foto</label>
+
+                                                                <div class="controls">
+                                                                    <input readonly type="text" class="span2" name="foto_id" value="<?php echo $_GET['id']; ?>">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="nama_foto">Nama Foto</label>
+
+                                                                <div class="controls">
+                                                                    <input type="text" id="nama_foto" name="nama_foto" required placeholder="Judul Foto..." value="" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <input type="submit" class="btn-success" name="simpan" value="Simpan">
+                                                    <!--<button class="btn btn-small" data-dismiss="modal">
+                                                        <i class="icon-remove"></i>
+                                                        Cancel
+                                                    </button>
+
+                                                    <button class="btn btn-small btn-primary">
+                                                        <i class="icon-ok"></i>
+                                                        Simpan
+                                                    </button>-->
+                                                </div>
+                                            </div>
+                                        </form>
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
@@ -416,6 +573,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
 <script src="../assets/js-ace/jquery.colorbox-min.js"></script>
 <script src="../assets/js-ace/autoNumeric.js"></script>
+<script src="../assets/js-ace/sweet-alert.js"></script>
 <!--ace scripts-->
 
 <script src="../assets/js-ace/ace-elements.min.js"></script>
@@ -461,37 +619,81 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 </script>
 <script type="text/javascript">
     $(function() {
-        var colorbox_params = {
-            reposition:true,
-            scalePhotos:true,
-            scrolling:false,
-            previous:'<i class="icon-arrow-left"></i>',
-            next:'<i class="icon-arrow-right"></i>',
-            close:'&times;',
-            current:'{current} of {total}',
-            maxWidth:'100%',
-            maxHeight:'100%',
-            onOpen:function(){
-                document.body.style.overflow = 'hidden';
-            },
-            onClosed:function(){
-                document.body.style.overflow = 'auto';
-            },
-            onComplete:function(){
-                $.colorbox.resize();
+                var colorbox_params = {
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="icon-arrow-left"></i>',
+                    next:'<i class="icon-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = 'auto';
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+
+    $('.widget-main [data-rel="colorbox"]').colorbox(colorbox_params);
+    $("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
+
+    /**$(window).on('resize.colorbox', function() {
+        try {
+            //this function has been changed in recent versions of colorbox, so it won't work
+            $.fn.colorbox.load();//to redraw the current frame
+        } catch(e){}
+    });*/
+})
+</script>
+<script type="text/javascript">
+$(function() {
+        $('#file_foto').ace_file_input({
+            style:'well',
+            btn_choose : "Drop images here or click to choose",
+            no_icon : "icon-picture",
+            btn_change:null,
+            droppable:true,
+            thumbnail:'small',
+            before_change : function(files, dropped) {
+                var allowed_files = [];
+                for(var i = 0 ; i < files.length; i++) {
+                    var file = files[i];
+                    if(typeof file === "string") {
+                        //IE8 and browsers that don't support File Object
+                        if(! (/\.(jpe?g|png|gif|bmp)$/i).test(file) ) return false;
+                    }
+                    else {
+                        var type = $.trim(file.type);
+                        if( ( type.length > 0 && ! (/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
+                                || ( type.length == 0 && ! (/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
+                            ) continue;//not an image so don't keep this file
+                    }
+                    
+                    allowed_files.push(file);
+                }
+                if(allowed_files.length == 0) return false;
+
+                return allowed_files;
             }
-        }; 
-
-        $('.content [data-rel="colorbox"]').colorbox(colorbox_params);
-        $("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
-
-        /**$(window).on('resize.colorbox', function() {
-            try {
-                //this function has been changed in recent versions of colorbox, so it won't work
-                $.fn.colorbox.load();//to redraw the current frame
-            } catch(e){}
-        });*/
-    })
+        });
+    
+        //chosen plugin inside a modal will have a zero width because the select element is originally hidden
+        //and its width cannot be determined.
+        //so we set the width after modal is show
+        $('#foto').on('show', function () {
+            $(this).find('.chzn-container').each(function(){
+                $(this).find('a:first-child').css('width' , '200px');
+                $(this).find('.chzn-drop').css('width' , '210px');
+                $(this).find('.chzn-search input').css('width' , '200px');
+            });
+        });
+    });
 </script>
 <script type="text/javascript">
     

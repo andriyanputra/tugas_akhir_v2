@@ -13,7 +13,11 @@ if ($_POST) {
     $luas_total = $_POST['luas_total'];
     $korban_luka = $_POST['korban_luka'];
     $korban_meninggal = $_POST['korban_meninggal'];
-    $biaya = $_POST['biaya'];
+    $biaya_ = $_POST['biaya'];
+    $biaya1 = str_replace('Rp.','',$biaya_);
+    $biaya2 = str_replace('.', '', $biaya1);
+    $biaya3 = str_replace(',', '', $biaya2);
+    $biaya = substr($biaya3,0,-2);
     $pasca_id = $_POST['pasca_id'];
     $pasca_status = 'yes';
     if($_POST['akhir_perjalanan'] == '00:00' || $_POST['pemadaman'] == '00:00'){
@@ -36,22 +40,7 @@ if ($_POST) {
     }
     $tgl = $row['resiko_tanggal_start'];
     $awal = date('H:i', strtotime($tgl));          
-    $nama = $row['nama_pelapor'];
-    $no = $row['nomor_telp'];
-    $alamat = $row['alamat_pelapor'];
-    $bangunan = $row['ID_BANGUNAN'];
-    $desa = $row['DESA_ID'];
-    $kecamatan = $row['KECAMATAN_ID'];
-    $sumber = $row['ID_SUMBER'];
-    $exposure = $row['exposure'];
-    $tepol = $row['tepol'];
-    $p = $row['panjang'];
-    $l = $row['lebar'];
-    $t = $row['tinggi'];        
-    $minim = $row['pasokan_air_minimum'];
-    $laju = $row['penerapan_air'];
-    $angkut = $row['pengangkutan_air'];
-    $proteksi = $row['tipe_proteksi'];
+    
 
     //=======HiTUNG WAKTU==========
     function beda_waktu($time1, $time2) {
@@ -97,7 +86,7 @@ if ($_POST) {
 <?php
     if ($check == 'on' && !empty($bangunanBaru) && !empty($luas_total) && !empty($penyebabBaru)) {
         $insert = mysql_query("INSERT INTO pasca
-            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `penyebab_id`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
              VALUES 
             ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
             '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
@@ -109,25 +98,7 @@ if ($_POST) {
 
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
-                                resiko_id = '$pasca_id',
-                                resiko_tanggal_start = '$tgl',
                                 resiko_tanggal_end = NOW(),
-                                nama_pelapor = '$nama',
-                                nomor_telp ='$no',
-                                alamat_pelapor = '$alamat',
-                                ID_BANGUNAN = '$bangunan',
-                                DESA_ID = '$desa',
-                                KECAMATAN_ID = '$kecamatan',
-                                ID_SUMBER = '$sumber',
-                                exposure = '$exposure',
-                                tepol = '$tepol',
-                                panjang= '$p',
-                                lebar = '$l',
-                                tinggi = '$t',
-                                pasokan_air_minimum = '$minim',
-                                penerapan_air = '$laju',
-                                pengangkutan_air = '$angkut',
-                                tipe_proteksi = '$proteksi',
                                 resiko_status = 'yes'
                                 WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
 
@@ -151,32 +122,14 @@ if ($_POST) {
 
     }else if($check == 'on' && !empty($bangunanBaru) && !empty($luas_total)){
         $insert = mysql_query("INSERT INTO pasca
-            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `penyebab_id`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
              VALUES 
             ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
             '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
 
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
-                                resiko_id = '$pasca_id',
-                                resiko_tanggal_start = '$tgl',
                                 resiko_tanggal_end = NOW(),
-                                nama_pelapor = '$nama',
-                                nomor_telp ='$no',
-                                alamat_pelapor = '$alamat',
-                                ID_BANGUNAN = '$bangunan',
-                                DESA_ID = '$desa',
-                                KECAMATAN_ID = '$kecamatan',
-                                ID_SUMBER = '$sumber',
-                                exposure = '$exposure',
-                                tepol = '$tepol',
-                                panjang= '$p',
-                                lebar = '$l',
-                                tinggi = '$t',
-                                pasokan_air_minimum = '$minim',
-                                penerapan_air = '$laju',
-                                pengangkutan_air = '$angkut',
-                                tipe_proteksi = '$proteksi',
                                 resiko_status = 'yes'
                                 WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
 
@@ -200,7 +153,7 @@ if ($_POST) {
 
     }else if(!empty($penyebabBaru)){
         $insert = mysql_query("INSERT INTO pasca
-            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `penyebab_id`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
             VALUES 
             ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
             '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
@@ -212,25 +165,7 @@ if ($_POST) {
 
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
-                                resiko_id = '$pasca_id',
-                                resiko_tanggal_start = '$tgl',
                                 resiko_tanggal_end = NOW(),
-                                nama_pelapor = '$nama',
-                                nomor_telp ='$no',
-                                alamat_pelapor = '$alamat',
-                                ID_BANGUNAN = '$bangunan',
-                                DESA_ID = '$desa',
-                                KECAMATAN_ID = '$kecamatan',
-                                ID_SUMBER = '$sumber',
-                                exposure = '$exposure',
-                                tepol = '$tepol',
-                                panjang= '$p',
-                                lebar = '$l',
-                                tinggi = '$t',
-                                pasokan_air_minimum = '$minim',
-                                penerapan_air = '$laju',
-                                pengangkutan_air = '$angkut',
-                                tipe_proteksi = '$proteksi',
                                 resiko_status = 'yes'
                                 WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
 
@@ -254,32 +189,14 @@ if ($_POST) {
 
     }else{
         $insert = mysql_query("INSERT INTO pasca
-            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `pasca_penyebab`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
+            (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `penyebab_id`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
             VALUES 
-            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas','$korban_luka',
             '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
 
         //=== R E SI K O ===
         $update = mysql_query("UPDATE resiko SET
-                                resiko_id = '$pasca_id',
-                                resiko_tanggal_start = '$tgl',
                                 resiko_tanggal_end = NOW(),
-                                nama_pelapor = '$nama',
-                                nomor_telp ='$no',
-                                alamat_pelapor = '$alamat',
-                                ID_BANGUNAN = '$bangunan',
-                                DESA_ID = '$desa',
-                                KECAMATAN_ID = '$kecamatan',
-                                ID_SUMBER = '$sumber',
-                                exposure = '$exposure',
-                                tepol = '$tepol',
-                                panjang= '$p',
-                                lebar = '$l',
-                                tinggi = '$t',
-                                pasokan_air_minimum = '$minim',
-                                penerapan_air = '$laju',
-                                pengangkutan_air = '$angkut',
-                                tipe_proteksi = '$proteksi',
                                 resiko_status = 'yes'
                                 WHERE resiko_id = '$pasca_id'") or die("Query : ".mysql_error());
 
