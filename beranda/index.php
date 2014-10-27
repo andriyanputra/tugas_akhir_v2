@@ -1,8 +1,6 @@
 <?php
 //
 include '../template/header.php';
-?>
-<?php
 include '../config/functions.php'; //include function.php - very important
 include '../config/koneksi.php';
 
@@ -20,7 +18,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
-            <body onload="setInterval('displayServerTime()', 1000);">
+            <body>
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">

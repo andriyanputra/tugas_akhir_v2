@@ -100,9 +100,9 @@
         </li>
 
         <li>
-            <a href="gallery.php">
+            <a href="../gallery/">
                 <i class="icon-picture"></i>
-                <span class="menu-text"> Gallery </span>
+                <span class="menu-text"> Foto Kejadian </span>
             </a>
         </li>
 

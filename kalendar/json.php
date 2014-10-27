@@ -1,7 +1,6 @@
 <?php
 include ("../config/koneksi.php");
 
-
 $rs = mysql_query(
 	"SELECT b.resiko_id AS id, d.NAMA_BANGUNAN AS title, b.resiko_tanggal_start AS start, b.nama_pelapor AS korban,
 		b.resiko_tanggal_end AS end, b.alamat_pelapor AS alamat, c.KECAMATAN_NAMA AS kecamatan, a.DESA_NAMA AS desa

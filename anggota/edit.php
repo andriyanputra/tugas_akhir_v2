@@ -21,6 +21,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
+            <body>
             <div class="navbar">
                 <div class="navbar-inner">
                     <div class="container-fluid">
@@ -171,7 +172,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <i class="icon-angle-right arrow-icon"></i>
                                 </span>
                             </li>
-                            <li class="active">Tambah Data</li>
+                            <li class="active">Edit Data</li>
                         </ul><!--.breadcrumb-->
                         <div class="pull-right">
                             <script>
@@ -196,7 +197,7 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                 Anggota Pemadam
                                 <small>
                                     <i class="icon-double-angle-right"></i>
-                                    Tambah Data
+                                    Edit Data
                                 </small>
                             </h1>
                         </div><!--/.page-header-->
