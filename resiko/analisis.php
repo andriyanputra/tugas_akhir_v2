@@ -11,7 +11,9 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 }
 
 if($_SESSION['level']!=1 && $_COOKIE['level'] != 1){
-    die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');//jika bukan admin jangan lanjut
+    //alert('Maaf Anda tidak diperkenankan mengakses halaman tersebut');
+    echo "<script> window.history.back(); </script>";
+    exit();//jika bukan admin jangan lanjut
 }
 
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {

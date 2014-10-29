@@ -248,6 +248,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                                             <div class="span9">
                                                 <div class="space-12"></div>
+                                                <?php if($row['id_level_user'] == 1 || $row['pegawai_nip'] == $d['pegawai_nip']) { ?>
                                                 <div class="pull-right">
                                                     <a href="edit?nip=<?= $d['pegawai_nip']; ?>">
                                                         <button class="btn btn-small btn-primary" data-rel="tooltip" title="Edit Pegawai">
@@ -256,6 +257,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         </button>
                                                     </a>
                                                 </div>
+                                                <?php } ?>
                                                 <br>
                                                 <br>
                                                 <div class="space-6"></div>
@@ -461,21 +463,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="hr hr2 hr-double"></div>
-
-                                            <div class="space-6"></div>
-
-                                            <div class="center">
-                                                <a href="#" class="btn btn-small btn-primary">
-                                                    <i class="icon-rss bigger-150 middle"></i>
-
-                                                    View more activities
-                                                    <i class="icon-on-right icon-arrow-right"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    
+                                        </div>  
                                 </div>
 
                                 <!--PAGE CONTENT ENDS-->

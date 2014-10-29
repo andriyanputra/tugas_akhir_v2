@@ -254,12 +254,14 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 ?>
                                 <div class = "space-6"></div>
                                 <div class = "pull-right">
+                                <?php if($row['id_level_user'] == 1){ ?>
                                     <a href = "tambah">
                                         <button class = "btn btn-mini btn-primary btn-block" data-rel = "tooltip" title = "Tambah Pegawai">
                                             <i class = "icon-plus bigger-130"></i>
                                             <strong>Tambah Data</strong>
                                         </button>
                                     </a>
+                                <?php } ?>
                                 </div>
                                 <div class = "space-18"></div>
                                 <div class = "table-header center">
@@ -295,14 +297,20 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         <a class="blue" href="profile?nip=<?php echo $data['pegawai_nip']; ?>" class="tooltip-info" data-rel="tooltip" title="View">
                                                             <i class="icon-zoom-in bigger-130"></i>
                                                         </a>
-
+                                                        <?php if($row['id_level_user'] == 1 ){ ?>
                                                         <a class="green" href="edit?nip=<?php echo $data['pegawai_nip']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                             <i class="icon-pencil bigger-130"></i>
                                                         </a>
-
+                                                        
                                                         <a class="red" href="prosesHapus?nip=<?php echo $data['pegawai_nip']; ?>" onclick="return confirm('Are you sure you want to delete?')" class="tooltip-error" data-rel="tooltip" title="Delete">
                                                             <i class="icon-trash bigger-130"></i>
                                                         </a>
+                                                        
+                                                        <?php }else if($data['pegawai_nip'] == $row['pegawai_nip']){ ?>
+                                                        <a class="green" href="edit?nip=<?php echo $data['pegawai_nip']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                            <i class="icon-pencil bigger-130"></i>
+                                                        </a>
+                                                        <?php } ?>
                                                     </div>
                                                 </td>
                                             </tr>

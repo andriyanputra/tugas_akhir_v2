@@ -10,6 +10,12 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
     exit();
 }
 
+if($_SESSION['level']!=1 && $_COOKIE['level'] != 1){
+    //alert('Maaf Anda tidak diperkenankan mengakses halaman tersebut');
+    echo "<script> window.history.back(); </script>";
+    exit();//jika bukan admin jangan lanjut
+}
+
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
                         OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());

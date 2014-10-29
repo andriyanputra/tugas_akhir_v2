@@ -9,6 +9,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
     exit();
 }
 
+
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
                         OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
@@ -21,6 +22,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         exit();
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
+            if(($_SESSION['pegawai_nomor'] == $row['pegawai_nip'] || $_COOKIE['pegawai_nomor'] == $row['pegawai_nip']) || ($_SESSION['level']==1 && $_COOKIE['level'] == 1)){
             ?>
             <body>
                 <div class="navbar">
@@ -422,7 +424,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        <?php if($row['id_level_user'] == 1){ ?>
                                                         <div class = "space"></div>
 
                                                         <h4 class = "header blue bolder smaller">Level User</h4>
@@ -471,7 +473,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        
                                                         <div class = "space"></div>
                                                         <div id = "pass">
                                                             <h4 class = "header blue bolder smaller">Password</h4>
@@ -519,7 +521,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        <?php } ?>
                                                         <div class = "row-fluid wizard-actions">
                                                             <button class = "btn  btn-primary" onClick = "document.location.reload(true)">
                                                                 <i class = "icon-refresh"></i>
@@ -541,7 +543,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     </div><!--/.page-content-->
 
                     <?php
-                    //include '../template/footer.php';
+                    }//include '../template/footer.php';
                 }
             }
         }

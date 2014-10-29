@@ -265,13 +265,18 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                             <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
                                                             <td>
                                                                 <div class="hidden-phone visible-desktop action-buttons">
+                                                                    <?php if($row['id_level_user'] == 1 ){ ?>
                                                                     <a class="red cek" href="" id="<?php echo $res['resiko_id']; ?>" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                                         <i class="icon-edit bigger-130"></i>
                                                                     </a>
-
                                                                     <a class="blue cek" href="" id="<?php echo $res['resiko_id']; ?>" class="tooltip-error" data-rel="tooltip" title="Selengkapnya">
                                                                         <i class="icon-zoom-in bigger-130"></i>
                                                                     </a>
+                                                                    <?php }else{ ?>
+                                                                    <a class="blue cek" href="" id="<?php echo $res['resiko_id']; ?>" class="tooltip-error" data-rel="tooltip" title="Selengkapnya">
+                                                                        <i class="icon-zoom-in bigger-130"></i>
+                                                                    </a>
+                                                                    <?php } ?>
                                                                 </div>
                                                             </td>
                                                         </tr>
