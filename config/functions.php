@@ -6,7 +6,7 @@ include 'config.php'; //include the config.php file
 
 //login check function
 function loggedin() {
-    if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
+    if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))){
         $loggedin = TRUE;
         return $loggedin;
     }

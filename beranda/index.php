@@ -9,8 +9,9 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
     exit();
 }
 
-if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
-    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "'");
+if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
+    $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
+                        OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -34,7 +35,9 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="icon-envelope icon-animated-vertical"></i>
                                         <?php
-                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='Administrator'") or die("Query : ".mysql_error());
+                                        $level = $row['id_level_user'];
+                                        $jabatan = $row['jabatan_id'];
+                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
                                         $jml_pesan = mysql_num_rows($cek_pesan);
                                         if($jml_pesan > 0){
                                             echo "<span class='badge badge-success'>$jml_pesan</span>";
@@ -57,18 +60,22 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
                                         </li>
                                         
                                         <?php
-                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                     FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
-                                                                    WHERE b.pesan_status = 0 AND b.pesan_untuk='Administrator'
+                                                                    INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
+                                                                    WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
                                                                     GROUP BY b.id ORDER BY b.id ASC
                                                                     LIMIT 3") or die("Query : ".mysql_error());
                                             while($pesan = mysql_fetch_array($q_pesan)){
+                                                $nama = $pesan['pegawai_nama'];
+                                                $first_nama = explode(' ',trim($nama));
+                                                //echo $first_nama[0];
                                         ?>
                                         <li>
                                             <a href="../pesan/detail?id=<?php echo $pesan['id'];?>">
                                                 <span class="msg-body">
                                                     <span class="msg-title">
-                                                        <span class="blue"><?php echo $pesan['pesan_dari'].': ' ?></span>
+                                                        <span class="blue"><?php echo $first_nama[0].': ' ?></span>
                                                         <?php
                                                             $isi = $pesan['pesan_isi'];
                                                             $potong_isi = substr($isi,0,50);
@@ -378,8 +385,8 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
 
 
                 <?php
-                //include '../template/footer.php';
-            }
+                }
+            //include '../template/footer.php';
             ?>
             <div class="ace-settings-container" id="ace-settings-container">
                 <div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">

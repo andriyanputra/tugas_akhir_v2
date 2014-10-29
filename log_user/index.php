@@ -9,8 +9,9 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
     exit();
 }
 
-if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
-    $sql = mysql_query("SELECT * FROM pegawai WHERE pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' OR pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'");
+if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
+    $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
+                        OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
     $query = mysql_query("SELECT a.pegawai_nip, a.pegawai_nama, b.NAMA_LEVEL_USER, c.login_date, c.logout_date, c.log_ket
                             FROM pegawai AS a INNER JOIN level_user AS b ON (a.id_level_user = b.ID_LEVEL_USER)
                                 INNER JOIN log_user AS c ON (a.pegawai_nip = c.pegawai_nip)
@@ -22,129 +23,135 @@ if (isset($_SESSION['pegawai_nomor']) || isset($_COOKIE['pegawai_nomor'])) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                        <a href="../beranda/index" class="brand">
-                            <small>
-                                <i class="icon-fire-extinguisher"></i>
-                                SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo
-                            </small>
-                        </a><!--/.brand-->
+            <body>
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="container-fluid">
+                            <a href="index" class="brand">
+                                <small>
+                                    <i class="icon-fire-extinguisher"></i>
+                                    SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo 
+                                </small>
+                            </a><!--/.brand-->
 
-                        <ul class="nav ace-nav pull-right">
+                            <ul class="nav ace-nav pull-right">
+                                <li class="green">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        <i class="icon-envelope icon-animated-vertical"></i>
+                                        <?php
+                                        $level = $row['id_level_user'];
+                                        $jabatan = $row['jabatan_id'];
+                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
+                                        $jml_pesan = mysql_num_rows($cek_pesan);
+                                        if($jml_pesan > 0){
+                                            echo "<span class='badge badge-success'>$jml_pesan</span>";
+                                        }else{
+                                            echo "<span class='badge badge-success'>0</span>";
+                                        }
+                                        ?>
+                                    </a>
 
-                            <li class="green">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-envelope icon-animated-vertical"></i>
-                                    <span class="badge badge-success">5</span>
-                                </a>
+                                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
+                                        <li class="nav-header">
+                                            <i class="icon-envelope-alt"></i>
+                                            <?php 
+                                            if($jml_pesan > 0){
+                                                echo "$jml_pesan Pesan";
+                                            }else{
+                                                echo "0 Pesan";
+                                            }
+                                            ?>
+                                        </li>
+                                        
+                                        <?php
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                                                    FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
+                                                                    INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
+                                                                    WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
+                                                                    GROUP BY b.id ORDER BY b.id ASC
+                                                                    LIMIT 3") or die("Query : ".mysql_error());
+                                            while($pesan = mysql_fetch_array($q_pesan)){
+                                                $nama = $pesan['pegawai_nama'];
+                                                $first_nama = explode(' ',trim($nama));
+                                                //echo $first_nama[0];
+                                        ?>
+                                        <li>
+                                            <a href="../pesan/detail?id=<?php echo $pesan['id'];?>">
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue"><?php echo $first_nama[0].': ' ?></span>
+                                                        <?php
+                                                            $isi = $pesan['pesan_isi'];
+                                                            $potong_isi = substr($isi,0,50);
+                                                            echo $potong_isi.'...';
+                                                        ?>
+                                                    </span>
 
-                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
-                                    <li class="nav-header">
-                                        <i class="icon-envelope-alt"></i>
-                                        5 Messages
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Alex:</span>
-                                                    Ciao sociis natoque penatibus et auctor ...
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>
+                                                            <?php
+                                                                $p_tgl = date('H:i:s A', strtotime($pesan['resiko_tanggal_start']));
+                                                                echo $p_tgl;
+                                                            ?>
+                                                        </span>
+                                                    </span>
                                                 </span>
+                                            </a>
+                                        </li>
+                                        <?php
+                                            }
+                                        ?>
+                                        <li>
+                                            <a href="../pesan/">
+                                                Lihat Semua Pemberitahuan
+                                                <i class="icon-arrow-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>a moment ago</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
+                                <li class="light-blue">
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                        <span class="user-info">
+                                            <small>Welcome,</small>
+                                            <?php echo $row['pegawai_nama']; ?>    
+                                        </span>
 
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Susan:</span>
-                                                    Vestibulum id ligula porta felis euismod ...
-                                                </span>
+                                        <i class="icon-caret-down"></i>
+                                    </a>
 
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>20 minutes ago</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
+                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
-                                    <li>
-                                        <a href="#">
-                                            <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-                                            <span class="msg-body">
-                                                <span class="msg-title">
-                                                    <span class="blue">Bob:</span>
-                                                    Nullam quis risus eget urna mollis ornare ...
-                                                </span>
+                                        <li>
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-user"></i>
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
 
-                                                <span class="msg-time">
-                                                    <i class="icon-time"></i>
-                                                    <span>3:15 pm</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
+                                        <li class="divider"></li>
 
-                                    <li>
-                                        <a href="#">
-                                            See all messages
-                                            <i class="icon-arrow-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="light-blue">
-                                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                    <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
-                                    <span class="user-info">
-                                        <small>Welcome,</small>
-                                        <?php echo $row['pegawai_nama']; ?>    
-                                    </span>
-
-                                    <i class="icon-caret-down"></i>
-                                </a>
-
-                                <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-
-                                    <li>
-                                        <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
-                                            <i class="icon-user"></i>
-                                            Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
-                                            <i class="icon-cog"></i>
-                                            Log User
-                                        </a>
-                                    </li>
-
-                                    <li class="divider"></li>
-
-                                    <li>
-                                        <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
-                                            <i class="icon-off"></i>
-                                            Logout
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul><!--/.ace-nav-->
-                    </div><!--/.container-fluid-->
-                </div><!--/.navbar-inner-->
-            </div>
+                                        <li>
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-off"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul><!--/.ace-nav-->
+                        </div><!--/.cont
+                        ainer-fluid-->
+                    </div><!--/.navbar-inner-->
+                </div>
 
             <div class="main-container container-fluid">
                 <a class="menu-toggler" id="menu-toggler" href="#">

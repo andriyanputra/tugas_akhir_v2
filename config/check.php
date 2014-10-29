@@ -23,36 +23,39 @@ $remember = $_POST['remember'];
     if ($loginok == TRUE) { //if it is the same password, script will continue.
         $update_log = mysql_query("UPDATE log_user SET login_date = NOW() WHERE pegawai_nip = '$nip'") or die("Query : ".mysql_error());
         if ($remember == "1") { //if the Remember me is checked, it will create a cookie.
-            /*if($db_level == 2){
-                header("Location: ../kepala_bidang");
+            if($db_level == 2){
+                setcookie("level", $db_level, time() + 7600, "/", "");
+                setcookie("pegawai_nomor", $nip, time() + 7600, "/", ""); //here we are setting a cookie named username, with the Username on the database that will last 48 hours and will be set on the understandesign.com domain. This is an optional parameter.
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
             }else if($db_level == 3){
-                header("Location: ../kepala_seksi");
+                setcookie("level", $db_level, time() + 7600, "/", "");
+                setcookie("pegawai_nomor", $nip, time() + 7600, "/", "");
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
             }else if($db_level == 1){
-                header("Location: ../admin");
+                setcookie("level", $db_level, time() + 7600, "/", "");
+                setcookie("pegawai_nomor", $nip, time() + 7600, "/", "");
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
-            }*/
-
-            setcookie("pegawai_nomor", $nip, time() + 7600, "/", ""); //here we are setting a cookie named username, with the Username on the database that will last 48 hours and will be set on the understandesign.com domain. This is an optional parameter.
-
-            header("Location: ../beranda/index.php?msg=log_ie");
-            exit();
+            }
         } else if ($remember == "") { //if the Remember me isn't checked, it will create a session.
-            /*if($db_level == 2){
-                header("Location: ../kepala_bidang");
+            if($db_level == 2){
+                $_SESSION['pegawai_nomor'] = $nip;
+                $_SESSION['level'] = $db_level;
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
             }else if($db_level == 3){
-                header("Location: ../kepala_seksi");
+                $_SESSION['pegawai_nomor'] = $nip;
+                $_SESSION['level'] = $db_level;
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
             }else if($db_level == 1){
-                header("Location: ../admin");
+                $_SESSION['pegawai_nomor'] = $nip;
+                $_SESSION['level'] = $db_level;
+                header("Location: ../beranda/index?msg=log_in&level=$db_level");
                 exit();
-            }*/
-            $_SESSION['pegawai_nomor'] = $nip;
-
-            header("Location: ../beranda/index.php?msg=log_in");
-            exit();
+            }
         }
     }
 
