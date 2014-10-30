@@ -12,7 +12,7 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
                         OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
-    if ($sql == false) {
+if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
         exit();
@@ -60,7 +60,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         </li>
                                         
                                         <?php
-                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                            $q_pesan = mysql_query("SELECT b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                     FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
                                                                     INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
                                                                     WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
@@ -72,7 +72,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                 //echo $first_nama[0];
                                         ?>
                                         <li>
-                                            <a href="../pesan/detail?id=<?php echo $pesan['id'];?>">
+                                            <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'];?>">
                                                 <span class="msg-body">
                                                     <span class="msg-title">
                                                         <span class="blue"><?php echo $first_nama[0].': ' ?></span>

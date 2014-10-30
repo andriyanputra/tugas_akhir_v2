@@ -383,12 +383,13 @@ if ($sql == false) {
                                                         </h6>
 
                                                         <div class="widget-toolbar">
+                                                            <?php if($row['id_level_user'] == 1){ ?>
                                                             <span data-rel="tooltip" data-placement="right" title="Tambahkan Foto Lokasi Kejadian.">
                                                                 <a href="#foto" role="button" data-toggle="modal">
                                                                     <i class="icon-plus white"></i>
                                                                 </a>
                                                             </span>
-
+                                                            <?php } ?>
                                                             <a href="#" data-action="reload">
                                                                 <i class="icon-refresh"></i>
                                                             </a>
