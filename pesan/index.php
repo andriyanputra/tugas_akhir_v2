@@ -61,7 +61,7 @@ if ($sql == false) {
                                         </li>
                                         
                                         <?php
-                                            $q_pesan = mysql_query("SELECT b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                            $q_pesan = mysql_query("SELECT b.id,  b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                     FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
                                                                     INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
                                                                     WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
@@ -73,7 +73,7 @@ if ($sql == false) {
                                                 //echo $first_nama[0];
                                         ?>
                                         <li>
-                                            <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'];?>">
+                                            <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'].'&no='.$pesan['id'];?>">
                                                 <span class="msg-body">
                                                     <span class="msg-title">
                                                         <span class="blue"><?php echo $first_nama[0].': ' ?></span>
@@ -204,15 +204,7 @@ if ($sql == false) {
                                 <?php
                                 
                                 ?>
-                                <div class = "space-6"></div>
-                                <!--<div class = "pull-right">
-                                    <a href = "tambah">
-                                        <button class = "btn btn-mini btn-primary btn-block" data-rel = "tooltip" title = "Tambah Pegawai">
-                                            <i class = "icon-plus bigger-130"></i>
-                                            <strong>Tambah Data</strong>
-                                        </button>
-                                    </a>
-                                </div>-->
+                                
                                 <div class = "space-18"></div>
                                 <div class = "table-header center">
                                     Pesan (Peralatan/Bahan Habis Pakai)

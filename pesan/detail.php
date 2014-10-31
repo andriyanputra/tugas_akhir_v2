@@ -38,6 +38,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         <?php
                                         $level = $row['id_level_user'];
                                         $jabatan = $row['jabatan_id'];
+                                        $update_pesan = mysql_query("UPDATE pesan SET pesan_status = 1 WHERE pesan_id = '".$_GET['id']."' AND pesan_untuk = '$jabatan' AND id= '".$_GET['no']."'") or die("Query : ".mysql_error());
                                         $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
                                         $jml_pesan = mysql_num_rows($cek_pesan);
                                         if($jml_pesan > 0){
@@ -100,7 +101,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             }
                                         ?>
                                         <li>
-                                            <a href="../pesan/">
+                                            <a href="index">
                                                 Lihat Semua Pemberitahuan
                                                 <i class="icon-arrow-right"></i>
                                             </a>
@@ -205,7 +206,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     $query = mysql_query("SELECT * FROM  pegawai AS a INNER JOIN pesan AS b ON (a.pegawai_nip = b.pegawai_nip)
                                                             INNER JOIN resiko AS c ON (c.resiko_id = b.resiko_id)
                                                             INNER JOIN jabatan AS d ON (a.jabatan_id = d.jabatan_id)
-                                                            WHERE b.pesan_id = '".$_GET['id']."' AND b.pesan_untuk = '$jabatan'") or die("Query : ".mysql_error());
+                                                            WHERE b.pesan_id = '".$_GET['id']."'AND b.id = '".$_GET['no']."' AND b.pesan_untuk = '$jabatan'") or die("Query : ".mysql_error());
                                     $data = mysql_fetch_array($query);
                                     $nama_jabatan = mysql_query("SELECT * FROM jabatan") or die("Query : ".mysql_error());
                                     while($j = mysql_fetch_array($nama_jabatan)) {
@@ -276,7 +277,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     </div>
                                     <div class="control-group">
                                         <div class="controls">
-                                            <span class="tooltip-error span3" data-rel="tooltip" data-placement="right" title="Balas">
+                                            <span class="tooltip-info span2" data-rel="tooltip" data-placement="right" title="Kembali">
+                                                <a href="javascript:history.back()" role="button" class="btn btn-danger btn-block" data-toggle="modal">
+                                                    <i class="icon-arrow-left icon-only bigger-150"></i>
+                                                </a>
+                                            </span>
+                                            <span class="tooltip-error span2" data-rel="tooltip" data-placement="right" title="Balas">
                                                 <a href="#pesan" role="button" class="btn btn-info btn-block" data-toggle="modal">
                                                     <i class="icon-mail-reply icon-only bigger-150"></i>
                                                 </a>
@@ -284,6 +290,51 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         </div>
                                     </div>
 
+                                <?php
+                                    if($_POST['add_pesan'] == 'Kirim'){
+                                        $no_ = $_POST['no_barang'];
+                                        $kepala_seksi = $_POST['kepala_seksi'];
+                                        $admin = $_POST['admin'];
+                                        $nama_barang = $_POST['nama_barang'];
+                                        $jml_barang = $_POST['jml_barang'];
+                                        $isi_pesan = $_POST['isi_pesan'];
+                                        //$id = $_POST['id'];
+
+                                        $jabatan = mysql_fetch_assoc(mysql_query("SELECT a.pegawai_nip, b.jabatan_nama FROM pegawai AS a 
+                                                                                INNER JOIN jabatan AS b ON (a.jabatan_id = b.jabatan_id)
+                                                                                WHERE a.pegawai_nip ='" . $_SESSION['pegawai_nomor'] . "' OR a.pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "'")) or die("Query : ".mysql_error());
+                                        $nama_jabatan = $jabatan['jabatan_nama'];
+                                        $nip_pegawai = $jabatan['pegawai_nip'];
+                                        //echo $kepala_seksi.' - '.$admin.' - '.$id[0];
+                                        if(!empty($kepala_seksi) && !empty($admin)){
+                                            $addPesan_kep = mysql_query("INSERT INTO pesan VALUES 
+                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
+                                            $addPesan_ad = mysql_query("INSERT INTO pesan VALUES 
+                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$admin')");
+                                            if($addPesan_kep && $addPesan_ad){
+                                ?>
+                                        <script language="JavaScript">
+                                            setTimeout(function() {
+                                                swal("Pesan Terkirim!", "Pesan Anda telah terkirim ke Kepala Seksi Oprasional dan Administrator (Lain)", "success")
+                                            }, 200);
+                                        </script>
+                                <?php
+                                            }else{die("Query : ".mysql_error());}
+                                        }else{
+                                            $addPesan_kep = mysql_query("INSERT INTO pesan VALUES 
+                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
+                                            if($addPesan_kep){
+                                ?>
+                                        <script language="JavaScript">
+                                            setTimeout(function() {
+                                                swal("Pesan Terkirim!", "Pesan Anda telah terkirim ke Kepala Seksi Oprasional", "success")
+                                            }, 200);
+                                        </script>
+                                <?php
+                                            }else{die("Query : ".mysql_error());}
+                                        }
+                                    }
+                                ?>
                                 <form action="" method="post">
                                     <!--Modal-->
                                     <div id="pesan" class="modal hide fade" tabindex="-1">
@@ -312,19 +363,30 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         <dd><input readonly type="text" class="" name="tgl_bls" id="" value="<?php echo date('Y-m-d H:i:s'); ?>"></dd>
                                                         <dt>Tujuan :</dt>
                                                         <dd>
+                                                        <?php if($pesan_dari == 'Staff Administrasi Umum'){ ?>
                                                             <label>
                                                                 <input name="kepala_seksi" class="ace-checkbox-2" type="checkbox" required value="Kepala Seksi Oprasional" />
                                                                 <span class="lbl"> Kepala Seksi Oprasional</span>
                                                             </label>
                                                             <label>
+                                                                <input name="admin" class="ace-checkbox-2" type="checkbox" checked="checked" value="Staff Administrasi Umum" />
+                                                                <span class="lbl"> Administrator (Lain)</span>
+                                                            </label>
+                                                            <?php }else if($pesan_dari == 'Kepala Seksi Oprasional'){ ?>
+                                                            <label>
                                                                 <input name="admin" class="ace-checkbox-2" type="checkbox" value="Staff Administrasi Umum" />
                                                                 <span class="lbl"> Administrator (Lain)</span>
                                                             </label>
+                                                            <label>
+                                                                <input name="kepala_seksi" class="ace-checkbox-2" type="checkbox" checked="checked" required value="Kepala Seksi Oprasional" />
+                                                                <span class="lbl"> Kepala Seksi Oprasional</span>
+                                                            </label>
+                                                            <?php } ?>
                                                         </dd>
-                                                        <dt>Nama Barang : </dt>
+                                                        <dt>Subject : </dt>
                                                         <dd>
-                                                            <input type="text" autocomplete="off" required id="nama_barang" name="nama_barang" placeholder="Nama Barang..." value="">
-                                                            <input type="text" autocomplete="off" required id="jml_barang" class="span2 korban" name="jml_barang" placeholder="Jml..." value="">
+                                                            <input type="text" readonly autocomplete="off" required id="nama_barang" name="nama_barang" value="<?php echo $data[pesan_nama]; ?>">
+                                                            <input type="text" readonly autocomplete="off" required id="jml_barang" class="span2 korban" name="jml_barang" value="<?php echo $data[pesan_jml]; ?>">
                                                         </dd>
                                                         <div class="space-6"></div>
                                                         <dt>Isi Pesan :</dt>

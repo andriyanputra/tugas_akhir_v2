@@ -30,7 +30,7 @@ if ($sql == false) {
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
-                            <a href="index" class="brand">
+                            <a href="../beranda/index" class="brand">
                                 <small>
                                     <i class="icon-fire-extinguisher"></i>
                                     SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo 
@@ -67,7 +67,7 @@ if ($sql == false) {
                                         </li>
                                         
                                         <?php
-                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                            $q_pesan = mysql_query("SELECT b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                     FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
                                                                     INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
                                                                     WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
@@ -79,7 +79,7 @@ if ($sql == false) {
                                                 //echo $first_nama[0];
                                         ?>
                                         <li>
-                                            <a href="../pesan/detail?id=<?php echo $pesan['id'];?>">
+                                            <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'];?>">
                                                 <span class="msg-body">
                                                     <span class="msg-title">
                                                         <span class="blue"><?php echo $first_nama[0].': ' ?></span>

@@ -26,7 +26,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
-                            <a href="index" class="brand">
+                            <a href="../beranda/index" class="brand">
                                 <small>
                                     <i class="icon-fire-extinguisher"></i>
                                     SIM Proteksi Kebakaran Perkotaan Kab. Sidoarjo 
