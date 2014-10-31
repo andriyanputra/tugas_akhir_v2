@@ -244,7 +244,7 @@ if ($sql == false) {
                                                     }
                                                 ?>
                                                 <td>
-                                                    <a href="detail?id=<?php echo $data['pesan_id']; ?>">
+                                                    <a href="detail?id=<?php echo $data['pesan_id'].'&no='.$data['id']; ?>">
                                                         Detail...
                                                     </a>
                                                 </td>

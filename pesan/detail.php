@@ -216,14 +216,14 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     }
                                     $nama1 = $row['pegawai_nama'];
                                     $first_nama1 = explode(' ',trim($nama1));
-                                    $tgl = $data['resiko_tanggal_start'];
-                                    $tanggal = date('d M Y', strtotime($tgl));
-                                    $hari = date('l', strtotime($tgl));
+                                    $tgl_resiko = $data['pesan_tgl_masuk'];
+                                    $tanggal = date('d M Y', strtotime($tgl_resiko));
+                                    $hari = date('l', strtotime($tgl_resiko));
                                     if($hari == 'Sunday')$hari = 'Minggu';else if($hari == 'Monday')$hari = 'Senin';
                                     else if($hari == 'Tuesday')$hari = 'Selasa';else if($hari == 'Wednesday')$hari = 'Rabu';
                                     else if($hari == 'Thursday')$hari = 'Kamis';else if($hari == 'Friday')$hari = 'Jumat';
                                     else if($hari == 'Saturday')$hari = 'Sabtu';
-                                    $pukul = date('H:i', strtotime($tgl));
+                                    $pukul = date('H:i', strtotime($tgl_resiko));
                                     //$no_barang = date('mdy-s');
                                 ?>
                                 <div class="row-fluid">
@@ -298,6 +298,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         $nama_barang = $_POST['nama_barang'];
                                         $jml_barang = $_POST['jml_barang'];
                                         $isi_pesan = $_POST['isi_pesan'];
+                                        $tgl_bls = $_POST['tgl_bls'];
                                         //$id = $_POST['id'];
 
                                         $jabatan = mysql_fetch_assoc(mysql_query("SELECT a.pegawai_nip, b.jabatan_nama FROM pegawai AS a 
@@ -308,9 +309,9 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         //echo $kepala_seksi.' - '.$admin.' - '.$id[0];
                                         if(!empty($kepala_seksi) && !empty($admin)){
                                             $addPesan_kep = mysql_query("INSERT INTO pesan VALUES 
-                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
+                                                            (NULL,'$no_','$id','$tgl_resiko','$tgl_bls','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
                                             $addPesan_ad = mysql_query("INSERT INTO pesan VALUES 
-                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$admin')");
+                                                            (NULL,'$no_','$id','$tgl_resiko','$tgl_bls','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$admin')");
                                             if($addPesan_kep && $addPesan_ad){
                                 ?>
                                         <script language="JavaScript">
@@ -322,7 +323,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             }else{die("Query : ".mysql_error());}
                                         }else{
                                             $addPesan_kep = mysql_query("INSERT INTO pesan VALUES 
-                                                            (NULL,'$no_','$id','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
+                                                            (NULL,'$no_','$id','$tgl_resiko','$tgl_bls','$nama_barang','$jml_barang','$isi_pesan','0','$nip_pegawai','$nama_jabatan','$kepala_seksi')");
                                             if($addPesan_kep){
                                 ?>
                                         <script language="JavaScript">
@@ -365,7 +366,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         <dd>
                                                         <?php if($pesan_dari == 'Staff Administrasi Umum'){ ?>
                                                             <label>
-                                                                <input name="kepala_seksi" class="ace-checkbox-2" type="checkbox" required value="Kepala Seksi Oprasional" />
+                                                                <input name="kepala_seksi" class="ace-checkbox-2" type="checkbox" value="Kepala Seksi Oprasional" />
                                                                 <span class="lbl"> Kepala Seksi Oprasional</span>
                                                             </label>
                                                             <label>
@@ -385,7 +386,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         </dd>
                                                         <dt>Subject : </dt>
                                                         <dd>
-                                                            <input type="text" readonly autocomplete="off" required id="nama_barang" name="nama_barang" value="<?php echo $data[pesan_nama]; ?>">
+                                                            <input type="text" readonly autocomplete="off" required id="nama_barang" name="nama_barang" value="<?php echo $data[pesan_nama].' (reply)'; ?>">
                                                             <input type="text" readonly autocomplete="off" required id="jml_barang" class="span2 korban" name="jml_barang" value="<?php echo $data[pesan_jml]; ?>">
                                                         </dd>
                                                         <div class="space-6"></div>
