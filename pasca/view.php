@@ -26,6 +26,8 @@ if ($sql == false) {
     } else if (mysql_num_rows($sql)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
+
+        <link rel="stylesheet" href="../assets/css-ace/css-slide/style.css" />
             <body>
                 <div class="navbar">
                     <div class="navbar-inner">
@@ -404,19 +406,30 @@ if ($sql == false) {
                                                         <div class="widget-main">
                                                             
                                                                 <?php
-                                                                    $foto = mysql_fetch_array(mysql_query("SELECT * FROM resiko AS a INNER JOIN foto_resiko AS b 
-                                                                        ON (a.resiko_id = b.resiko_id) WHERE a.resiko_id = '".$_GET['id']."'"));
-                                                                    if($foto['foto_dir']==''){
-                                                                        echo "<p class='alert alert-info center'>Tidak terdapat foto lokasi kejadian.</p>";
-                                                                    }else{
+                                                                    $foto_ = mysql_query("SELECT * FROM resiko AS a INNER JOIN foto_resiko AS b 
+                                                                        ON (a.resiko_id = b.resiko_id) WHERE a.resiko_id = '".$_GET['id']."'") or die("Query : ".mysql_error());
+                                                                    $cek_ = mysql_num_rows($foto_);
+                                                                    if($cek_ > 1){
                                                                 ?>
-                                                                    <a href="../assets/img/foto-kejadian/<?= $foto['foto_dir']; ?>" title="<?php echo $foto['foto_nama'];?>" data-rel="colorbox">
-                                                                        <img src="../assets/img/foto-kejadian/<?= $foto['foto_dir']; ?>" width="829" height="441"/>
+                                                                <div id="slider">
+                                                                    <ul id="sliderContent">
+                                                                    <?php while($foto = mysql_fetch_array($foto_)) { ?>
+                                                                        <li class="sliderImage" style="display: list-item;">
+                                                                            <img src="../assets/img/foto-kejadian/<?php echo $foto['foto_dir'];?>" width="500" height="400"/>
+                                                                            <span class="atas"><strong><?php echo date('d-m-Y H:i A',strtotime($foto['resiko_tanggal_start']));?></strong><br /><?php echo $foto['foto_nama'];?></span>
+                                                                        </li>
+                                                                <?php } ?>
+                                                                    </ul>
+                                                                </div>
+                                                                <?php }else if($cek_ == 1){ $foto1 = mysql_fetch_array($foto_)?>
+                                                                    <a href="../assets/img/foto-kejadian/<?= $foto1['foto_dir']; ?>" title="<?php echo $foto1['foto_nama'];?>" data-rel="colorbox">
+                                                                        <img src="../assets/img/foto-kejadian/<?= $foto1['foto_dir']; ?>" width="829" height="441"/>
                                                                     </a>
                                                                 <?php
-                                                                    }
+                                                                    }else{
                                                                 ?>
-                                                                  
+                                                                <p class='alert alert-info center'>Tidak terdapat foto lokasi kejadian.</p>";
+                                                                <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -575,6 +588,7 @@ if ($sql == false) {
 <script src="../assets/js-ace/bootstrap.min.js"></script>
 
 <!--page specific plugin scripts-->
+<script src="../assets/js-ace/js-slide/s3slider.js"></script>
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
 <script src="../assets/js-ace/jquery.colorbox-min.js"></script>
@@ -625,37 +639,40 @@ if ($sql == false) {
 </script>
 <script type="text/javascript">
     $(function() {
-                var colorbox_params = {
-                    reposition:true,
-                    scalePhotos:true,
-                    scrolling:false,
-                    previous:'<i class="icon-arrow-left"></i>',
-                    next:'<i class="icon-arrow-right"></i>',
-                    close:'&times;',
-                    current:'{current} of {total}',
-                    maxWidth:'100%',
-                    maxHeight:'100%',
-                    onOpen:function(){
-                        document.body.style.overflow = 'hidden';
-                    },
-                    onClosed:function(){
-                        document.body.style.overflow = 'auto';
-                    },
-                    onComplete:function(){
-                        $.colorbox.resize();
-                    }
-                };
+        var colorbox_params = {
+            reposition:true,
+            scalePhotos:true,
+            scrolling:false,
+            previous:'<i class="icon-arrow-left"></i>',
+            next:'<i class="icon-arrow-right"></i>',
+            close:'&times;',
+            current:'{current} of {total}',
+            maxWidth:'100%',
+            maxHeight:'100%',
+            onOpen:function(){
+                document.body.style.overflow = 'hidden';
+            },
+            onClosed:function(){
+                document.body.style.overflow = 'auto';
+            },
+            onComplete:function(){
+                $.colorbox.resize();
+            }
+        };
 
-    $('.widget-main [data-rel="colorbox"]').colorbox(colorbox_params);
-    $("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
+        $('.widget-main [data-rel="colorbox"]').colorbox(colorbox_params);
+        $("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
 
-    /**$(window).on('resize.colorbox', function() {
-        try {
-            //this function has been changed in recent versions of colorbox, so it won't work
-            $.fn.colorbox.load();//to redraw the current frame
-        } catch(e){}
-    });*/
-})
+        /**$(window).on('resize.colorbox', function() {
+            try {
+                //this function has been changed in recent versions of colorbox, so it won't work
+                $.fn.colorbox.load();//to redraw the current frame
+            } catch(e){}
+        });*/
+    })
+</script>
+<script type="text/javascript">
+    
 </script>
 <script type="text/javascript">
 $(function() {
@@ -702,7 +719,11 @@ $(function() {
     });
 </script>
 <script type="text/javascript">
-    
+    $(document).ready(function() {
+        $('#slider').s3Slider({
+            timeOut: 6000
+        });
+    });
 </script>
 </body>
 </html>

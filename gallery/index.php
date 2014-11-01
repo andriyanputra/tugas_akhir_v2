@@ -201,8 +201,62 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!--PAGE CONTENT BEGINS-->
+                                    <?php 
+                                        $result = mysql_query("SELECT a.resiko_id AS id, a.resiko_tanggal_start AS tgl_kejadian,
+                                                            b.foto_nama, b.foto_dir FROM resiko AS a 
+                                                            INNER JOIN foto_resiko AS b ON (a.resiko_id = b.resiko_id)
+                                                            WHERE a.resiko_tanggal_start BETWEEN '2013-01-01' AND '2015-12-31'") or die("Query : ".mysql_error());
+                                    ?>
+
                                     <div class="row-fluid">
-                                        <form class="form-inline center" method="post" />
+                                        <div class="widget-box">
+                                            <div class="widget-header widget-hea1der-small header-color-blue">
+                                                <h6>Scroll Content</h6>
+
+                                                <div class="widget-toolbar">
+                                                    <a href="#" data-action="reload">
+                                                        <i class="icon-refresh"></i>
+                                                    </a>
+
+                                                    <a href="#" data-action="collapse">
+                                                        <i class="icon-chevron-up"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main padding-4">
+                                                    <div class="slim-scroll" data-height="250">
+                                                        <div class="content">
+                                                            <ul class="ace-thumbnails">
+                                                            <?php
+                                                                while($row=mysql_fetch_array($result)){
+                                                            ?>
+                                                                <li>
+                                                                    <a href="../assets/img/foto-kejadian/<?php echo $row['foto_dir'];?>" title="<?php echo $row['foto_nama'];?>" data-rel="colorbox">
+                                                                        <img width="150" height="150" alt="150x150" src="../assets/img/foto-kejadian/<?php echo $row['foto_dir'];?>" />
+                                                                        <div class="text">
+                                                                            <div class="inner"><?php echo $row['foto_nama'];?></div>
+                                                                        </div>
+                                                                        <div class="tags">
+                                                                            <span class="label label-important arrowed"><?php echo date('d-m-Y H:i A',strtotime($row['tgl_kejadian']));?></span>
+                                                                        </div>
+                                                                    </a>
+
+                                                                    <div class="tools tools-top">
+                                                                        <a href="../pasca/view?id=<?php echo $row['id'];?>">
+                                                                            <i class="icon-share-alt"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </li>
+                                                            <?php } ?>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--<form class="form-inline center" method="post" />
                                             Tampilkan Berdasarkan :&nbsp;&nbsp;
                                             <select class="span2" id="bulan">
                                                 <option value=""/>Pilih Bulan...
@@ -225,13 +279,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                 <option value="2014" />2014
                                             </select>
 
-                                            <!--<input type="button" id="button" value="Cari" />-->
+                                            <!--<input type="button" id="button" value="Cari" />
                                             <button id="button" onclick="return false;" class="btn btn-danger btn-small">
                                                 Cari
                                                 <i class="icon-search bigger-110"></i>
                                             </button>
-                                        </form>
-                                        <ul class="ace-thumbnails hasil" id="result"></ul>
+                                        </form>-->
                                     </div>
                                     <!--PAGE CONTENT ENDS-->
                                 </div><!--/.span-->
@@ -288,6 +341,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
     <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
     <script src="../assets/js-ace/sweet-alert.js"></script>
+    <script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
     <script src="../assets/js-ace/jquery.colorbox-min.js"></script>
     <script src="../assets/js-ace/ace-elements.min.js"></script>
     <script src="../assets/js-ace/ace.min.js"></script>
@@ -330,41 +384,14 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         // ========================Akhir Jam========================================== //
     </script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            function search(){
-
-              var bulan=$("#bulan").val();
-              var tahun=$("#tahun").val();
-
-              if(bulan!="" && tahun!=""){
-                //$("#result").html("<img src='img/ajax-loader.gif'/>");
-                 $.ajax({
-                    type:"post",
-                    url:"data.php",
-                    data:{bulan:bulan, tahun:tahun},
-                    success:function(data){
-                        $("ul#result").html(data);
-                        //$("#result").html(data);
-                        $("#search").val("");
-                    }
-                });
-            }else if(bulan==""||tahun==""){
-                setTimeout(function() {
-                    swal("Oops...", "Mohon untuk memilih bulan dan tahun !", "error");
-                }, 200);
-            } 
-        }
-
-        $("#button").click(function(){
-            search();
+        // scrollables
+        $('.slim-scroll').each(function () {
+            var $this = $(this);
+            $this.slimScroll({
+                height: $this.data('height') || 100,
+                railVisible:true
+            });
         });
-
-        $('#search').keyup(function(e) {
-            if(e.keyCode == 13) {
-                search();
-            }
-        });
-    });
     </script>
     <script type="text/javascript">
         $(function() {
@@ -389,7 +416,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                 }
             };
 
-            $('.hasil [data-rel="colorbox"]').colorbox(colorbox_params);
+            $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
             $("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
 
             /**$(window).on('resize.colorbox', function() {
