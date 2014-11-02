@@ -211,7 +211,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     <div class="row-fluid">
                                         <div class="widget-box">
                                             <div class="widget-header widget-hea1der-small header-color-blue">
-                                                <h6>Scroll Content</h6>
+                                                <h6>Daftar Foto Kejadian Kebakaran</h6>
 
                                                 <div class="widget-toolbar">
                                                     <a href="#" data-action="reload">

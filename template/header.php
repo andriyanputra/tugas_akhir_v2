@@ -43,52 +43,6 @@ date_default_timezone_set('Asia/Jakarta');
             body,td,th {
                 font-family: "Open Sans";
             }
-            .blink {
-              -moz-animation-duration: 800ms;
-              -moz-animation-name: blink;
-              -moz-animation-iteration-count: infinite;
-              -moz-animation-direction: alternate;
-              
-              -webkit-animation-duration: 800ms;
-              -webkit-animation-name: blink;
-              -webkit-animation-iteration-count: infinite;
-              -webkit-animation-direction: alternate;
-              
-              animation-duration: 800ms;
-              animation-name: blink;
-              animation-iteration-count: infinite;
-              animation-direction: alternate;
-            }
-
-            @-moz-keyframes blink {
-              from {
-                opacity: 1;
-              }
-              
-              to {
-                opacity: 0;
-              }
-            }
-
-            @-webkit-keyframes blink {
-              from {
-                opacity: 1;
-              }
-              
-              to {
-                opacity: 0;
-              }
-            }
-
-            @keyframes blink {
-              from {
-                opacity: 1;
-              }
-              
-              to {
-                opacity: 0;
-              }
-            }
         </style>
         <!--inline styles related to this page-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>

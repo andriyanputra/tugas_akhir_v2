@@ -18,16 +18,43 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         INNER JOIN desa AS d ON (d.KECAMATAN_ID = c.KECAMATAN_ID)
         INNER JOIN bangunan AS e ON (e.ID_BANGUNAN = a.ID_BANGUNAN)
         INNER JOIN master_bangunan AS f ON (e.ID_MASTER = f.ID_MASTER)
-        WHERE a.resiko_id = '".$_GET['id']."' LIMIT 1") or die(mysql_error());
+        WHERE a.resiko_id = '".$_GET['id']."' AND a.resiko_status = 'yes' LIMIT 1") or die(mysql_error());
 if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
         exit();
-    } else if (mysql_num_rows($sql)) {
+    } else if (mysql_num_rows($sql) && mysql_num_rows($query)) {
         while ($row = mysql_fetch_assoc($sql)) {
             ?>
-
-        <link rel="stylesheet" href="../assets/css-ace/css-slide/style.css" />
+<style type="text/css">
+        /*** set the width and height to match your images **/
+        #slideshow {
+            position:relative;
+            height:400px;
+        }
+        #slideshow DIV {
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:8;
+            opacity:0.0;
+            height: 400px;
+            background-color: #FFF;
+        }
+        #slideshow DIV.active {
+            z-index:10;
+            opacity:1.0;
+        }
+        #slideshow DIV.last-active {
+            z-index:9;
+        }
+        #slideshow DIV IMG {
+            height: 350px;
+            display: block;
+            border: 0;
+            margin-bottom: 10px;
+        }
+        </style>
             <body>
                 <div class="navbar">
                     <div class="navbar-inner">
@@ -411,15 +438,13 @@ if ($sql == false) {
                                                                     $cek_ = mysql_num_rows($foto_);
                                                                     if($cek_ > 1){
                                                                 ?>
-                                                                <div id="slider">
-                                                                    <ul id="sliderContent">
+                                                                <div id="slideshow">
                                                                     <?php while($foto = mysql_fetch_array($foto_)) { ?>
-                                                                        <li class="sliderImage" style="display: list-item;">
-                                                                            <img src="../assets/img/foto-kejadian/<?php echo $foto['foto_dir'];?>" width="500" height="400"/>
-                                                                            <span class="atas"><strong><?php echo date('d-m-Y H:i A',strtotime($foto['resiko_tanggal_start']));?></strong><br /><?php echo $foto['foto_nama'];?></span>
-                                                                        </li>
+                                                                        <div class="active">
+                                                                            <img src="../assets/img/foto-kejadian/<?= $foto['foto_dir']; ?>" alt="<?php echo $foto['foto_nama'];?>" width="520" height="350"/>
+                                                                            <?php echo $foto['foto_nama'];?>
+                                                                        </div>
                                                                 <?php } ?>
-                                                                    </ul>
                                                                 </div>
                                                                 <?php }else if($cek_ == 1){ $foto1 = mysql_fetch_array($foto_)?>
                                                                     <a href="../assets/img/foto-kejadian/<?= $foto1['foto_dir']; ?>" title="<?php echo $foto1['foto_nama'];?>" data-rel="colorbox">
@@ -536,10 +561,25 @@ if ($sql == false) {
                                 </div><!--/.span-->
                             </div><!--/.row-fluid-->
                         </div><!--/.page-content-->
+        
 
                 <?php
                 //include '../template/footer.php';
             }
+        }else{
+            ?>
+            <script language="JavaScript">
+                setTimeout(function() {
+                    sweetAlert({
+                      title: "Gagal lihat kejadian!", 
+                      text: "Maaf, kejadian kebakaran belum selesai ditangani !!", 
+                      type: "error"
+                    }, function(){
+                        document.location = 'pasca.php';
+                    })
+                }, 200);
+            </script>
+            <?php
         }
     }
     ?>  
@@ -588,7 +628,6 @@ if ($sql == false) {
 <script src="../assets/js-ace/bootstrap.min.js"></script>
 
 <!--page specific plugin scripts-->
-<script src="../assets/js-ace/js-slide/s3slider.js"></script>
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
 <script src="../assets/js-ace/jquery.colorbox-min.js"></script>
@@ -719,11 +758,38 @@ $(function() {
     });
 </script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#slider').s3Slider({
-            timeOut: 6000
+    /*** 
+    Simple jQuery Slideshow Script
+    Released by Jon Raasch (jonraasch.com) under FreeBSD license: free to use or modify, not responsible for anything, etc.  Please link out to me if you like it :)
+***/
+
+function slideSwitch() {
+    var $active = $('#slideshow DIV.active');
+
+    if ( $active.length == 0 ) $active = $('#slideshow DIV:last');
+
+    // use this to pull the divs in the order they appear in the markup
+    var $next =  $active.next().length ? $active.next()
+        : $('#slideshow DIV:first');
+
+    // uncomment below to pull the divs randomly
+    // var $sibs  = $active.siblings();
+    // var rndNum = Math.floor(Math.random() * $sibs.length );
+    // var $next  = $( $sibs[ rndNum ] );
+
+
+    $active.addClass('last-active');
+
+    $next.css({opacity: 0.0})
+        .addClass('active')
+        .animate({opacity: 1.0}, 1000, function() {
+            $active.removeClass('active last-active');
         });
-    });
+}
+
+$(function() {
+    setInterval( "slideSwitch()", 5000 );
+});
 </script>
 </body>
 </html>
