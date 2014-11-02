@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Inang: 127.0.0.1
--- Waktu pembuatan: 29 Okt 2014 pada 23.16
+-- Waktu pembuatan: 02 Nov 2014 pada 20.57
 -- Versi Server: 5.5.27
 -- Versi PHP: 5.4.7
 
@@ -531,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `foto_resiko` (
 
 INSERT INTO `foto_resiko` (`foto_id`, `resiko_id`, `foto_nama`, `foto_dir`) VALUES
 (1, 115, 'Rumah Makan (Buduran)', '251014-rm.jpg'),
-(2, 115, 'wew', '271014-Capture2.PNG'),
+(2, 115, 'wew', '271014-Capture2.jpg'),
 (3, 56, 'Pabrik biji', '271014-pabrik (sidoarjo).jpg');
 
 -- --------------------------------------------------------
@@ -680,16 +680,17 @@ CREATE TABLE IF NOT EXISTS `log_user` (
   `log_ket` varchar(200) NOT NULL,
   PRIMARY KEY (`log_id`),
   KEY `FK_pegawai` (`pegawai_nip`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data untuk tabel `log_user`
 --
 
 INSERT INTO `log_user` (`log_id`, `pegawai_nip`, `login_date`, `logout_date`, `log_ket`) VALUES
-(1, 115623001, '2014-10-29 21:46:55', '2014-10-29 22:35:58', '-'),
-(2, 115623003, '2014-10-29 22:36:07', '2014-10-29 22:36:30', '-'),
-(3, 115623212, '2014-10-29 22:36:43', '2014-10-29 12:45:19', '-');
+(1, 115623001, '2014-10-30 11:22:07', '2014-10-30 11:28:14', '-'),
+(2, 115623003, '2014-11-02 17:11:17', '2014-11-01 19:58:09', '-'),
+(3, 115623212, '2014-11-01 20:03:18', '2014-11-01 20:03:43', '-'),
+(4, 115623333, '2014-10-31 21:31:43', '2014-10-31 21:30:56', '-');
 
 -- --------------------------------------------------------
 
@@ -778,7 +779,8 @@ CREATE TABLE IF NOT EXISTS `pegawai` (
 INSERT INTO `pegawai` (`pegawai_nip`, `id_level_user`, `pegawai_nama`, `pegawai_tempat`, `pegawai_tanggal`, `pegawai_kelamin`, `pegawai_alamat`, `pegawai_no_telp`, `jabatan_id`, `pegawai_email`, `pegawai_password`, `pegawai_foto`) VALUES
 (115623001, 2, 'Achmad Fatoni', 'Surabaya', '1992-01-01', 'Laki-laki', 'Surabaya', '085733964366', 1, 'fatoni@gmail.com', 'e807f1fcf82d132f9bb018ca6738a19f', '120814-Achmad-Fatoni.jpg'),
 (115623003, 1, 'Andriyan Dwi P', 'Sidoarjo', '2014-04-30', 'Laki-laki', 'Sidoarjo', '242112321421', 4, 'andriyan.115623003@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 'Downfall342.jpg'),
-(115623212, 3, 'Muhammad Rudi', 'Jombang', '1992-02-28', 'Laki-laki', 'Ds. Ploso Jombang', '082134222233', 2, 'rudi_westlife@gmail.com', 'bfcd3eee9746714ca4fcba684344bbc0', '211014-rudi.jpg');
+(115623212, 3, 'Muhammad Rudi', 'Jombang', '1992-02-28', 'Laki-laki', 'Ds. Ploso Jombang', '082134222233', 2, 'rudi_westlife@gmail.com', 'bfcd3eee9746714ca4fcba684344bbc0', '211014-rudi.jpg'),
+(115623333, 1, 'Andriyan D. Putranto', 'Surabaya', '1992-05-29', 'Laki-laki', 'Surabaya', '085733964366', 4, 'abang_kuning@yahoo.co.id', '25631d5374f0ecc91cd7300fa6902d9b', '311014-editan_PP.jpg');
 
 -- --------------------------------------------------------
 
@@ -859,6 +861,8 @@ CREATE TABLE IF NOT EXISTS `pesan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pesan_id` varchar(20) NOT NULL,
   `resiko_id` int(11) NOT NULL,
+  `pesan_tgl_masuk` datetime NOT NULL,
+  `pesan_tgl_keluar` datetime NOT NULL,
   `pesan_nama` varchar(100) NOT NULL,
   `pesan_jml` int(20) NOT NULL,
   `pesan_isi` text NOT NULL,
@@ -869,15 +873,17 @@ CREATE TABLE IF NOT EXISTS `pesan` (
   PRIMARY KEY (`id`),
   KEY `FK_resiko` (`resiko_id`),
   KEY `FK_pegawai` (`pegawai_nip`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data untuk tabel `pesan`
 --
 
-INSERT INTO `pesan` (`id`, `pesan_id`, `resiko_id`, `pesan_nama`, `pesan_jml`, `pesan_isi`, `pesan_status`, `pegawai_nip`, `pesan_dari`, `pesan_untuk`) VALUES
-(1, 'SK-102114-19', 55, 'APAR', 2, 'Karena kebakaran terlalu menyulitkan dengan terpaksa, sembari menunggu mobil tangki pemadam. Kami menggunakan APAR', 0, 115623003, 4, 2),
-(2, 'SK-102114-19', 55, 'APAR', 2, 'Karena kebakaran terlalu menyulitkan dengan terpaksa, sembari menunggu mobil tangki pemadam. Kami menggunakan APAR', 0, 115623003, 4, 4);
+INSERT INTO `pesan` (`id`, `pesan_id`, `resiko_id`, `pesan_tgl_masuk`, `pesan_tgl_keluar`, `pesan_nama`, `pesan_jml`, `pesan_isi`, `pesan_status`, `pegawai_nip`, `pesan_dari`, `pesan_untuk`) VALUES
+(1, 'SK-102114-19', 55, '2013-01-19 10:42:12', '0000-00-00 00:00:00', 'APAR', 2, 'Karena kebakaran terlalu menyulitkan dengan terpaksa, sembari menunggu mobil tangki pemadam. Kami menggunakan APAR', 0, 115623003, 4, 2),
+(2, 'SK-102114-19', 55, '2013-01-19 10:42:12', '0000-00-00 00:00:00', 'APAR', 2, 'Karena kebakaran terlalu menyulitkan dengan terpaksa, sembari menunggu mobil tangki pemadam. Kami menggunakan APAR', 0, 115623003, 4, 4),
+(3, 'SK-102114-19', 55, '2013-01-19 10:42:12', '0000-00-00 00:00:00', 'APAR', 2, 'WEW', 0, 115623003, 4, 4),
+(4, 'SK-102114-19', 55, '2013-01-19 10:42:12', '0000-00-00 00:00:00', 'APAR', 2, 'wew', 0, 115623003, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -944,22 +950,22 @@ INSERT INTO `resiko` (`resiko_id`, `resiko_tanggal_start`, `resiko_tanggal_end`,
 (24, '2013-10-24 16:29:04', '0000-00-00 00:00:00', 'Johan Adi', '0813429098', 'Jalan Kebayoran No.80 RT 06 RW 01', 84, 80, 5, 10, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '7.00', '3.00', '1084', '152', '28', 'MPKP', 'no'),
 (25, '2013-12-20 16:31:12', '0000-00-00 00:00:00', 'Julita', '7223980', 'Jalan Sumber No.14 RT 08 RW 09', 44, 83, 5, 11, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '1.00', '9643', '964', '29', 'MPKL', 'no'),
 (26, '2013-02-27 08:17:54', '0000-00-00 00:00:00', 'Fitri Kartika', '0811089011', 'Jalan Mundu No.13 RT 01 RW 08', 84, 148, 8, 9, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '6.00', '3.00', '1414', '132', '31', 'MPKP', 'no'),
-(27, '2013-07-12 08:20:52', '0000-00-00 00:00:00', 'Andriyan', '0887685477', 'Jalan Semeru No.300 RT 01 RW 07', 0, 149, 8, 9, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '9.00', '4.00', '2758', '257', '30', 'MPKP', 'no'),
+(27, '2013-07-12 08:20:52', '0000-00-00 00:00:00', 'Andriyan', '0887685477', 'Jalan Semeru No.300 RT 01 RW 07', 84, 149, 8, 9, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '9.00', '4.00', '2758', '257', '30', 'MPKP', 'no'),
 (28, '2013-09-09 08:26:16', '0000-00-00 00:00:00', 'Muhammad', '7231098', 'Jalan Komplek NO.20 RT 01 RW 01', 44, 147, 8, 9, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '80.00', '1.00', '41186', '4127', '29', 'MPKL', 'no'),
-(29, '2013-09-25 08:30:10', '0000-00-00 00:00:00', 'Rahmad Hidayat', '8933445', 'Jalan Asem NO.14 RT 02 RW 08', 0, 140, 8, 11, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '100.00', '50.00', '1.00', '48413', '3228', '30', 'MPKL', 'no'),
+(29, '2013-09-25 08:30:10', '0000-00-00 00:00:00', 'Rahmad Hidayat', '8933445', 'Jalan Asem NO.14 RT 02 RW 08', 44, 140, 8, 11, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '100.00', '50.00', '1.00', '48413', '3228', '30', 'MPKL', 'no'),
 (30, '2013-11-28 08:33:37', '0000-00-00 00:00:00', 'Guntur', '7022345', 'Jalan Merdeka NO.17 RT 01 RW 02', 44, 142, 8, 9, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '1.00', '22632', '2258', '31', 'MPKL', 'no'),
-(31, '2013-01-27 08:36:41', '0000-00-00 00:00:00', 'Jihan Fahira', '08653748278', 'Jalan Berkah No.400 RT 01 RW 05', 0, 312, 16, 13, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '6.00', '3.00', '1671', '104', '26', 'MPKP', 'no'),
-(32, '2013-07-27 08:43:01', '0000-00-00 00:00:00', 'Joseph Santoso', '7317089', 'Jalan Ksatria No.300 RT 01 RW 02', 0, 277, 16, 19, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '11.00', '9.00', '4.00', '4513', '281', '26', 'MPKP', 'no'),
+(31, '2013-01-27 08:36:41', '0000-00-00 00:00:00', 'Jihan Fahira', '08653748278', 'Jalan Berkah No.400 RT 01 RW 05', 84, 312, 16, 13, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '6.00', '3.00', '1671', '104', '26', 'MPKP', 'no'),
+(32, '2013-07-27 08:43:01', '0000-00-00 00:00:00', 'Joseph Santoso', '7317089', 'Jalan Ksatria No.300 RT 01 RW 02', 83, 277, 16, 19, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '11.00', '9.00', '4.00', '4513', '281', '26', 'MPKP', 'no'),
 (33, '2013-09-19 08:46:00', '0000-00-00 00:00:00', 'Winda Meliani', '08395874930', 'Jalan Urip Sumoharjo No.29 RT 01 RW 05', 44, 313, 16, 13, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '85.00', '50.00', '1.00', '27454', '2745', '31', 'MPKL', 'no'),
 (34, '2013-11-22 08:48:24', '0000-00-00 00:00:00', 'Rizki Rahmad', '8955674', 'Jalan Harapan No.89 RT 01 RW 07', 44, 301, 16, 13, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '100.00', '40.00', '1.00', '25781', '2578', '29', 'MPKL', 'no'),
-(35, '2013-01-27 08:51:35', '0000-00-00 00:00:00', 'Wulansuci', '8853456', 'Jalan Santri No.58 RT 01 RW 05', 0, 189, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '80.00', '65.00', '4.00', '181370', '14537', '30', 'MPKP', 'no'),
-(36, '2013-02-21 08:54:02', '0000-00-00 00:00:00', 'Azizah', '7022345', 'Jalan Indah NO.78 RT 01 RW 09', 0, 196, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '60.00', '4.00', '141655', '15136', '28', 'MPKP', 'no'),
-(37, '2013-03-10 08:56:42', '0000-00-00 00:00:00', 'Rania', '8999308', 'Jalan Raden Patah No.38 RT 01 RW 03', 0, 207, 11, 43, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '100.00', '100.00', '5.00', '258202', '34427', '30', 'MPKP', 'no'),
+(35, '2013-01-27 08:51:35', '0000-00-00 00:00:00', 'Wulansuci', '8853456', 'Jalan Santri No.58 RT 01 RW 05', 77, 189, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '80.00', '65.00', '4.00', '181370', '14537', '30', 'MPKP', 'no'),
+(36, '2013-02-21 08:54:02', '0000-00-00 00:00:00', 'Azizah', '7022345', 'Jalan Indah NO.78 RT 01 RW 09', 62, 196, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '60.00', '4.00', '141655', '15136', '28', 'MPKP', 'no'),
+(37, '2013-03-10 08:56:42', '0000-00-00 00:00:00', 'Rania', '8999308', 'Jalan Raden Patah No.38 RT 01 RW 03', 49, 207, 11, 43, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '100.00', '100.00', '5.00', '258202', '34427', '30', 'MPKP', 'no'),
 (38, '2013-03-27 08:59:56', '0000-00-00 00:00:00', 'Jojon', '8090765', 'Jalan Hidup No.12 RT 01 RW 07', 28, 194, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '40.00', '5.00', '205932', '11004', '26', 'MPKP', 'no'),
-(39, '2013-08-07 09:05:43', '0000-00-00 00:00:00', 'Fitarina', '8090765', 'Jalan Kembang Sepatu No.290 RT 01 RW 02', 0, 192, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '8.00', '5.00', '5616', '245', '25', 'MPKP', 'no'),
-(40, '2013-08-17 09:08:11', '0000-00-00 00:00:00', 'Septiadi', '7317089', 'Jalan Sono No.45 Rt 01 RW 03', 0, 193, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '6.00', '5.00', '3.00', '800', '62', '29', 'MPKP', 'no'),
+(39, '2013-08-07 09:05:43', '0000-00-00 00:00:00', 'Fitarina', '8090765', 'Jalan Kembang Sepatu No.290 RT 01 RW 02', 37, 192, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '8.00', '5.00', '5616', '245', '25', 'MPKP', 'no'),
+(40, '2013-08-17 09:08:11', '0000-00-00 00:00:00', 'Septiadi', '7317089', 'Jalan Sono No.45 Rt 01 RW 03', 67, 193, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '6.00', '5.00', '3.00', '800', '62', '29', 'MPKP', 'no'),
 (41, '2013-08-20 09:10:52', '0000-00-00 00:00:00', 'Azzahra', '0813429098', 'Jalan A Yani No.32 RT 05 RW 01', 53, 198, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '6.00', '3.00', '1800', '118', '31', 'MPKP', 'no'),
-(42, '2013-08-24 09:13:18', '0000-00-00 00:00:00', 'Stefanie', '08123857999', 'Jalan Kota No.66 Rt 01 RW 04', 0, 190, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '11.00', '9.00', '5.00', '2777', '346', '23', 'MPKP', 'no'),
+(42, '2013-08-24 09:13:18', '0000-00-00 00:00:00', 'Stefanie', '08123857999', 'Jalan Kota No.66 Rt 01 RW 04', 84, 190, 11, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '11.00', '9.00', '5.00', '2777', '346', '23', 'MPKP', 'no'),
 (43, '2013-09-07 09:15:30', '0000-00-00 00:00:00', 'Putri', '08123857999', 'Jalan Indah No.50 Rt 06 RW 01', 44, 189, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '60.00', '1.00', '34869', '3493', '31', 'MPKL', 'no'),
 (44, '2013-09-11 10:10:04', '0000-00-00 00:00:00', 'Sukarno', '0813429098', 'Jalan Surabaya NO.20 RT 01 RW 08', 44, 189, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '40.00', '1.00', '20593', '2063', '28', 'MPKL', 'no'),
 (45, '2013-09-17 10:12:40', '0000-00-00 00:00:00', 'Kartono', '71123456', 'Jalan Semanggi NO.55 RT 01 RW 07', 44, 199, 11, 43, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '1.00', '22632', '2258', '26', 'MPKL', 'no'),
@@ -971,26 +977,26 @@ INSERT INTO `resiko` (`resiko_id`, `resiko_tanggal_start`, `resiko_tanggal_end`,
 (51, '2013-10-27 10:31:26', '0000-00-00 00:00:00', 'Rumanah', '71123456', 'Jalan Urip Sumoharjo NO.39 RT 08 RW 03', 44, 193, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '45.00', '1.00', '17494', '1749', '29', 'MPKL', 'no'),
 (52, '2013-11-17 10:34:14', '0000-00-00 00:00:00', 'Dwi Ayu', '8933445', 'Jalan Kencana No.300 RT 01 RW 02', 44, 190, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '40.00', '1.00', '20593', '2063', '31', 'MPKL', 'no'),
 (53, '2013-11-25 10:36:12', '0000-00-00 00:00:00', 'Ratna', '7022345', 'Jalan Sentosa NO.39 RT 01 RW 05', 44, 198, 11, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '1.00', '9643', '964', '29', 'MPKL', 'no'),
-(54, '2013-01-01 10:39:04', '0000-00-00 00:00:00', 'Robby', '0811089011', 'Jalan Kauman NO.200 RT 08 RW 01', 0, 23, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '4.00', '275828', '9786', '26', 'MPKP', 'no'),
+(54, '2013-01-01 10:39:04', '0000-00-00 00:00:00', 'Robby', '0811089011', 'Jalan Kauman NO.200 RT 08 RW 01', 30, 23, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '4.00', '275828', '9786', '26', 'MPKP', 'no'),
 (55, '2013-01-19 10:42:12', '2013-01-19 11:27:12', 'Iswatun', '7231098', 'Jalan Arjuno No.30 RT 01 RW 02', 60, 26, 2, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '40.00', '4.00', '97923', '7817', '31', 'MPKP', 'yes'),
 (56, '2013-01-26 10:45:22', '2013-01-27 11:05:22', 'Suhartik', '08123857999', 'Jalan Pahlawan NO. 39 RT 01 RW 03', 6, 31, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '50.00', '5.00', '258027', '15508', '31', 'MPKP', 'yes'),
-(57, '2013-05-11 10:48:21', '0000-00-00 00:00:00', 'Roni', '8918476', 'Jalan Maju JAya NO.29 RT 03 RW 01', 0, 24, 2, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '40.00', '5.00', '139122', '12387', '31', 'MPKP', 'no'),
+(57, '2013-05-11 10:48:21', '0000-00-00 00:00:00', 'Roni', '8918476', 'Jalan Maju JAya NO.29 RT 03 RW 01', 36, 24, 2, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '40.00', '5.00', '139122', '12387', '31', 'MPKP', 'no'),
 (58, '2013-05-20 10:51:16', '0000-00-00 00:00:00', 'Totok', '7231098', 'Jalan Randu Agung NO.100 RT 01 RW 02', 31, 28, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '5.00', '64288', '5143', '28', 'MPKP', 'no'),
 (59, '2013-08-27 10:53:56', '0000-00-00 00:00:00', 'Julita', '0811089011', 'Jalan Sigura-gura NO.39 RT 02 RW 01', 56, 22, 2, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '60.00', '4.00', '167746', '13445', '31', 'MPKP', 'no'),
 (60, '2013-09-07 10:56:21', '0000-00-00 00:00:00', 'Sari', '7317089', 'Jalan HArum NO.400 RT 01 RW 02', 1, 27, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '30.00', '4.00', '83659', '5020', '30', 'MPKP', 'no'),
 (61, '2013-09-24 10:59:26', '0000-00-00 00:00:00', 'Suhardi', '0856389048', 'Jalan Kertajaya NO.20 RT 01 RW 02', 29, 26, 2, 15, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '20.00', '10.00', '5.00', '8712', '692', '31', 'MPKP', 'no'),
 (62, '2013-09-27 11:02:16', '0000-00-00 00:00:00', 'Maliq', '8933445', 'JAlan Sumoharjo NO 400 RT 01 RW 09', 95, 35, 2, 15, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '15.00', '10.00', '6.00', '4620', '647', '29', 'MPKP', 'no'),
 (63, '2013-10-01 11:04:39', '0000-00-00 00:00:00', 'Sariyah', '0887685477', 'Jalan Kenongo NO.40 RT 01 RW 02', 43, 35, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '20.00', '15.00', '4.00', '6306', '834', '29', 'MPKP', 'no'),
-(64, '2013-10-11 11:48:04', '0000-00-00 00:00:00', 'Wahyuni', '71123456', 'Jalan Makmur NO.20 RT 01 RW 03', 0, 23, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '8.00', '3.00', '2758', '172', '31', 'MPKP', 'no'),
-(65, '2013-10-13 11:52:18', '0000-00-00 00:00:00', 'Putri', '08123857999', 'Jalan Kartini NO.20 RT 01 RW 02', 0, 23, 2, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '6.00', '3.00', '1114', '104', '30', 'MPKP', 'no'),
-(66, '2013-10-17 11:55:06', '0000-00-00 00:00:00', 'Siskawati', '7223980', 'Jalan Ijen NO.24 Rt 01 RW 03', 0, 29, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '6.00', '3.00', '1929', '118', '31', 'MPKP', 'no'),
+(64, '2013-10-11 11:48:04', '0000-00-00 00:00:00', 'Wahyuni', '71123456', 'Jalan Makmur NO.20 RT 01 RW 03', 83, 23, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '8.00', '3.00', '2758', '172', '31', 'MPKP', 'no'),
+(65, '2013-10-13 11:52:18', '0000-00-00 00:00:00', 'Putri', '08123857999', 'Jalan Kartini NO.20 RT 01 RW 02', 84, 23, 2, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '6.00', '3.00', '1114', '104', '30', 'MPKP', 'no'),
+(66, '2013-10-17 11:55:06', '0000-00-00 00:00:00', 'Siskawati', '7223980', 'Jalan Ijen NO.24 Rt 01 RW 03', 84, 29, 2, 7, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '6.00', '3.00', '1929', '118', '31', 'MPKP', 'no'),
 (67, '2013-10-19 11:57:20', '0000-00-00 00:00:00', 'Putra', '7022345', 'Jalan Sewu Candi NO.20 RT 01 RW 02', 84, 28, 2, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '5.00', '3.00', '891', '83', '30', 'MPKP', 'no'),
 (68, '2013-10-22 11:59:13', '0000-00-00 00:00:00', 'Sulastri', '0813429098', 'JAlan Supratman NO.10 RT 09 RW 01', 84, 24, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '6.00', '6.00', '1886', '264', '28', 'MPKP', 'no'),
 (69, '2013-10-25 12:01:22', '0000-00-00 00:00:00', 'Fahmi', '08123857999', 'Jalan Manggis NO.14 RT 07 RW 01', 55, 30, 2, 8, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '6.00', '3.00', '1300', '104', '31', 'MPKP', 'no'),
 (70, '2013-10-27 12:03:36', '0000-00-00 00:00:00', 'Karunia', '08123857999', 'Jalan Sawo NO.30 RT 02 RW 06', 84, 28, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '7.00', '3.00', '986', '136', '29', 'MPKP', 'no'),
 (71, '2013-11-15 12:12:41', '0000-00-00 00:00:00', 'Rusliawan', '7384758', 'Jalan Jeruk NO.34 RT 01 RW 08', 44, 22, 2, 15, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '60.00', '1.00', '27186', '2713', '29', 'MPKL', 'no'),
 (72, '2013-11-26 12:14:50', '0000-00-00 00:00:00', 'Saritoga', '0811089011', 'Jalan Kebomas NO.33 RT 01 Rw 02', 44, 25, 2, 7, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '55.00', '1.00', '21276', '2128', '28', 'MPKL', 'no'),
-(73, '2013-01-21 12:18:10', '0000-00-00 00:00:00', 'Suryanto', '7223980', 'Jalan Merbabu NO.89 RT 01 RW 04', 0, 38, 3, 11, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '40.00', '15.00', '4.00', '23469', '1669', '29', 'MPKP', 'no'),
+(73, '2013-01-21 12:18:10', '0000-00-00 00:00:00', 'Suryanto', '7223980', 'Jalan Merbabu NO.89 RT 01 RW 04', 28, 38, 3, 11, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '40.00', '15.00', '4.00', '23469', '1669', '29', 'MPKP', 'no'),
 (74, '2013-08-17 12:21:59', '0000-00-00 00:00:00', 'Riniwati', '0811089011', 'Jalan Sumo Kali NO.39 RT 01 RW 02', 44, 40, 3, 19, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '100.00', '70.00', '1.00', '45264', '4526', '28', 'MPKL', 'no'),
 (75, '2013-08-29 12:24:12', '0000-00-00 00:00:00', 'Rozaq', '7022345', 'Jalan Kemuning Raya NO.28 RT 01 RW 03', 44, 51, 3, 12, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '80.00', '70.00', '1.00', '36156', '3623', '30', 'MPKL', 'no'),
 (76, '2013-09-03 12:26:34', '0000-00-00 00:00:00', 'Setya Uswatun', '08123857999', 'Jalan Cempaka NO.300 RT 01 RW 03', 44, 44, 3, 18, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '35.00', '1.00', '11316', '1132', '24', 'MPKL', 'no'),
@@ -1000,37 +1006,37 @@ INSERT INTO `resiko` (`resiko_id`, `resiko_tanggal_start`, `resiko_tanggal_end`,
 (80, '2013-10-26 12:43:16', '0000-00-00 00:00:00', 'Deni', '0813429098', 'Jalan Slamet NO.34 RT 02 Rw 04', 44, 37, 3, 12, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '1.00', '22632', '2258', '28', 'MPKL', 'no'),
 (81, '2013-11-13 12:46:03', '0000-00-00 00:00:00', 'Rahmawati', '0813429098', 'Jalan Rukun Warga NO.50 RT 01 RW 04', 44, 46, 3, 12, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '65.00', '1.00', '29394', '2933', '28', 'MPKL', 'no'),
 (82, '2013-11-26 12:48:10', '0000-00-00 00:00:00', 'Fajar Budi', '7223980', 'Jalan jambu NO.400 RT 01 Rw 03', 44, 344, 3, 18, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '60.00', '1.00', '27186', '2713', '31', 'MPKL', 'no'),
-(83, '2013-06-19 12:55:33', '0000-00-00 00:00:00', 'Rahardjo', '0811089011', 'Jalan Sudimampir No.30 RT 01 Rw 02', 0, 256, 14, 12, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '7.00', '3.00', '2218', '136', '31', 'MPKP', 'no'),
+(83, '2013-06-19 12:55:33', '0000-00-00 00:00:00', 'Rahardjo', '0811089011', 'Jalan Sudimampir No.30 RT 01 Rw 02', 84, 256, 14, 12, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '7.00', '3.00', '2218', '136', '31', 'MPKP', 'no'),
 (84, '2013-09-04 12:57:55', '0000-00-00 00:00:00', 'Rasita', '7223980', 'Jalan Rekoso No.34 RT 01 RW 08', 53, 267, 14, 19, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '5.00', '3.00', '1248', '83', '29', 'MPKP', 'no'),
-(85, '2013-01-21 13:00:34', '0000-00-00 00:00:00', 'Rahmi', '8955674', 'Jalan Kuning Mas NO.34 RT 02 RW 01', 0, 63, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '70.00', '40.00', '5.00', '135585', '9621', '28', 'MPKBG', 'no'),
+(85, '2013-01-21 13:00:34', '0000-00-00 00:00:00', 'Rahmi', '8955674', 'Jalan Kuning Mas NO.34 RT 02 RW 01', 29, 63, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '70.00', '40.00', '5.00', '135585', '9621', '28', 'MPKBG', 'no'),
 (86, '2013-02-22 13:02:55', '0000-00-00 00:00:00', 'Yanto', '7223980', 'Jalan Kanjeng Jimat', 20, 64, 4, 45, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '4.00', '78351', '4179', '29', 'MPKP', 'no'),
-(87, '2013-09-19 13:05:47', '0000-00-00 00:00:00', 'Mustika', '0856389048', 'Jalan Sedap Malam NO.35 RT 01 Rw 03', 0, 73, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '30.00', '15.00', '3.00', '12005', '965', '29', 'MPKP', 'no'),
+(87, '2013-09-19 13:05:47', '0000-00-00 00:00:00', 'Mustika', '0856389048', 'Jalan Sedap Malam NO.35 RT 01 Rw 03', 78, 73, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '30.00', '15.00', '3.00', '12005', '965', '29', 'MPKP', 'no'),
 (88, '2013-10-18 13:08:16', '0000-00-00 00:00:00', 'Lilik', '7317089', 'Jalan Sekar BUmi No.33 RT 01 RW 03', 53, 62, 4, 45, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '12.00', '7.00', '3.00', '2691', '182', '31', 'MPKP', 'no'),
-(89, '2013-10-27 13:10:22', '0000-00-00 00:00:00', 'Hartatik', '8918476', 'Jalan Sono NO 55 Rt 02 RW 03', 0, 66, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '5.00', '3.00', '1337', '83', '29', 'MPKP', 'no'),
-(90, '2013-11-11 13:12:29', '0000-00-00 00:00:00', 'Pujiono', '88445578', 'Jalan Bambu Asri NO.32 RT 01 RW 01', 0, 69, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '7.00', '5.00', '3.00', '789', '74', '31', 'MPKP', 'no'),
+(89, '2013-10-27 13:10:22', '0000-00-00 00:00:00', 'Hartatik', '8918476', 'Jalan Sono NO 55 Rt 02 RW 03', 84, 66, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '5.00', '3.00', '1337', '83', '29', 'MPKP', 'no'),
+(90, '2013-11-11 13:12:29', '0000-00-00 00:00:00', 'Pujiono', '88445578', 'Jalan Bambu Asri NO.32 RT 01 RW 01', 84, 69, 4, 45, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '7.00', '5.00', '3.00', '789', '74', '31', 'MPKP', 'no'),
 (91, '2013-11-27 13:14:30', '0000-00-00 00:00:00', 'Dhani', '71123456', 'Jalan Untung No.26 RT 01 RW 02', 44, 75, 4, 45, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '75.00', '65.00', '1.00', '31439', '3144', '28', 'MPKL', 'no'),
-(92, '2013-01-10 13:38:52', '0000-00-00 00:00:00', 'Dinda', '0813429098', 'Jalan Kartini No.30 RT 01 RW 03', 0, 316, 17, 3, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '4.00', '39176', '4179', '29', 'MPKP', 'no'),
+(92, '2013-01-10 13:38:52', '0000-00-00 00:00:00', 'Dinda', '0813429098', 'Jalan Kartini No.30 RT 01 RW 03', 60, 316, 17, 3, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '4.00', '39176', '4179', '29', 'MPKP', 'no'),
 (93, '2013-02-20 13:41:19', '0000-00-00 00:00:00', 'Salma', '7022345', 'Jalan Jati NO.45 RT 01 RW 02', 49, 320, 17, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '45.00', '7.00', '111651', '11165', '29', 'MPKP', 'no'),
 (94, '2013-02-28 13:43:30', '0000-00-00 00:00:00', 'Ningrum', '0856389048', 'Jalan Lembayung NO.20 RT 01 RW 02', 29, 329, 17, 3, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '15.00', '6.00', '4.00', '3185', '255', '31', 'MPKP', 'no'),
 (95, '2013-03-27 13:45:39', '0000-00-00 00:00:00', 'Rendy', '08123857999', 'Jalan Jemursari NO 30 RT 03 Rw 01', 28, 321, 17, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '20.00', '15.00', '5.00', '9702', '1027', '31', 'MPKP', 'no'),
-(96, '2013-08-22 13:56:30', '0000-00-00 00:00:00', 'Fahmia', '0813429098', 'Jalan Asem NO 32 RT 01 RW 02', 0, 277, 17, 4, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '7.00', '3.00', '2218', '136', '31', 'MPKP', 'no'),
+(96, '2013-08-22 13:56:30', '0000-00-00 00:00:00', 'Fahmia', '0813429098', 'Jalan Asem NO 32 RT 01 RW 02', 83, 277, 17, 4, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '9.00', '7.00', '3.00', '2218', '136', '31', 'MPKP', 'no'),
 (97, '2013-09-07 13:58:18', '0000-00-00 00:00:00', 'Galang', '74564738', 'Jalan Jati NO.35 RT 07 RW 02', 53, 331, 17, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '7.00', '3.00', '1794', '120', '27', 'MPKP', 'no'),
-(98, '2013-09-18 14:00:22', '0000-00-00 00:00:00', 'Fadli', '08123857999', 'Jalan erdeka NO.45 RT 01 RW 07', 0, 331, 17, 4, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '7.00', '3.00', '2440', '152', '31', 'MPKP', 'no'),
+(98, '2013-09-18 14:00:22', '0000-00-00 00:00:00', 'Fadli', '08123857999', 'Jalan erdeka NO.45 RT 01 RW 07', 83, 331, 17, 4, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '7.00', '3.00', '2440', '152', '31', 'MPKP', 'no'),
 (99, '2013-09-25 14:02:05', '0000-00-00 00:00:00', 'Dimas', '7317089', 'Jalan Sawojajar NO.34 RT 01 RW 03', 55, 320, 17, 3, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '5.00', '3.00', '693', '83', '31', 'MPKP', 'no'),
 (100, '2013-11-12 14:03:53', '0000-00-00 00:00:00', 'Zahra', '0813429098', 'Jalan Semangka No.23 RT 01 RW 02', 44, 130, 17, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '25.00', '1.00', '8069', '807', '29', 'MPKL', 'no'),
 (101, '2013-11-24 14:05:47', '0000-00-00 00:00:00', 'Rona', '8955674', 'Jalan Mujur NO.13 RT 01 RW 02', 44, 323, 17, 3, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '50.00', '1.00', '16138', '1614', '27', 'MPKL', 'no'),
 (102, '2013-11-27 14:07:50', '0000-00-00 00:00:00', 'khusnul Khotimah', '8933445', 'Jalan Sepatu NO.30 RT 01 RW 03', 44, 322, 17, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '40.00', '1.00', '18078', '1804', '31', 'MPKL', 'no'),
-(103, '2013-02-23 15:43:01', '0000-00-00 00:00:00', 'Ninis', '7022345', 'Jalan Mayjend Sungkono NO.36 RT 02 RW 04', 0, 172, 10, 5, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '5.00', '169740', '12044', '30', 'MPKP', 'no'),
-(104, '2013-04-20 15:47:11', '0000-00-00 00:00:00', 'Prima', '7317089', 'JAlan Sekar NO.30 RT 02 RW 01', 0, 181, 10, 14, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '4.00', '78351', '4179', '31', 'MPKP', 'no'),
+(103, '2013-02-23 15:43:01', '0000-00-00 00:00:00', 'Ninis', '7022345', 'Jalan Mayjend Sungkono NO.36 RT 02 RW 04', 52, 172, 10, 5, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '5.00', '169740', '12044', '30', 'MPKP', 'no'),
+(104, '2013-04-20 15:47:11', '0000-00-00 00:00:00', 'Prima', '7317089', 'JAlan Sekar NO.30 RT 02 RW 01', 68, 181, 10, 14, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '30.00', '4.00', '78351', '4179', '31', 'MPKP', 'no'),
 (105, '2013-07-27 15:49:52', '0000-00-00 00:00:00', 'Joseph', '8933445', 'Jalan Boyolali NO.88 RT 02 RW 01', 28, 179, 10, 5, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '50.00', '20.00', '5.00', '43296', '3464', '28', 'MPKP', 'no'),
-(106, '2013-09-20 15:52:04', '0000-00-00 00:00:00', 'Raden Aji', '71123456', 'Jalan Raden Patah NO.300 RT 01 RW 02', 0, 177, 10, 5, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '9.00', '6.00', '6364', '396', '31', 'MPKP', 'no'),
-(107, '2013-10-17 15:54:07', '0000-00-00 00:00:00', 'Muhklis', '0811089011', 'Jalan Banjar NO.14 RT 01 RW 02', 0, 178, 10, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '7.00', '4.00', '1666', '155', '29', 'MPKP', 'no'),
+(106, '2013-09-20 15:52:04', '0000-00-00 00:00:00', 'Raden Aji', '71123456', 'Jalan Raden Patah NO.300 RT 01 RW 02', 83, 177, 10, 5, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '10.00', '9.00', '6.00', '6364', '396', '31', 'MPKP', 'no'),
+(107, '2013-10-17 15:54:07', '0000-00-00 00:00:00', 'Muhklis', '0811089011', 'Jalan Banjar NO.14 RT 01 RW 02', 84, 178, 10, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '8.00', '7.00', '4.00', '1666', '155', '29', 'MPKP', 'no'),
 (108, '2013-10-27 15:56:18', '0000-00-00 00:00:00', 'Aura', '7317089', 'Jalan Asri NO.23 RT 08 RW 01', 44, 173, 10, 5, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '50.00', '1.00', '22632', '2258', '31', 'MPKL', 'no'),
 (109, '2013-12-19 15:58:17', '0000-00-00 00:00:00', 'Soleh', '0811089011', 'Jalan Semanggi No. 38 RT 01 RW 02', 44, 176, 10, 4, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '90.00', '50.00', '1.00', '29028', '2908', '30', 'MPKL', 'no'),
-(110, '2013-04-27 16:00:34', '0000-00-00 00:00:00', 'Syauqi', '7317089', 'Jalan Jenaka No.30 RT 01 RW 09', 0, 212, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '45.00', '4.00', '170563', '7581', '28', 'MPKP', 'no'),
-(111, '2013-08-03 16:02:51', '0000-00-00 00:00:00', 'Juwita', '8933445', 'Jalan Pregolan No.88 RT 01 RW 03', 0, 216, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '40.00', '5.00', '180780', '9621', '30', 'MPKP', 'no'),
-(112, '2013-10-15 16:05:22', '0000-00-00 00:00:00', 'Hanifa', '8918476', 'Jalan Sungkono No.45 RT 01 RW 08', 0, 198, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '40.00', '5.00', '61937', '8258', '28', 'MPKP', 'no'),
-(113, '2013-10-27 16:08:00', '0000-00-00 00:00:00', 'Sony Tulung', '0856389048', 'Jalan Sukoharjo NO,88 RT 08 RW 07', 0, 218, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '40.00', '20.00', '5.00', '51876', '2767', '31', 'MPKBG', 'no'),
+(110, '2013-04-27 16:00:34', '0000-00-00 00:00:00', 'Syauqi', '7317089', 'Jalan Jenaka No.30 RT 01 RW 09', 45, 212, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '45.00', '4.00', '170563', '7581', '28', 'MPKP', 'no'),
+(111, '2013-08-03 16:02:51', '0000-00-00 00:00:00', 'Juwita', '8933445', 'Jalan Pregolan No.88 RT 01 RW 03', 79, 216, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '70.00', '40.00', '5.00', '180780', '9621', '30', 'MPKP', 'no'),
+(112, '2013-10-15 16:05:22', '0000-00-00 00:00:00', 'Hanifa', '8918476', 'Jalan Sungkono No.45 RT 01 RW 08', 34, 198, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '60.00', '40.00', '5.00', '61937', '8258', '28', 'MPKP', 'no'),
+(113, '2013-10-27 16:08:00', '0000-00-00 00:00:00', 'Sony Tulung', '0856389048', 'Jalan Sukoharjo NO,88 RT 08 RW 07', 63, 218, 12, 15, 'Dengan resiko bangunan berdekatan.', '<b>Menggunkan</b> Tepol (Cairan Basa)', '40.00', '20.00', '5.00', '51876', '2767', '31', 'MPKBG', 'no'),
 (114, '2013-11-24 16:10:29', '0000-00-00 00:00:00', 'Fatimah', '0813429098', 'Jalan Buntu No.45 RT 09 RW 01', 28, 220, 12, 15, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '30.00', '15.00', '4.00', '11705', '1255', '24', 'MPKP', 'no'),
 (115, '2014-10-10 06:20:06', '0000-00-00 00:00:00', 'Subaru', '08123456789', 'Jalan Ketintang 2', 47, 24, 2, 8, 'Dengan resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '5.00', '6.00', '7.00', '2208', '152', '28', 'MPKP', 'yes'),
 (116, '2014-10-28 09:21:02', '2014-10-28 09:21:02', 'andriyan', '6174235', 'wow', 80, 71, 4, 45, 'Tanpa resiko bangunan berdekatan.', '<b>Tidak</b> Menggunakan Tepol', '20.00', '30.00', '100.00', '303072', '42109', '28', 'MPKP', 'no');

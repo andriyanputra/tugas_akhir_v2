@@ -58,7 +58,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <!--inline styles related to this page-->
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                 </head>
-                <body tracingsrc="../assets/img/sda/Kec.jpg" tracingopacity="100">
+                <body tracingsrc="../assets/img/sda/potensi.jpg" tracingopacity="100">
 
                     <div class="navbar">
                         <div class="navbar-inner">
@@ -275,7 +275,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 <div class="slim-scroll" data-height="200">
                                                                     <div class="content">
                                                                         <p align="center">
-                                                                            <img src="../assets/img/sda/Kec.jpg" width="829" height="441" usemap="#Map">
+                                                                            <img src="../assets/img/sda/potensi.jpg" width="829" height="441" usemap="#Map">
                                                                             <map name="Map">
                                                                                 <area target="_self" id="6" data-href="javascript:setSelectValue('6');" shape="poly" coords="191,252,194,241,203,235,200,227,212,230,222,240,238,244,248,243,258,251,267,259,267,257,267,266,263,273,276,283,285,293,285,296,283,305,282,299,281,306,271,309,267,304,251,302,240,298,226,279,207,268" href="#" alt="6" title="KREMBUNG" data-rel="tooltip">
                                                                                 <area target="_self" id="8" data-href="javascript:setSelectValue('8');" shape="poly" coords="292,330,284,330,282,325,289,318,293,306,286,297,295,294,292,288,289,279,279,277,270,271,279,266,290,262,289,255,295,256,302,264,316,266,330,271,340,278,355,282,351,283,363,285,362,285,366,287,366,287,373,287,388,288,395,278,402,277,394,280,411,277,418,275,430,266,439,261,437,276,448,266,443,262,439,266,438,278,429,275,435,277,405,277,398,283,398,283,392,290,389,291,379,290,373,290,367,291,367,290,367,291,338,291,339,293,338,296,330,300,335,302,328,305,316,308,316,312,313,310,303,311,304,308,305,314,298,313,292,315,287,319,291,324" href="#" alt="8" title="PORONG" data-rel="tooltip">
