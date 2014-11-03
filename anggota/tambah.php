@@ -313,7 +313,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                             ?>
                                                             <div class="span4">
                                                                 <div class="control-group">
-                                                                    <input type="file" name="foto" required/>
+                                                                    <input type="file" name="foto"/>
                                                                     <p align="center" class="red">*&nbsp;&nbsp;Ukuran foto tidak boleh melebihi 1Mb.</p>
                                                                 </div>
                                                             </div>

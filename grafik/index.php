@@ -170,7 +170,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         <i class="icon-angle-right arrow-icon"></i>
                                     </span>
                                 </li>
-                                <li class="active">Grafik</li>
+                                <li class="active">Grafik Kejadian Kebakaran</li>
                             </ul><!--.breadcrumb-->
                             <div class="pull-right">
                                 <script>
@@ -192,7 +192,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                         <div class="page-content">
                             <div class="page-header position-relative">
                                 <h1>
-                                    Grafik
+                                    Grafik Kejadian Kebakaran
                                     <small>
                                         <i class="icon-double-angle-right"></i>
                                         Overview
@@ -209,20 +209,46 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <h4 class="header smaller lighter green">
+                                                <!--<h4 class="header smaller lighter red">
                                                     <span>
                                                         <i class="icon-bar-chart"></i>
-                                                         Grafik Kejadian Kebakaran
+                                                         Berdasarkan Benda Pokok yang Terbakar
                                                     </span><!--/span-->
-                                                </h4>
+                                                <!--</h4>-->
+
                                                 <div class="row-fluid">
                                                     <div class="span6">
                                                         <div class="widget-box">
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-red">
                                                                 <h5>
                                                                     <!--<i class="icon-bar-chart"></i>-->
-                                                                    Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. <?php $thn ?>
+                                                                    Berdasarkan Benda Pokok yang Terbakar <?php $thn ?>
                                                                 </h5>
+                                                                
+                                                                <div class="widget-toolbar no-border">
+                                                                    <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                                                        This Week
+                                                                        <i class="icon-angle-down icon-on-right"></i>
+                                                                    </button>
+
+                                                                    <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li class="active">
+                                                                            <a href="#">This Week</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">Last Week</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">This Month</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">Last Month</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
 
                                                             <div class="widget-body">
@@ -239,6 +265,31 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     <!--<i class="icon-bar-chart"></i>-->
                                                                     Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. <?php $thn ?>
                                                                 </h5>
+
+                                                                <div class="widget-toolbar no-border">
+                                                                    <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                                                        This Week
+                                                                        <i class="icon-angle-down icon-on-right"></i>
+                                                                    </button>
+
+                                                                    <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li class="active">
+                                                                            <a href="#">This Week</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">Last Week</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">This Month</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="#">Last Month</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
 
                                                             <div class="widget-body">
@@ -249,8 +300,16 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         </div><!--/widget-box-->
                                                     </div><!--/span6-->
                                                 </div><!--/.row-fluid-->
+
                                                 <div class="space-6"></div>
-                                                <div class="row-fluid">   
+                                                <div class="row-fluid"> 
+                                                    <!--<h4 class="header smaller lighter red">
+                                                            <span>
+                                                                <i class="icon-bar-chart"></i>
+                                                                 Berdasarkan Benda Pokok yang Terbakar
+                                                            </span><!--/span-->
+                                                        <!--</h4>-->
+
                                                     <div class="span6">
                                                         <div class="widget-box">
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-green">
