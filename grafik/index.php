@@ -331,13 +331,43 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-green">
                                                                 <h5>
                                                                     <!--<i class="icon-bar-chart"></i>-->
-                                                                    Bencana Kebakaran Berdasarkan pada Tipe Proteksi Th. 2013.
+                                                                    Bencana Kebakaran Berdasarkan pada Tipe Proteksi.
                                                                 </h5>
-                                                            </div>
+                                                                <?php
+                                                                    include 'line/line.php';
+                                                                ?>
+                                                                <div class="widget-toolbar no-border">
+                                                                    <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                                                        2011
+                                                                        <i class="icon-angle-down icon-on-right"></i>
+                                                                    </button>
 
+                                                                    <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li class="active">
+                                                                            <a href="javascript:void(0);" id="data1" class="space1">2011</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="data2" class="space1">2012</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="data3" class="space1">2013</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="data4" class="space1">2014</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="data5" class="space1">2015</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            
                                                             <div class="widget-body">
                                                                 <div class="widget-main">
-                                                                    <div id="line-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                                                                    <div id="line-chart2" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
                                                                 </div><!--/widget-main-->
                                                             </div><!--/widget-body-->
                                                         </div><!--/widget-box-->
@@ -452,7 +482,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         $(function () {
             var chart;
             $(document).ready(function () {
-                $.getJSON("proses/data.php", function (json) {
+                $.getJSON("line/data.php", function (json) {
 
                     chart = new Highcharts.Chart({
                         chart: {
@@ -503,6 +533,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
             });
         });
     </script>
+
     <script type="text/javascript">
         $(function () {
             //Radialize the colors
