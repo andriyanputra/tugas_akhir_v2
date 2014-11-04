@@ -338,7 +338,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 ?>
                                                                 <div class="widget-toolbar no-border">
                                                                     <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                                                        2011
+                                                                        Pilih Tahun
                                                                         <i class="icon-angle-down icon-on-right"></i>
                                                                     </button>
 
@@ -478,61 +478,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         setInterval(showTime, 500);
         // ========================Akhir Jam========================================== //
     </script>
-    <script type="text/javascript">
-        $(function () {
-            var chart;
-            $(document).ready(function () {
-                $.getJSON("line/data.php", function (json) {
-
-                    chart = new Highcharts.Chart({
-                        chart: {
-                            renderTo: 'line-chart',
-                            type: 'line',
-                            marginRight: 130,
-                            marginBottom: 25
-                        },
-                        title: {
-                            text: '',
-                            x: -20 //center
-                        },
-                        subtitle: {
-                            text: '',
-                            x: -20
-                        },
-                        xAxis: {
-                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des']
-                        },
-                        yAxis: {
-                            title: {
-                                text: 'Jumlah'
-                            },
-                            plotLines: [{
-                                    value: 0,
-                                    width: 1,
-                                    color: '#808080'
-                                }]
-                        },
-                        tooltip: {
-                            formatter: function () {
-                                return '<b>' + this.series.name + '</b><br/>' +
-                                        this.x + ': ' + this.y;
-                            }
-                        },
-                        legend: {
-                            layout: 'vertical',
-                            align: 'right',
-                            verticalAlign: 'top',
-                            x: -10,
-                            y: 100,
-                            borderWidth: 0
-                        },
-                        series: json
-                    });
-                });
-
-            });
-        });
-    </script>
+    
 
     <script type="text/javascript">
         $(function () {

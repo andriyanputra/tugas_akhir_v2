@@ -796,7 +796,61 @@ while($res = mysql_fetch_array($q_)) {
 }
 echo " </tbody></table>";
 ?>
+<script type="text/javascript">
+        $(function () {
+            var chart;
+            $(document).ready(function () {
+                $.getJSON("line/data.php", function (json) {
 
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'line-chart',
+                            type: 'line',
+                            marginRight: 130,
+                            marginBottom: 25
+                        },
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+                        subtitle: {
+                            text: '',
+                            x: -20
+                        },
+                        xAxis: {
+                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des']
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Jumlah'
+                            },
+                            plotLines: [{
+                                    value: 0,
+                                    width: 1,
+                                    color: '#808080'
+                                }]
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                        this.x + ': ' + this.y;
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -10,
+                            y: 100,
+                            borderWidth: 0
+                        },
+                        series: json
+                    });
+                });
+
+            });
+        });
+    </script>
 
     include '../../config/koneksi.php';
 
