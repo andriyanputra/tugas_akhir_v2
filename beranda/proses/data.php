@@ -1,7 +1,7 @@
 <?php
 include '../../config/koneksi.php';
 
-$sth = mysql_query("SELECT grafik_mpkp, grafik_mpkl, grafik_mpkbg FROM grafik");
+$sth = mysql_query("SELECT grafik_mpkp, grafik_mpkl, grafik_mpkbg FROM grafik WHERE grafik_thn = 2013");
 $row1 = array();$row3 = array();
 $row2 = array();
 $row1['name'] = 'MPKP';$row3['name'] = 'MPKBG';

@@ -879,3 +879,72 @@ array_push($result,$row3);
 
 
 print json_encode($result, JSON_NUMERIC_CHECK);
+<script type="text/javascript">
+        $(function () {
+            //Radialize the colors
+            Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+             return {
+             radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
+             stops: [
+             [0, color],
+             [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+             ]
+             };
+             });
+             Highcharts.setOptions({
+             colors: ['#ff0000', '#18F918', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+             });
+             var chart;
+
+            $('#pie-chart').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '',
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                        type: 'pie',
+                        name: 'Jumlah Kejadian Kebakaran pada Bangunan',
+                        data: [
+                        <?php
+                            $query = mysql_query("SELECT c.NAMA_MASTER, COUNT(c.NAMA_MASTER) AS Nilai
+                                                                        FROM resiko AS a
+                                                                            INNER JOIN bangunan AS b 
+                                                                                ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
+                                                                            INNER JOIN master_bangunan AS c
+                                                                                ON (b.ID_MASTER = c.ID_MASTER)
+                                                                        WHERE a.resiko_tanggal_start BETWEEN '2013-01-01' AND '2013-12-31'
+                                                                        GROUP BY c.NAMA_MASTER");
+                            $numrows = mysql_num_rows($query);
+                            while ($row = mysql_fetch_array($query)) {
+                                $data[0] = $row['NAMA_MASTER'];
+                                $data[1] = $row['Nilai'];
+                                echo "['" . $data[0] . "', " . $data[1] . "],";
+                            }
+                        ?>
+                        ]
+                    }]
+            });
+        });
+    </script>

@@ -215,37 +215,65 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                          Berdasarkan Benda Pokok yang Terbakar
                                                     </span><!--/span-->
                                                 <!--</h4>-->
+                                                <div class="row-fluid">
+                                                    <div class="widget-box">
+                                                        <div class="widget-header widget-header-flat widget-header-small header-color-dark">
+                                                            <h5>
+                                                                <!--<i class="icon-bar-chart"></i>-->
+                                                                Berdasarkan Total Kejadian Kebakaran.
+                                                            </h5>
+                                                        </div>
 
+                                                        <div class="widget-body">
+                                                            <div class="widget-main">
+                                                                 <div id="semua" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                                                            </div><!--/widget-main-->
+                                                        </div><!--/widget-body-->
+                                                    </div><!--/widget-box-->
+                                                </div>
                                                 <div class="row-fluid">
                                                     <div class="span6">
                                                         <div class="widget-box">
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-red">
                                                                 <h5>
                                                                     <!--<i class="icon-bar-chart"></i>-->
-                                                                    Berdasarkan Benda Pokok yang Terbakar <?php $thn ?>
+                                                                    Berdasarkan Penyebab kebakaran
                                                                 </h5>
-                                                                
+                                                                <?php
+                                                                    include 'penyebab/column.php';
+                                                                ?>
                                                                 <div class="widget-toolbar no-border">
                                                                     <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                                                        This Week
+                                                                        Pilih Tahun
                                                                         <i class="icon-angle-down icon-on-right"></i>
                                                                     </button>
 
                                                                     <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="column9" class="column1">2009</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="column0" class="column1">2010</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="column1" class="column1">2011</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="column2" class="column1">2012</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="column3" class="column1">2013</a>
+                                                                        </li>
+
                                                                         <li class="active">
-                                                                            <a href="#">This Week</a>
+                                                                            <a href="javascript:void(0);" id="column4" class="column1">2014</a>
                                                                         </li>
-
                                                                         <li>
-                                                                            <a href="#">Last Week</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="#">This Month</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="#">Last Month</a>
+                                                                            <a href="javascript:void(0);" id="column5" class="column1">2015</a>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -253,7 +281,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                                                             <div class="widget-body">
                                                                 <div class="widget-main">
-                                                                    <div></div>
+                                                                    <div id="column" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
                                                                 </div><!--/widget-main-->
                                                             </div><!--/widget-body-->
                                                         </div><!--/widget-box-->
@@ -263,30 +291,43 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-red">
                                                                 <h5>
                                                                     <!--<i class="icon-bar-chart"></i>-->
-                                                                    Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. <?php $thn ?>
+                                                                    Bencana Kebakaran Berdasarkan Korban Luka/Meninggal
                                                                 </h5>
-
-                                                                <div class="widget-toolbar no-border">
+                                                                <?php
+                                                                    include 'korban/column.php';
+                                                                ?>
+                                                                 <div class="widget-toolbar no-border">
                                                                     <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                                                        This Week
+                                                                        Pilih Tahun
                                                                         <i class="icon-angle-down icon-on-right"></i>
                                                                     </button>
 
                                                                     <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie9" class="pie11">2009</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie0" class="pie11">2010</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie1" class="pie11">2011</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie2" class="pie11">2012</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie3" class="pie11">2013</a>
+                                                                        </li>
+
                                                                         <li class="active">
-                                                                            <a href="#">This Week</a>
+                                                                            <a href="javascript:void(0);" id="pie4" class="pie11">2014</a>
                                                                         </li>
-
                                                                         <li>
-                                                                            <a href="#">Last Week</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="#">This Month</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="#">Last Month</a>
+                                                                            <a href="javascript:void(0);" id="pie5" class="pie11">2015</a>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -294,7 +335,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                                                             <div class="widget-body">
                                                                 <div class="widget-main">
-                                                                    <div></div>
+                                                                    <div id="korban" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
                                                                 </div><!--/widget-main-->
                                                             </div><!--/widget-body-->
                                                         </div><!--/widget-box-->
@@ -303,25 +344,56 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                                                 <div class="space-6"></div>
                                                 <div class="row-fluid"> 
-                                                    <!--<h4 class="header smaller lighter red">
-                                                            <span>
-                                                                <i class="icon-bar-chart"></i>
-                                                                 Berdasarkan Benda Pokok yang Terbakar
-                                                            </span><!--/span-->
-                                                        <!--</h4>-->
-
                                                     <div class="span6">
                                                         <div class="widget-box">
                                                             <div class="widget-header widget-header-flat widget-header-small header-color-green">
                                                                 <h5>
                                                                     <!--<i class="icon-bar-chart"></i>-->
-                                                                    Bencana Kebakaran Berdasarkan pada Tipe Bangunan Th. 2013.
+                                                                    Bencana Kebakaran Berdasarkan pada Tipe Bangunan
                                                                 </h5>
+                                                                <?php
+                                                                    include 'bangunan/pie.php';
+                                                                ?>
+                                                                <div class="widget-toolbar no-border">
+                                                                    <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                                                        Pilih Tahun
+                                                                        <i class="icon-angle-down icon-on-right"></i>
+                                                                    </button>
+
+                                                                    <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie9" class="pie1">2009</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie0" class="pie1">2010</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie1" class="pie1">2011</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie2" class="pie1">2012</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie3" class="pie1">2013</a>
+                                                                        </li>
+
+                                                                        <li class="active">
+                                                                            <a href="javascript:void(0);" id="pie4" class="pie1">2014</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="pie5" class="pie1">2015</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
 
                                                             <div class="widget-body">
                                                                 <div class="widget-main">
-                                                                    <div id="pie-chart" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                                                                    <div id="pie-chart2" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
                                                                 </div><!--/widget-main-->
                                                             </div><!--/widget-body-->
                                                         </div><!--/widget-box-->
@@ -334,7 +406,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     Bencana Kebakaran Berdasarkan pada Tipe Proteksi.
                                                                 </h5>
                                                                 <?php
-                                                                    include 'line/line.php';
+                                                                    include 'proteksi/line.php';
                                                                 ?>
                                                                 <div class="widget-toolbar no-border">
                                                                     <button class="btn btn-minier btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -343,23 +415,23 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     </button>
 
                                                                     <ul class="dropdown-menu dropdown-info pull-right dropdown-caret">
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="line1" class="line1">2011</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="line2" class="line1">2012</a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" id="line3" class="line1">2013</a>
+                                                                        </li>
+
                                                                         <li class="active">
-                                                                            <a href="javascript:void(0);" id="data1" class="space1">2011</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="javascript:void(0);" id="data2" class="space1">2012</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="javascript:void(0);" id="data3" class="space1">2013</a>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <a href="javascript:void(0);" id="data4" class="space1">2014</a>
+                                                                            <a href="javascript:void(0);" id="line4" class="line1">2014</a>
                                                                         </li>
                                                                         <li>
-                                                                            <a href="javascript:void(0);" id="data5" class="space1">2015</a>
+                                                                            <a href="javascript:void(0);" id="line5" class="line1">2015</a>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -478,74 +550,58 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         setInterval(showTime, 500);
         // ========================Akhir Jam========================================== //
     </script>
-    
-
     <script type="text/javascript">
         $(function () {
-            //Radialize the colors
-            Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
-             return {
-             radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
-             stops: [
-             [0, color],
-             [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-             ]
-             };
-             });
-             Highcharts.setOptions({
-             colors: ['#ff0000', '#18F918', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
-             });
-             var chart;
+            var chart;
+            $(document).ready(function () {
+                $.getJSON("proteksi/data.php", function (json) {
 
-            $('#pie-chart').highcharts({
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false
-                },
-                title: {
-                    text: '',
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            color: '#000000',
-                            connectorColor: '#000000',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'semua',
+                            type: 'column',
+                            marginRight: 130,
+                            marginBottom: 25
+                        },
+                        title: {
+                            text: 'Periode Th.2009 - 2015',
+                            x: -20 //center
+                        },
+                        subtitle: {
+                            text: '',
+                            x: -20
+                        },
+                        xAxis: {
+                             categories: ['Jumlah']
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Kejadian'
                             },
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                        }
-                    }
-                },
-                series: [{
-                        type: 'pie',
-                        name: 'Jumlah Kejadian Kebakaran pada Bangunan',
-                        data: [
-<?php
-$query = mysql_query("SELECT c.NAMA_MASTER, COUNT(c.NAMA_MASTER) AS Nilai
-                                            FROM resiko AS a
-                                                INNER JOIN bangunan AS b 
-                                                    ON (a.ID_BANGUNAN = b.ID_BANGUNAN)
-                                                INNER JOIN master_bangunan AS c
-                                                    ON (b.ID_MASTER = c.ID_MASTER)
-                                            WHERE a.resiko_tanggal_start BETWEEN '2013-01-01' AND '2013-12-31'
-                                            GROUP BY c.NAMA_MASTER");
-$numrows = mysql_num_rows($query);
-while ($row = mysql_fetch_array($query)) {
-    $data[0] = $row['NAMA_MASTER'];
-    $data[1] = $row['Nilai'];
-    echo "['" . $data[0] . "', " . $data[1] . "],";
-}
-?>
-                        ]
-                    }]
+                            plotLines: [{
+                                    value: 0,
+                                    width: 1,
+                                    color: '#808080'
+                                }]
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                        this.x + ': ' + this.y;
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -10,
+                            y: 100,
+                            borderWidth: 0
+                        },
+                        series: json
+                    });
+                });
+
             });
         });
     </script>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Inang: 127.0.0.1
--- Waktu pembuatan: 04 Nov 2014 pada 12.50
+-- Waktu pembuatan: 04 Nov 2014 pada 23.04
 -- Versi Server: 5.5.27
 -- Versi PHP: 5.4.7
 
@@ -608,6 +608,39 @@ INSERT INTO `grafik` (`grafik_id`, `grafik_bln`, `grafik_thn`, `grafik_mpkp`, `g
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `grafik_bangunan`
+--
+
+CREATE TABLE IF NOT EXISTS `grafik_bangunan` (
+  `grafik_id` int(11) NOT NULL AUTO_INCREMENT,
+  `grafik_tahun` int(4) NOT NULL,
+  `ID_MASTER` int(11) NOT NULL,
+  `grafik_nilai` int(2) NOT NULL,
+  PRIMARY KEY (`grafik_id`),
+  KEY `FK_master_bangunan` (`ID_MASTER`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data untuk tabel `grafik_bangunan`
+--
+
+INSERT INTO `grafik_bangunan` (`grafik_id`, `grafik_tahun`, `ID_MASTER`, `grafik_nilai`) VALUES
+(1, 2011, 1, 4),
+(2, 2011, 2, 23),
+(3, 2011, 3, 41),
+(4, 2011, 4, 8),
+(5, 2011, 5, 37),
+(6, 2011, 6, 69),
+(7, 2012, 1, 0),
+(8, 2012, 2, 23),
+(9, 2012, 3, 22),
+(10, 2012, 4, 3),
+(11, 2012, 5, 39),
+(12, 2012, 6, 86);
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `grafik_bangunan_terbakar`
 --
 
@@ -681,11 +714,12 @@ CREATE TABLE IF NOT EXISTS `grafik_kebakaran` (
   `jumlah_kejadian` int(11) NOT NULL,
   `industri` int(11) NOT NULL,
   `perkantoran` int(11) NOT NULL,
+  `udj` int(11) NOT NULL,
   `rumah` int(11) NOT NULL,
   `kb` int(11) NOT NULL,
   `ls` int(11) NOT NULL,
   `bbm` int(11) NOT NULL,
-  `kpr/lpg` int(11) NOT NULL,
+  `kpr` int(11) NOT NULL,
   `lst` int(11) NOT NULL,
   `rk` int(11) NOT NULL,
   `lain` int(11) NOT NULL,
@@ -699,9 +733,9 @@ CREATE TABLE IF NOT EXISTS `grafik_kebakaran` (
 -- Dumping data untuk tabel `grafik_kebakaran`
 --
 
-INSERT INTO `grafik_kebakaran` (`id`, `tahun`, `jumlah_kejadian`, `industri`, `perkantoran`, `rumah`, `kb`, `ls`, `bbm`, `kpr/lpg`, `lst`, `rk`, `lain`, `luka`, `meninggal`, `nominal_kerugian`, `luas_area`) VALUES
-(1, 2009, 147, 45, 28, 34, 4, 36, 0, 10, 27, 1, 109, 4, 0, '3543000000', 1899716000),
-(2, 2010, 80, 22, 19, 22, 1, 16, 0, 8, 22, 1, 49, 1, 0, '2563000000', 1291689);
+INSERT INTO `grafik_kebakaran` (`id`, `tahun`, `jumlah_kejadian`, `industri`, `perkantoran`, `udj`, `rumah`, `kb`, `ls`, `bbm`, `kpr`, `lst`, `rk`, `lain`, `luka`, `meninggal`, `nominal_kerugian`, `luas_area`) VALUES
+(1, 2009, 147, 45, 28, 0, 34, 4, 36, 0, 10, 27, 1, 109, 4, 0, '3543000000', 1899716000),
+(2, 2010, 80, 22, 19, 0, 22, 1, 16, 0, 8, 22, 1, 49, 1, 0, '2563000000', 1291689);
 
 -- --------------------------------------------------------
 
@@ -1264,7 +1298,7 @@ INSERT INTO `log_user` (`log_id`, `pegawai_nip`, `login_date`, `logout_date`, `l
 (1, 115623001, '2014-10-30 11:22:07', '2014-10-30 11:28:14', '-'),
 (2, 115623003, '2014-11-03 19:33:35', '2014-11-03 20:46:44', '-'),
 (3, 115623212, '2014-11-01 20:03:18', '2014-11-01 20:03:43', '-'),
-(4, 115623333, '2014-11-04 08:00:26', '2014-10-31 21:30:56', '-');
+(4, 115623333, '2014-11-04 17:42:22', '2014-10-31 21:30:56', '-');
 
 -- --------------------------------------------------------
 
