@@ -237,7 +237,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     <thead>
                                         <tr>
                                            <th rowspan="2" class="center">No.</th>
-                                           <th rowspan="2" class="center">Bulan Kejadian</th>
+                                           <th rowspan="2" class="center">Tanggal Kejadian</th>
                                            <th rowspan="2" class="center">Jumlah Kejadian</th>
                                            <th rowspan="2" class="center">Jumlah Bangunan Terbakar</th>
                                            <th colspan="2" class="center">Jumlah Korban</th>
@@ -376,7 +376,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
           var bulan=$("#bulan").val();
           var tahun=$("#tahun").val();
 
-          if(bulan!="" && tahun!=""){
+          if(bulan!="" || tahun!=""){
             //$("#result").html("<img src='img/ajax-loader.gif'/>");
              $.ajax({
                 type:"post",
@@ -388,7 +388,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     $("#search").val("");
                 }
             });
-        }else if(bulan==""||tahun==""){
+        }else if(bulan=="" && tahun==""){
             setTimeout(function() {
                 swal("Oops...", "Mohon untuk memilih bulan dan tahun !", "error");
             }, 200);
