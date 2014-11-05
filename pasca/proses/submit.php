@@ -18,7 +18,7 @@ if ($_POST) {
     $biaya2 = str_replace('.', '', $biaya1);
     $biaya3 = str_replace(',', '', $biaya2);
     $biaya = substr($biaya3,0,-2);
-    $pasca_id = $_POST['pasca_id'];
+    $pasca_id = $_POST['resiko_id'];
     $pasca_status = 'yes';
     if($_POST['akhir_perjalanan'] == '00:00' || $_POST['pemadaman'] == '00:00'){
         header("Location: ../olahPasca?id=$pasca_id&msg=error");
@@ -110,10 +110,10 @@ if ($_POST) {
                     title: "Great Work and Well Done!",
                     text: "Keep Fire in Your Life.",
                     imageUrl: '../../assets/img/thumbs-up.jpg'
-                });
+                }, function(){
+                    document.location = '../view?id=<?php echo $pasca_id; ?>';
+                })
             }, 200);
-            
-            document.location = '../../beranda/index.php';
         </script>
         <?php
         }else{
@@ -141,10 +141,10 @@ if ($_POST) {
                     title: "Great Work and Well Done!",
                     text: "Keep Fire in Your Life.",
                     imageUrl: '../../assets/img/thumbs-up.jpg'
-                });
+                }, function(){
+                    document.location = '../view?id=<?php echo $pasca_id; ?>';
+                })
             }, 200);
-            
-            document.location = '../../beranda/index.php';
         </script>
         <?php
         }else{
@@ -155,8 +155,7 @@ if ($_POST) {
         $insert = mysql_query("INSERT INTO pasca
             (`pasca_id`, `resiko_id`, `pasca_lama_perjalanan`, `pasca_penyelesaian`, `penyebab_id`, `ID_BANGUNAN_BARU`, `pasca_luas`, `pasca_luka`, `pasca_meninggal`, `pasca_biaya`)
             VALUES 
-            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas_total','$korban_luka',
-            '$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
+            ( NULL,'$pasca_id', '$hasil', '$pemadaman','$penyebab', '$bangunanBaru', '$luas','$korban_luka','$korban_meninggal','$biaya')") or die("Query : ".mysql_error());
 
         //=== PENYEBAB LAIN ===
         $id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1")) or die ('Query Id terakhir : '.mysql_error());
@@ -177,10 +176,10 @@ if ($_POST) {
                         title: "Great Work and Well Done!",
                         text: "Keep Fire in Your Life.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
-                    });
+                    }, function(){
+                        document.location = '../view?id=<?php echo $pasca_id; ?>';
+                    })
                 }, 200);
-                
-                document.location = '../../beranda/index.php';
             </script>
         <?php
         }else{
@@ -208,10 +207,10 @@ if ($_POST) {
                         title: "Great Work and Well Done!",
                         text: "Keep Fire in Your Life.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
-                    });
+                    }, function(){
+                        document.location = '../view?id=<?php echo $pasca_id; ?>';
+                    })
                 }, 200);
-                
-                document.location = '../../beranda/index.php';
             </script>
         <?php
         }else{

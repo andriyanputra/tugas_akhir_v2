@@ -430,7 +430,11 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                         <option value = "1" />Kepala Bidang PMK
                                                                         <option value = "2" />Kepala Seksi Oprasional
                                                                         <option value = "3" />Kepala Seksi Sarana
-                                                                        <option value = "4" />Staff Administrasi Umum
+                                                                        <option value = "4" />Staff Administrasi (Admin)
+                                                                        <option value = "9" />Staff Administrasi Umum (Petugas PP APK)
+                                                                        <option value = "10" />Staff Administrasi Umum (BPP)
+                                                                        <option value = "11" />Staff Administrasi Umum (Mekanik)
+                                                                        <option value = "12" />Staff Administrasi Umum (Adminstrasi)
                                                                         <option value = "5" />Komandan Pleton
                                                                         <option value = "6" />Komandan Regu
                                                                         <option value = "7" />Operator
@@ -448,7 +452,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     <div id="4">
                                                                         <label class="inline">
                                                                             <input name = "level" value = "1" type = "checkbox"/>
-                                                                            <span class="lbl"> Admin (Staff Administrasi Umum)</span>
+                                                                            <span class="lbl"> Admin (Staff Administrasi)</span>
                                                                         </label>
                                                                     </div>
 
@@ -752,8 +756,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     required: true
                 },
                 gender: 'required',
-                jabatan: 'required',
-                foto: 'required'
+                jabatan: 'required'
             },
             messages: {
                 email: {

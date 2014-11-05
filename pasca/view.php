@@ -18,6 +18,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         INNER JOIN desa AS d ON (d.KECAMATAN_ID = c.KECAMATAN_ID)
         INNER JOIN bangunan AS e ON (e.ID_BANGUNAN = a.ID_BANGUNAN)
         INNER JOIN master_bangunan AS f ON (e.ID_MASTER = f.ID_MASTER)
+        INNER JOIN penyebab AS g ON (b.penyebab_id = g.penyebab_id)
         WHERE a.resiko_id = '".$_GET['id']."' AND a.resiko_status = 'yes' LIMIT 1") or die(mysql_error());
 if ($sql == false) {
         die(mysql_error());
@@ -354,19 +355,20 @@ if ($sql == false) {
                                                                                                 MINUTE(pasca_lama_perjalanan) AS menit, MINUTE(pasca_penyelesaian) AS menit_selesai 
                                                                                                 FROM pasca WHERE resiko_id='".$_GET['id']."'")) or die("Query : ".mysql_error()); ?>
                                                     <div class="controls">
-                                                        <?php if($waktu['jam']==0 && $waktu['jam_selesai']==0){echo $waktu['menit'].' menit dan '.$waktu['menit_selesai'].' menit.';} ?>
-                                                        <?php if(($waktu['jam']!=0 && $waktu['menit']!=0) && ($waktu['jam_selesai']!=0 && $waktu['menit_selesai']!=0)){echo $waktu['jam'].' jam '.$waktu['menit'].' menit dan '.$waktu['jam_selesai'].' jam '.$waktu['menit_selesai'].' menit.';} ?>
-                                                        <?php if($waktu['menit']==0 && $waktu['menit_selesai']==0){echo $waktu['jam'].' jam dan '.$waktu['jam_selesai'].' jam.';} ?>
+                                                        <?php 
+                                                            echo $waktu['jam'].' jam '.$waktu['menit'].' menit dan '.$waktu['jam_selesai'].' jam '.$waktu['menit_selesai'].' menit.'
+                                                        ?>
                                                     </div>
                                                 </div>
                                                 <div class="control-group">
                                                     <label class="control-label" for="penyebab"><b>Penyebab Kebakaran :</b></label>
                                                     <?php 
                                                         if($r['penyebab_id'] == '5'){
+                                                            $last_id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1"));
                                                             $sebab = mysql_fetch_assoc(mysql_query("SELECT * FROM penyebab AS a
                                                                                                 INNER JOIN penyebab_lain AS b ON (a.penyebab_id = b.penyebab_id)
                                                                                                 INNER JOIN pasca AS c ON (a.penyebab_id = c.penyebab_id)
-                                                                                                WHERE c.resiko_id = '".$_GET['id']."'")) or die("Query : ".mysql_error());
+                                                                                                WHERE c.resiko_id = '".$_GET['id']."' AND b.pasca_id = '".$last_id['pasca_id']."'")) or die("Query : ".mysql_error());
                                                     ?>
                                                     <div class="controls">
                                                         <?php echo 'Lain-lain : '.$sebab['lain_nama']; ?>
@@ -453,7 +455,7 @@ if ($sql == false) {
                                                                 <?php
                                                                     }else{
                                                                 ?>
-                                                                <p class='alert alert-info center'>Tidak terdapat foto lokasi kejadian.</p>";
+                                                                <p class='alert alert-info center'>Tidak terdapat foto lokasi kejadian.</p>
                                                                 <?php } ?>
                                                         </div>
                                                     </div>

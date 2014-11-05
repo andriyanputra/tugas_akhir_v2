@@ -32,58 +32,96 @@ if (isset($_POST['submit'])) {
         exit();
     } else {
         //cek type foto
-        if ($type != "image/gif" && $type != "image/jpg" && $type != "image/jpeg" && $type != "image/png") {
-            header('location:tambah.php?msg=error_foto1');
-        } else {
-            if ($ukuran > 1100000) {
-                header('location:tambah.php?msg=error_foto2');
+        if(!empty($nama_gambar) && !empty($type) && !empty($ukuran)){
+            if ($type != "image/gif" && $type != "image/jpg" && $type != "image/jpeg" && $type != "image/png") {
+                header('location:tambah.php?msg=error_foto1');
             } else {
-                $lokasi = "../assets/img/img-anggota";
-                $lokasi_foto = $_FILES['foto']['tmp_name'];
-                $tgl = date("dmy");
-                $nama_file_upload = $tgl . '-' . $nama_gambar;
-                $alamatfile = $lokasi . $nama_file_upload;
-
-                if (move_uploaded_file($lokasi_foto, $lokasi . "/" . $nama_file_upload)) {
-                    $query = "INSERT INTO pegawai 
-                                            (pegawai_nip, 
-                                            id_level_user, 
-                                            pegawai_nama, 
-                                            pegawai_tempat, 
-                                            pegawai_tanggal, 
-                                            pegawai_kelamin, 
-                                            pegawai_alamat, 
-                                            pegawai_no_telp, 
-                                            jabatan_id, 
-                                            pegawai_email, 
-                                            pegawai_password, 
-                                            pegawai_foto
-                                            )
-                                            VALUES
-                                            ('$nip', 
-                                            '$level', 
-                                            '$nama', 
-                                            '$tempat', 
-                                            '$tgl_format', 
-                                            '$gender', 
-                                            '$alamat', 
-                                            '$phone', 
-                                            '$jabatan', 
-                                            '$email', 
-                                            '$pass1', 
-                                            '$nama_file_upload'
-                                            )";
-                    $add_log = mysql_query("INSERT INTO log_user VALUES (NULL, '$nip', NOW(), NOW(), '-')");
-                    $result = mysql_query($query);
-                    if ($result && $add_log) {
-                        header('Location:list.php?msg=success1');
-                    } else {
-                        header('Location:tambah.php?msg=error');
-                    }
+                if ($ukuran > 1100000) {
+                    header('location:tambah.php?msg=error_foto2');
                 } else {
-                    header('Location:tambah.php?msg=error_foto4');
+                    $lokasi = "../assets/img/img-anggota";
+                    $lokasi_foto = $_FILES['foto']['tmp_name'];
+                    $tgl = date("dmy");
+                    $nama_file_upload = $tgl . '-' . $nama_gambar;
+                    $alamatfile = $lokasi . $nama_file_upload;
+
+                    if (move_uploaded_file($lokasi_foto, $lokasi . "/" . $nama_file_upload)) {
+                        $query = "INSERT INTO pegawai 
+                                                (pegawai_nip, 
+                                                id_level_user, 
+                                                pegawai_nama, 
+                                                pegawai_tempat, 
+                                                pegawai_tanggal, 
+                                                pegawai_kelamin, 
+                                                pegawai_alamat, 
+                                                pegawai_no_telp, 
+                                                jabatan_id, 
+                                                pegawai_email, 
+                                                pegawai_password, 
+                                                pegawai_foto
+                                                )
+                                                VALUES
+                                                ('$nip', 
+                                                '$level', 
+                                                '$nama', 
+                                                '$tempat', 
+                                                '$tgl_format', 
+                                                '$gender', 
+                                                '$alamat', 
+                                                '$phone', 
+                                                '$jabatan', 
+                                                '$email', 
+                                                '$pass1', 
+                                                '$nama_file_upload'
+                                                )";
+                        $add_log = mysql_query("INSERT INTO log_user VALUES (NULL, '$nip', NOW(), NOW(), '-')");
+                        $result = mysql_query($query);
+                        if ($result && $add_log) {
+                            header('Location:list.php?msg=success1');
+                        } else {
+                            header('Location:tambah.php?msg=error');
+                        }
+                    } else {
+                        header('Location:tambah.php?msg=error_foto4');
+                    }
                 }
             }
+        }else{
+            $query = "INSERT INTO pegawai 
+                            (pegawai_nip, 
+                            id_level_user, 
+                            pegawai_nama, 
+                            pegawai_tempat, 
+                            pegawai_tanggal, 
+                            pegawai_kelamin, 
+                            pegawai_alamat, 
+                            pegawai_no_telp, 
+                            jabatan_id, 
+                            pegawai_email, 
+                            pegawai_password, 
+                            pegawai_foto
+                            )
+                            VALUES
+                            ('$nip', 
+                            '$level', 
+                            '$nama', 
+                            '$tempat', 
+                            '$tgl_format', 
+                            '$gender', 
+                            '$alamat', 
+                            '$phone', 
+                            '$jabatan', 
+                            '$email', 
+                            '$pass1', 
+                            ''
+                            )";
+                        $add_log = mysql_query("INSERT INTO log_user VALUES (NULL, '$nip', NOW(), NOW(), '-')");
+                        $result = mysql_query($query);
+                        if ($result && $add_log) {
+                            header('Location:list.php?msg=success1');
+                        } else {
+                            header('Location:tambah.php?msg=error');
+                        }
         }
     }
 }

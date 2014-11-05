@@ -300,7 +300,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         ?>
 
                                              <form class="form-horizontal" id="validation-form" method="POST" action="proses/submit.php">
-                                                <input type="hidden" name="pasca_id" value="<?=$_GET['id']?>"/>
+                                                <input type="hidden" name="resiko_id" value="<?=$_GET['id']?>"/>
                                                 <div class="row-fluid">
                                                     <div class="row-fluid">
                                                         <div class="control-group">

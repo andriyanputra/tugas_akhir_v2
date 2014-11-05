@@ -254,12 +254,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                                                     <tbody>
                                                         <?php
-                                                            $no = 1;
+                                                            //$no = 1;
                                                             while($res = mysql_fetch_array($query)){
                                                                 $result_tgl = date_create($res['resiko_tanggal_start']);
                                                         ?>
                                                         <tr>
-                                                            <td><?php echo $no.'.'; ?></td>
+                                                            <td><?php echo $res['resiko_id'].'.'; ?></td>
                                                             <td><?php echo $res['nama_pelapor']; ?></td>
                                                             <td><?php echo $res['alamat_pelapor'].' Ds. '.$res['DESA_NAMA'].' Kec. '.$res['KECAMATAN_NAMA'].'.' ?></td>
                                                             <td><?php echo date_format($result_tgl, 'd M Y H:i:s'); ?></td>
@@ -280,8 +280,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <?php  
-                                                                $no++; 
+                                                        <?php 
                                                             }
                                                         ?>
                                                     </tbody>
