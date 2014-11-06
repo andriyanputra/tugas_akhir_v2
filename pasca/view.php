@@ -260,7 +260,7 @@ if ($sql == false) {
 
                                                 <div class="widget-body">
                                                     <div class="widget-main padding-4">
-                                                        <div class="slim-scroll" data-height="200">
+                                                        <div class="slim-scroll" data-height="300">
                                                             <div class="content">
                                                                 <p align="center">
                                                                     <img src="../assets/img/sda/large/<?= $r['KECAMATAN_DIR']; ?>" width="829" height="441" id="gambar2"></p>
@@ -364,7 +364,7 @@ if ($sql == false) {
                                                     <label class="control-label" for="penyebab"><b>Penyebab Kebakaran :</b></label>
                                                     <?php 
                                                         if($r['penyebab_id'] == '5'){
-                                                            $last_id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca ORDER BY pasca_id DESC LIMIT 1"));
+                                                            $last_id = mysql_fetch_assoc(mysql_query("SELECT pasca_id FROM pasca WHERE resiko_id = '".$_GET['id']."'"));
                                                             $sebab = mysql_fetch_assoc(mysql_query("SELECT * FROM penyebab AS a
                                                                                                 INNER JOIN penyebab_lain AS b ON (a.penyebab_id = b.penyebab_id)
                                                                                                 INNER JOIN pasca AS c ON (a.penyebab_id = c.penyebab_id)
@@ -633,6 +633,7 @@ if ($sql == false) {
 <script src="../assets/js-ace/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="../assets/js-ace/jquery.ui.touch-punch.min.js"></script>
 <script src="../assets/js-ace/jquery.colorbox-min.js"></script>
+<script src="../assets/js-ace/jquery.slimscroll.min.js"></script>
 <script src="../assets/js-ace/autoNumeric.js"></script>
 <script src="../assets/js-ace/sweet-alert.js"></script>
 <!--ace scripts-->
@@ -642,6 +643,15 @@ if ($sql == false) {
 <script type="text/javascript">
 </script>
 <script type="text/javascript">
+    // scrollables
+    $('.slim-scroll').each(function() {
+        var $this = $(this);
+        $this.slimScroll({
+            height: $this.data('height') || 100,
+            railVisible: true
+        });
+    });
+
     jQuery(function($) {
         $('.biaya').autoNumeric('init');
     });

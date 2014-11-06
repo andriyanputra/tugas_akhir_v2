@@ -220,6 +220,8 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     </select>
                                     <select class="span2" id="tahun">
                                         <option value="" />Pilih Tahun...
+                                        <option value="2011" />2011
+                                        <option value="2012" />2012
                                         <option value="2013" />2013
                                         <option value="2014" />2014
                                     </select>
@@ -239,17 +241,23 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                            <th rowspan="2" class="center">No.</th>
                                            <th rowspan="2" class="center">Tanggal Kejadian</th>
                                            <th rowspan="2" class="center">Jumlah Kejadian</th>
-                                           <th rowspan="2" class="center">Jumlah Bangunan Terbakar</th>
+                                           <th colspan="6" class="center">Tipe Bangunan</th>
                                            <th colspan="2" class="center">Jumlah Korban</th>
                                            <th rowspan="2" class="center">Jumlah Nominal Kerugian</th>
                                            <th rowspan="2" class="center">Action</th>
                                          </tr>
                                          <tr>
-                                           <th class="center">Korban Luka</th>
-                                           <th class="center">Korban Meninggal</th>
+                                            <th class="center">Perkantoran</th>
+                                            <th class="center">UDJ</th>
+                                            <th class="center">Industri</th>
+                                            <th class="center">Kendaraan Bermotor</th>
+                                            <th class="center">Rumah</th>
+                                            <th class="center">Lahan/Sawah</th>
+                                            <th class="center">Korban Luka</th>
+                                            <th class="center">Korban Meninggal</th>
                                          </tr>
                                     </thead>
-
+                                        
                                     <tbody></tbody>
                                 </table>
                                 <!--<div id="error_msg_box"      ></div>-->
@@ -391,6 +399,10 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
         }else if(bulan=="" && tahun==""){
             setTimeout(function() {
                 swal("Oops...", "Mohon untuk memilih bulan dan tahun !", "error");
+            }, 200);
+        }else if(bulan==""){
+            setTimeout(function() {
+                swal("Oops...", "Mohon untuk memilih tahun !", "error");
             }, 200);
         } 
     }

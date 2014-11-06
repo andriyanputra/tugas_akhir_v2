@@ -108,7 +108,7 @@ if ($_POST) {
             setTimeout(function() {
                 swal({
                     title: "Great Work and Well Done!",
-                    text: "Keep Fire in Your Life.",
+                    text: "Keep Fire in Your Life dan Pantang Pulang Sebelum Padam.",
                     imageUrl: '../../assets/img/thumbs-up.jpg'
                 }, function(){
                     document.location = '../view?id=<?php echo $pasca_id; ?>';
@@ -139,7 +139,7 @@ if ($_POST) {
             setTimeout(function() {
                 swal({
                     title: "Great Work and Well Done!",
-                    text: "Keep Fire in Your Life.",
+                    text: "Keep Fire in Your Life dan Pantang Pulang Sebelum Padam.",
                     imageUrl: '../../assets/img/thumbs-up.jpg'
                 }, function(){
                     document.location = '../view?id=<?php echo $pasca_id; ?>';
@@ -174,7 +174,7 @@ if ($_POST) {
                 setTimeout(function() {
                     swal({
                         title: "Great Work and Well Done!",
-                        text: "Keep Fire in Your Life.",
+                        text: "Keep Fire in Your Life dan Pantang Pulang Sebelum Padam.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
                     }, function(){
                         document.location = '../view?id=<?php echo $pasca_id; ?>';
@@ -205,7 +205,7 @@ if ($_POST) {
                 setTimeout(function() {
                     swal({
                         title: "Great Work and Well Done!",
-                        text: "Keep Fire in Your Life.",
+                        text: "Keep Fire in Your Life dan Pantang Pulang Sebelum Padam.",
                         imageUrl: '../../assets/img/thumbs-up.jpg'
                     }, function(){
                         document.location = '../view?id=<?php echo $pasca_id; ?>';
