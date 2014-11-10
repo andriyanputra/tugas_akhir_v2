@@ -58,11 +58,9 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <!--inline styles related to this page-->
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                     <style>
-                        #map-canvas {
-                            position:absolute;
-                            width:80%;height: 30%;                            
+                       #map_canvas {
+                            position:absolute;                           
                             margin-top:-10px;
-                            margin-left:40px;
                         }
                     </style>
                     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
@@ -98,8 +96,8 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                         function initialize() {
                             var latLng = new google.maps.LatLng(-7.413861041296166, 112.73011093392938);
-                            var map = new google.maps.Map(document.getElementById('map-canvas'), {
-                                zoom: 11,
+                            var map = new google.maps.Map(document.getElementById('map_canvas'), {
+                                zoom: 10,
                                 center: latLng,
                                 mapTypeId: google.maps.MapTypeId.ROADMAP
                             });
@@ -330,7 +328,38 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         <!--PAGE CONTENT BEGINS-->
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <p align="center">
+                                                <div class="widget-box">
+                                                    <div class="widget-header widget-hea1der-small header-color-red">
+                                                        <h6>
+                                                            Peta Kabupaten Sidoarjo
+                                                        </h6>
+
+                                                        <div class="widget-toolbar">
+                                                            <a href="#" data-action="reload">
+                                                                <i class="icon-refresh"></i>
+                                                            </a>
+
+                                                            <a href="#" data-action="collapse">
+                                                                <i class="icon-chevron-up"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="widget-body">
+                                                        <div class="widget-main padding-4">
+                                                            <div class="slim-scroll" data-height="200">
+                                                                <div class="content">
+                                                                    <p align="center">
+                                                                    <div id="map_canvas" style="width:100%;height:100%;"></div>
+                                                                        <!--<img src="../assets/img/sda/large/" width="829" height="441" id="gambar2"></p>-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--<p align="center">
                                                     <div id="map-canvas"></div>
                                                 </p>
                                                 <div class="space-32"></div>
@@ -339,7 +368,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                 <div class="space-32"></div><div class="space-32"></div>
                                                 <div class="space-32"></div><div class="space-32"></div>
                                                 <div class="space-32"></div><div class="space-32"></div>
-                                                <div class="space-32"></div><div class="space-32"></div>
+                                                <div class="space-32"></div><div class="space-32"></div>-->
                                             </div><!-- end span 12 --> 
                                         </div><!-- end row fluid -->
                                         <div class="space-6"></div>
@@ -427,8 +456,8 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                                 <label class="control-label" for=""> </label>
 
                                                                                 <div class="controls">
-                                                                                    <input type="text" name="lat" id="lat" placeholder="Copy & Paste Latitude...">
-                                                                                    <input type="text" name="long_" id="long_" placeholder="Copy & Paste Longitude...">
+                                                                                    <input type="text" class="span5" name="lat" id="lat" placeholder="Latitude...">
+                                                                                    <input type="text" class="span5" name="long_" id="long_" placeholder="Longitude...">
                                                                                     <span class="lbl">
                                                                                         <a href="#help" role="button" class="green" data-toggle="modal">
                                                                                             <span class="help-button" data-rel="tooltip" data-placement="top" title="Help">?</span>

@@ -126,8 +126,8 @@ function requestDirections(start, end, routeToDisplay, main_route) {
 </div>
         <script type="text/javascript">
           // users route
-          requestDirections('(<?php echo '-7.350702573657568, 112.69775276437372';?>)', '(<?php echo '-7.345026,112.692442';?>)', 0, true);
-          drawMap("-7.4830233,112.679546");
+          requestDirections('(-7.368344441111629, 112.718695452362)', '(-7.376712, 112.728523)', 0, true);
+          drawMap("-7.501064, 112.6977421");
         </script>
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"> 
 </script> 

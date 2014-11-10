@@ -18,7 +18,23 @@ if ($_SESSION['level'] != 1 && $_COOKIE['level'] != 1) {
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='" . $_SESSION['level'] . "') 
                         OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='" . $_COOKIE['level'] . "')") or die("Query : " . mysql_error());
-    $query = mysql_query("SELECT * FROM kecamatan WHERE KECAMATAN_ID = '" . $_GET['kec'] . "'");
+    $q_ = mysql_fetch_assoc(mysql_query("SELECT resiko_id FROM resiko ORDER BY resiko_id DESC LIMIT 1")) or die('Query Id terakhir : ' . mysql_error());
+    $resiko_id = $q_['resiko_id'];
+    $query_result = mysql_query("SELECT * FROM kecamatan AS a INNER JOIN sumber_air_kecamatan AS f 
+                                ON (f.KECAMATAN_ID = a.KECAMATAN_ID) INNER JOIN resiko AS b
+                                ON (a.KECAMATAN_ID = b.KECAMATAN_ID) INNER JOIN desa AS c
+                                ON (c.DESA_ID = b.DESA_ID) AND (c.KECAMATAN_ID = a.KECAMATAN_ID)
+                                INNER JOIN bangunan AS d ON (d.ID_BANGUNAN = b.ID_BANGUNAN)
+                                INNER JOIN sumber_air AS e ON (e.ID_SUMBER = b.ID_SUMBER)
+                                WHERE b.resiko_id = '$resiko_id' LIMIT 1");
+    if ($query_result) {
+        $result = mysql_fetch_array($query_result);
+    } else {
+        die(mysql_error());
+    }
+    //$query = mysql_query("SELECT * FROM kecamatan AS a INNER JOIN sumber_air_kecamatan AS b ON 
+    //                    (a.KECAMATAN_ID = b.KECAMATAN_ID) INNER JOIN sumber_air AS c ON (c.ID_SUMBER = b.ID_SUMBER) 
+    //                    WHERE a.KECAMATAN_ID = '" . $_GET['kec'] . "'");
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -56,6 +72,10 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <link rel="stylesheet" href="../assets/css-ace/ace-skins.min.css" />
                     <style type="text/css">
                         #map_canvas {
+                            position:absolute;                           
+                            margin-top:-10px;
+                        }
+                        #map {
                             position:absolute;                           
                             margin-top:-10px;
                         }
@@ -170,11 +190,71 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                         });
                     }
                 </script>
-            </head>
-            <body>
-            
+                <script type="text/javascript">
+                    var directionDisplay;
+                    var directionsService = new google.maps.DirectionsService();
+                    var map;
 
-        
+                    function initialize() {
+                        directionsDisplay = new google.maps.DirectionsRenderer();
+                        var chicago = new google.maps.LatLng(-7.501064,112.6977421);
+                        var myOptions = {
+                            zoom: 6,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            center: chicago
+                        }
+                        map = new google.maps.Map(document.getElementById("map"), myOptions);
+                        directionsDisplay.setMap(map);
+                        calcRoute();
+                    }
+                      
+                    function calcRoute() {
+
+                        var request = {
+                            // from: Blackpool to: Preston to: Blackburn
+                            origin: "-7.413729, 112.730180", 
+                            destination: "<?php echo $result[resiko_lat]; ?>, <?php echo $result[resiko_long]; ?>", 
+                            //waypoints: [{
+                            //  location: "Preston",
+                            //  stopover:true}],
+                            //optimizeWaypoints: true,
+                            travelMode: google.maps.DirectionsTravelMode.DRIVING
+                        };
+                        directionsService.route(request, function(response, status) {
+                          if (status == google.maps.DirectionsStatus.OK) {
+                            directionsDisplay.setDirections(response);
+                            var route = response.routes[0];
+                            var summaryPanel = document.getElementById("directions_panel1");
+                            summaryPanel.innerHTML = "";
+                            // For each route, display summary information.
+                            for (var i = 0; i < route.legs.length; i++) {
+                              var routeSegment = i + 1;
+                              summaryPanel.innerHTML += "<b>Route Segment: " + routeSegment + "</b><br />";
+                              summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+                              summaryPanel.innerHTML += route.legs[i].end_address + "<br />";
+                              summaryPanel.innerHTML += route.legs[i].distance.text + "<br /><br />";
+                            }
+                            computeTotalDistance(response);
+                          } else {
+                            alert("directions response "+status);
+                          }
+                        });
+                    }
+
+                      function computeTotalDistance(result) {
+                      var totalDist = 0;
+                      var totalTime = 0;
+                      var myroute = result.routes[0];
+                      for (i = 0; i < myroute.legs.length; i++) {
+                        totalDist += myroute.legs[i].distance.value;
+                        totalTime += myroute.legs[i].duration.value;      
+                      }
+                      totalDist = totalDist / 1000.
+                      document.getElementById("total").innerHTML = "total distance is: "+ totalDist + " km<br>total time is: " + (totalTime / 60).toFixed(2) + " minutes";
+                      }
+                </script>
+            </head>
+            <body onload="initialize()">
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container-fluid">
@@ -369,31 +449,64 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     <!--PAGE CONTENT BEGINS-->
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <?php $r = mysql_fetch_assoc($query); ?>
-                                            <div class="widget-box">
-                                                <div class="widget-header widget-hea1der-small header-color-red">
-                                                    <h6>
-                                                        Peta Desa Kecamatan <?= $r['KECAMATAN_NAMA']; ?>
-                                                    </h6>
+                                            <?php //$r = mysql_fetch_assoc($query); ?>
+                                            <div class="span6">
+                                                <div class="widget-box">
+                                                    <div class="widget-header widget-hea1der-small header-color-red">
+                                                        <h6>
+                                                            Jarak Dinas Pemadam Kebakaran ke TKP
+                                                        </h6>
 
-                                                    <div class="widget-toolbar">
-                                                        <a href="#" data-action="reload">
-                                                            <i class="icon-refresh"></i>
-                                                        </a>
+                                                        <div class="widget-toolbar">
+                                                            <a href="#" data-action="reload">
+                                                                <i class="icon-refresh"></i>
+                                                            </a>
 
-                                                        <a href="#" data-action="collapse">
-                                                            <i class="icon-chevron-up"></i>
-                                                        </a>
+                                                            <a href="#" data-action="collapse">
+                                                                <i class="icon-chevron-up"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="widget-body">
+                                                        <div class="widget-main padding-4">
+                                                            <div class="slim-scroll" data-height="200">
+                                                                <div class="content">
+                                                                    <p align="center">
+                                                                    <div id="map" style="width:100%;height:100%;"></div>
+                                                                        <!--<img src="../assets/img/sda/large/" width="829" height="441" id="gambar2"></p>-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="widget-box">
+                                                    <div class="widget-header widget-hea1der-small header-color-red">
+                                                        <h6>
+                                                            Jarak Lokasi Kebakaran Menuju Sumber Air.
+                                                        </h6>
 
-                                                <div class="widget-body">
-                                                    <div class="widget-main padding-4">
-                                                        <div class="slim-scroll" data-height="200">
-                                                            <div class="content">
-                                                                <p align="center">
-                                                                <div id="map_canvas" style="width:100%;height:100%;"></div>
-                                                                    <!--<img src="../assets/img/sda/large/" width="829" height="441" id="gambar2"></p>-->
+                                                        <div class="widget-toolbar">
+                                                            <a href="#" data-action="reload">
+                                                                <i class="icon-refresh"></i>
+                                                            </a>
+
+                                                            <a href="#" data-action="collapse">
+                                                                <i class="icon-chevron-up"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="widget-body">
+                                                        <div class="widget-main padding-4">
+                                                            <div class="slim-scroll" data-height="200">
+                                                                <div class="content">
+                                                                    <p align="center">
+                                                                    <div id="map_canvas" style="width:100%;height:100%;"></div>
+                                                                        <!--<img src="../assets/img/sda/large/" width="829" height="441" id="gambar2"></p>-->
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -467,8 +580,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                                 <div class="content">
                                                                                     <div class="span6 center">
                                                                                         <div class="space-6"></div>
-                                                                                        <img src="../assets/img/pengirimanAir.JPG" width="" height="" ></div>
+                                                                                        <img src="../assets/img/pengirimanAir.JPG" width="" height="" >
+                                                                                    </div>
                                                                                     <div class="span6 form-horizontal">
+                                                                                    <?php echo $result[resiko_lat]; ?>, <?php echo $result[resiko_long]; ?>
+                                                                                        <div id="directions_panel1" style="margin:20px;background-color:#FFEE77;"></div>
+                                                                                        <div id="total"></div>
                                                                                         <div class="space-6"></div>
                                                                                         <div class="control-group">
                                                                                             <label class="control-label" for="volume">Volume Bangunan :</label>
@@ -542,26 +659,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                         <!--END LAJU-->
                                                         <?php
                                                         //$q_ = mysql_fetch_assoc(mysql_query("SELECT MAX( resiko_id )FROM resiko"));
-                                                        $q_ = mysql_fetch_assoc(mysql_query("SELECT resiko_id FROM resiko ORDER BY resiko_id DESC LIMIT 1")) or die('Query Id terakhir : ' . mysql_error());
-                                                        $resiko_id = $q_['resiko_id'];
-                                                        $query_result = mysql_query("SELECT *
-                                                                                            FROM
-                                                                                                kecamatan AS a INNER JOIN sumber_air_kecamatan AS f 
-                                                                                                    ON (f.KECAMATAN_ID = a.KECAMATAN_ID)
-                                                                                                INNER JOIN resiko AS b
-                                                                                                    ON (a.KECAMATAN_ID = b.KECAMATAN_ID)
-                                                                                                INNER JOIN desa AS c
-                                                                                                    ON (c.DESA_ID = b.DESA_ID) AND (c.KECAMATAN_ID = a.KECAMATAN_ID)
-                                                                                                INNER JOIN bangunan AS d
-                                                                                                    ON (d.ID_BANGUNAN = b.ID_BANGUNAN)
-                                                                                                INNER JOIN sumber_air AS e
-                                                                                                    ON (e.ID_SUMBER = b.ID_SUMBER)
-                                                                                             WHERE b.resiko_id = '$resiko_id' LIMIT 1");
-                                                        if ($query_result) {
-                                                            $result = mysql_fetch_array($query_result);
-                                                        } else {
-                                                            die(mysql_error());
-                                                        }
                                                         $result_tgl = date_create($result['resiko_tanggal_start']);
                                                         ?>
                                                         <!--POTENSI-->
@@ -974,7 +1071,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
     <!--[if !IE]>
     -->
     <script type="text/javascript">
-                                                            window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
+        window.jQuery || document.write("<script src='../assets/js-ace/jquery-2.0.3.min.js'>" + "<" + "/script>");
     </script>
 
     <!--<![endif]-->
@@ -998,7 +1095,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
     <script type="text/javascript">
           // users route
           requestDirections('(<?php echo $result[resiko_lat] ?>, <?php echo $result[resiko_long] ?>)', '(<?php echo $result[Lat] ?>,<?php echo $result[Long_] ?>)', 0, true);
-          drawMap("-7.4830233,112.679546");
+          drawMap("-7.501064,112.6977421");
     </script>
     <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script> 
     <script type="text/javascript"> 

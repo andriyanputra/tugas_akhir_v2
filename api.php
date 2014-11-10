@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,14 +8,6 @@
 <style type="text/css">
 html { height: 100% }
 body { height: 100%; margin: 0px; padding: 0px }
-#content {
-    padding: 0;
-    position : absolute !important; 
-    top : 40px !important;  
-    right : 0; 
-    bottom : 40px !important;  
-    left : 0 !important;     
-}
 </style>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
@@ -24,13 +17,13 @@ body { height: 100%; margin: 0px; padding: 0px }
 
   function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer();
-    var chicago = new google.maps.LatLng(-7.4830233,112.679546);
+    var chicago = new google.maps.LatLng(-7.413729, 112.730180);
     var myOptions = {
-      zoom: 5,
+      zoom: 6,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       center: chicago
     }
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     directionsDisplay.setMap(map);
     calcRoute();
   }
@@ -39,8 +32,8 @@ body { height: 100%; margin: 0px; padding: 0px }
 
     var request = {
         // from: Blackpool to: Preston to: Blackburn
-        origin: "<?php echo "-7.413729, 112.730180";?>", 
-        destination:  "<?php echo "-7.350702573657568,112.69775276437372"; ?>", 
+        origin: "-7.413729, 112.730180", 
+        destination: "-7.350702573657568, 112.69775276437372", 
         //waypoints: [{
         //  location: "Preston",
         //  stopover:true}],
@@ -69,23 +62,21 @@ body { height: 100%; margin: 0px; padding: 0px }
   }
 
       function computeTotalDistance(result) {
-          var totalDist = 0;
-          var totalTime = 0;
-          var myroute = result.routes[0];
-          for (i = 0; i < myroute.legs.length; i++) {
-            totalDist += myroute.legs[i].distance.value;
-            totalTime += myroute.legs[i].duration.value;      
-          }
-          totalDist = totalDist / 1000.
-          document.getElementById("total").innerHTML = "total distance is: "+ totalDist + " km<br>total time is: " + (totalTime / 60).toFixed(2) + " minutes";
+      var totalDist = 0;
+      var totalTime = 0;
+      var myroute = result.routes[0];
+      for (i = 0; i < myroute.legs.length; i++) {
+        totalDist += myroute.legs[i].distance.value;
+        totalTime += myroute.legs[i].duration.value;      
+      }
+      totalDist = totalDist / 1000.
+      document.getElementById("total").innerHTML = "total distance is: "+ totalDist + " km<br>total time is: " + (totalTime / 60).toFixed(2) + " minutes";
       }
 
 </script>
 </head>
 <body onload="initialize()">
-<div data-role="content" id="content">
-            <div id="map_canvas" style="height:100%"></div>
-        </div>
+<div id="map-canvas" style="float:left;width:70%;height:100%;"></div>
 <div id="control_panel" style="float:right;width:30%;text-align:left;padding-top:20px">
 <div id="directions_panel" style="margin:20px;background-color:#FFEE77;"></div>
 <div id="total"></div>
