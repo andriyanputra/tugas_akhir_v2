@@ -14,13 +14,18 @@ if ($_POST) {
     $r = mysql_fetch_assoc($query_desa);
     $query_kec = mysql_query("SELECT KECAMATAN_ID FROM kecamatan WHERE KECAMATAN_NAMA = '" . $lokasi1 . "'") or die("Query failed: " . mysql_error());
     $d = mysql_fetch_assoc($query_kec);
-    $query_sumber_kec = mysql_query("SELECT ID_SAK FROM sumber_air_kecamatan WHERE ID_SUMBER = '$sumber_id'") or die("Query failed: " . mysql_error());
+    $query_sumber_kec = mysql_query("SELECT ID_SAK, Lat, Long_ FROM sumber_air_kecamatan WHERE ID_SUMBER = '$sumber_id'") or die("Query failed: " . mysql_error());
     $a = mysql_fetch_assoc($query_sumber_kec);
     $query_sumber_desa = mysql_query("SELECT ID_SAD FROM sumber_air_desa WHERE ID_SUMBER = '$sumber_id'") or die("Query failed: " . mysql_error());
     $b = mysql_fetch_assoc($query_sumber_desa);
     $desa_id = $r['DESA_ID'];
     $kec_id = $d['KECAMATAN_ID'];
     $sumber_kec_id = $a['ID_SAK'];
+    $lat = $a['Lat'];$long = $a['Long_'];
+    if($_POST['lat'] != $lat && $_POST['long_'] != $long){
+        header('Location: ../sumberEdit?id=$sumber_id&msg=error_edit');
+    }
+
     $sumber_desa_id = $b['ID_SAD'];
     /*echo 'ID Sumber: '.$sumber_id.'<br/>';
     echo 'Nama Sumber: '.$nSumber.'<br/>';
@@ -38,7 +43,8 @@ if ($_POST) {
             $update_air_kec = mysql_query("UPDATE sumber_air_kecamatan SET 
                                     ID_SAK = '$sumber_kec_id',
                                     ID_SUMBER = '$sumber_id',
-                                    KECAMATAN_ID = '$kec_id'
+                                    KECAMATAN_ID = '$kec_id',
+                                    Lat = '$lat', Long_ = '$long'
                                     WHERE ID_SAK = '$sumber_kec_id'") or die(mysql_error());
             $update_air_desa = mysql_query("UPDATE sumber_air_desa SET 
                                     ID_SAD = '$sumber_desa_id',

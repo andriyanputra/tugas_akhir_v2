@@ -2,7 +2,7 @@
 date_default_timezone_set('Asia/Jakarta');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="utf-8" />
         <title>SIM Proteksi Kebakaran Perkotaan</title>
@@ -44,8 +44,25 @@ date_default_timezone_set('Asia/Jakarta');
                 font-family: "Open Sans";
             }
         </style>
+        <style type="text/css">
+            /* Prevent copy paste for all elements except text fields */
+            *  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); margin:0;padding:0;}
+            input, textarea  { -webkit-user-select:text; }
+            /*body {
+              overflow:hidden;
+            }*/
+
+            #map {
+              position:absolute;
+              width:83%;
+              height: 30%;
+            }
+          </style>
         <!--inline styles related to this page-->
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+        <link rel="stylesheet" type="text/css" href="../assets/ext/af.actionsheet.css">
+        <script src="http://maps.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
 
 
 

@@ -9,6 +9,8 @@ if ($_POST) {
     $pelapor = $_POST['pelapor'];
     $jalan = $_POST['jalan'];
     $telp = $_POST['telp'];
+    $lat = $_POST['lat'];
+    $long = $_POST['long_'];
 
     if (is_numeric($_POST['telp'])) {
         $telp = $_POST['telp'];
@@ -89,6 +91,8 @@ if ($_POST) {
                                     '',
                                     '',
                                     '$tipe_proteksi',
+                                    '$lat',
+                                    '$long',
                                     'no'
                                     )") or die(mysql_error());
 
@@ -119,6 +123,8 @@ if ($_POST) {
                                     '',
                                     '',
                                     '$tipe_proteksi',
+                                    '$lat',
+                                    '$long',
                                     'no'
                                     )") or die(mysql_error());
             if ($q_) {
@@ -162,6 +168,8 @@ if ($_POST) {
                                     '',
                                     '',
                                     '$tipe_proteksi',
+                                    '$lat',
+                                    '$long',
                                     'no'
                                     )") or die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');
                     if ($q2 && $baru2) {
@@ -191,6 +199,8 @@ if ($_POST) {
               '',
               '',
               '$tipe_proteksi',
+              '$lat',
+              '$long',
               'no'
               )") or die('<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../analisis.php?msg=error1">');
             if ($qinsert) {

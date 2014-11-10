@@ -10,15 +10,15 @@ if (!loggedin()) { // check if the user is logged in, but if it isn't, it will r
     exit();
 }
 
-if($_SESSION['level']!=1 && $_COOKIE['level'] != 1){
+if ($_SESSION['level'] != 1 && $_COOKIE['level'] != 1) {
     //alert('Maaf Anda tidak diperkenankan mengakses halaman tersebut');
     echo "<script> window.history.back(); </script>";
-    exit();//jika bukan admin jangan lanjut
+    exit(); //jika bukan admin jangan lanjut
 }
 
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
-    $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
-                        OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
+    $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='" . $_SESSION['level'] . "') 
+                        OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='" . $_COOKIE['level'] . "')") or die("Query : " . mysql_error());
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -45,7 +45,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
                     <link rel="shortcut icon" href="../assets/img/favicon.png">
                     <script src='../assets/js-zoom/jquery-1.8.3.min.js'></script>
-                    <script src='../assets/js-zoom/jquery.elevatezoom.js'></script>
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
                     <!--ace styles-->
@@ -56,6 +55,83 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                     <!--inline styles related to this page-->
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                    <style>
+                        #map-canvas {
+                            position:absolute;
+                            width:50%;height: 30%;                            
+                            margin-top:10px;
+                            margin-left:245px;
+                        }
+                    </style>
+                    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+                    <script type="text/javascript">
+                        var geocoder = new google.maps.Geocoder();
+
+                        function geocodePosition(pos) {
+                            geocoder.geocode({
+                                latLng: pos
+                            }, function (responses) {
+                                if (responses && responses.length > 0) {
+                                    updateMarkerAddress(responses[0].formatted_address);
+                                } else {
+                                    updateMarkerAddress('Cannot determine address at this location.');
+                                }
+                            });
+                        }
+
+                        function updateMarkerStatus(str) {
+                            document.getElementById('markerStatus').innerHTML = str;
+                        }
+
+                        function updateMarkerPosition(latLng) {
+                            document.getElementById('info').innerHTML = [
+                                latLng.lat(),
+                                latLng.lng()
+                            ].join(', ');
+                        }
+
+                        function updateMarkerAddress(str) {
+                            document.getElementById('address').innerHTML = str;
+                        }
+
+                        function initialize() {
+                            var latLng = new google.maps.LatLng(-7.413861041296166, 112.73011093392938);
+                            var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                                zoom: 11,
+                                center: latLng,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            });
+                            var marker = new google.maps.Marker({
+                                position: latLng,
+                                title: 'Dinas Pemadam Kebakaran Kab. Sidoarjo.',
+                                map: map,
+                                draggable: true
+                            });
+
+                            // Update current position info.
+                            updateMarkerPosition(latLng);
+                            geocodePosition(latLng);
+
+                            // Add dragging event listeners.
+                            google.maps.event.addListener(marker, 'dragstart', function () {
+                                updateMarkerAddress('Dragging...');
+                            });
+
+                            google.maps.event.addListener(marker, 'drag', function () {
+                                updateMarkerStatus('Dragging...');
+                                updateMarkerPosition(marker.getPosition());
+                            });
+
+                            google.maps.event.addListener(marker, 'dragend', function () {
+                                updateMarkerStatus('Drag ended');
+                                geocodePosition(marker.getPosition());
+                            });
+                        }
+
+            // Onload handler to fire off the app.
+                        google.maps.event.addDomListener(window, 'load', initialize);
+                    </script>
+
                 </head>
                 <body>
                     <div class="navbar">
@@ -75,11 +151,11 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             <?php
                                             $level = $row['id_level_user'];
                                             $jabatan = $row['jabatan_id'];
-                                            $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
+                                            $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : " . mysql_error());
                                             $jml_pesan = mysql_num_rows($cek_pesan);
-                                            if($jml_pesan > 0){
+                                            if ($jml_pesan > 0) {
                                                 echo "<span class='badge badge-success'>$jml_pesan</span>";
-                                            }else{
+                                            } else {
                                                 echo "<span class='badge badge-success'>0</span>";
                                             }
                                             ?>
@@ -88,53 +164,53 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
                                             <li class="nav-header">
                                                 <i class="icon-envelope-alt"></i>
-                                                <?php 
-                                                if($jml_pesan > 0){
+                                                <?php
+                                                if ($jml_pesan > 0) {
                                                     echo "$jml_pesan Pesan";
-                                                }else{
+                                                } else {
                                                     echo "0 Pesan";
                                                 }
                                                 ?>
                                             </li>
-                                            
+
                                             <?php
-                                                $q_pesan = mysql_query("SELECT b.id, b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                         FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
                                                                         INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
                                                                         WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
                                                                         GROUP BY b.id ORDER BY b.id ASC
-                                                                        LIMIT 3") or die("Query : ".mysql_error());
-                                                while($pesan = mysql_fetch_array($q_pesan)){
-                                                    $nama = $pesan['pegawai_nama'];
-                                                    $first_nama = explode(' ',trim($nama));
-                                                    //echo $first_nama[0];
-                                            ?>
-                                            <li>
-                                                <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'].'&no='.$pesan['id'];?>">
-                                                    <span class="msg-body">
-                                                        <span class="msg-title">
-                                                            <span class="blue"><?php echo $first_nama[0].': ' ?></span>
-                                                            <?php
-                                                                $isi = $pesan['pesan_isi'];
-                                                                $potong_isi = substr($isi,0,50);
-                                                                echo $potong_isi.'...';
-                                                            ?>
-                                                        </span>
-
-                                                        <span class="msg-time">
-                                                            <i class="icon-time"></i>
-                                                            <span>
+                                                                        LIMIT 3") or die("Query : " . mysql_error());
+                                            while ($pesan = mysql_fetch_array($q_pesan)) {
+                                                $nama = $pesan['pegawai_nama'];
+                                                $first_nama = explode(' ', trim($nama));
+                                                //echo $first_nama[0];
+                                                ?>
+                                                <li>
+                                                    <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'] . '&no=' . $pesan['id']; ?>">
+                                                        <span class="msg-body">
+                                                            <span class="msg-title">
+                                                                <span class="blue"><?php echo $first_nama[0] . ': ' ?></span>
                                                                 <?php
-                                                                    $p_tgl = date('H:i:s A', strtotime($pesan['resiko_tanggal_start']));
-                                                                    echo $p_tgl;
+                                                                $isi = $pesan['pesan_isi'];
+                                                                $potong_isi = substr($isi, 0, 50);
+                                                                echo $potong_isi . '...';
                                                                 ?>
                                                             </span>
+
+                                                            <span class="msg-time">
+                                                                <i class="icon-time"></i>
+                                                                <span>
+                                                                    <?php
+                                                                    $p_tgl = date('H:i:s A', strtotime($pesan['resiko_tanggal_start']));
+                                                                    echo $p_tgl;
+                                                                    ?>
+                                                                </span>
+                                                            </span>
                                                         </span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <?php
-                                                }
+                                                    </a>
+                                                </li>
+                                                <?php
+                                            }
                                             ?>
                                             <li>
                                                 <a href="../pesan/">
@@ -260,11 +336,15 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 <div class="row-fluid">
 
                                                                     <p align="center">
-                                                                        <img id="zoom_01" src='../assets/img/sda/small/potensi.png' data-zoom-image="../assets/img/sda/large/kec.png"/>
+                                                                    <div id="map-canvas"></div>
                                                                     </p>
 
-                                                                    <div class="vspace"></div>
-
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    
                                                                     <?php
                                                                     if (isset($_GET['msg'])) {
                                                                         if ($_GET['msg'] == 'error1') {
@@ -304,6 +384,33 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     </div>
 
                                                                     <div class="control-group">
+                                                                        <label class="control-label" for="nama_sumber">Koordinat : </label>
+
+                                                                        <div class="controls">
+                                                                            <b>Marker status:</b>
+                                                                            <div id="markerStatus"><i>Click and drag the marker.</i></div>
+                                                                            <b>Current position:</b>
+                                                                            <div id="info"></div>
+                                                                            <b>Closest matching address:</b>
+                                                                            <div id="address"></div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="control-group">
+                                                                        <label class="control-label" for=""></label>
+
+                                                                        <div class="controls">
+                                                                            <input type="text" name="lat" id="lat" placeholder="Copy Latitude..." value=""/>
+                                                                            <input type="text" name="long_" id="long_" placeholder="Copy Longitude..." value=""/>
+                                                                            <span class="lbl">
+                                                                                <a href="#help" role="button" class="green" data-toggle="modal">
+                                                                                    <span class="help-button" data-rel="tooltip" data-placement="top" title="Help">?</span>
+                                                                                </a>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="control-group">
                                                                         <label class="control-label" for="lokasi_sumber">Lokasi Sumber:</label>
                                                                         <?php
                                                                         $q = mysql_query("SELECT * FROM kecamatan") or die("Query failed: " . mysql_error());
@@ -328,7 +435,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                         <label class="control-label" for="keterangan">Keterangan ( Jalan, gang, dll ):</label>
 
                                                                         <div class="controls">
-                                                                            <textarea class="span6" id="keterangan" name="keterangan"></textarea>
+                                                                            <textarea class="span6" id="keterangan" name="keterangan" placeholder="Keterangan Sumber Air (alamat dll)..."></textarea>
                                                                         </div>
                                                                     </div>
 
@@ -352,7 +459,47 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                 </div><!--/widget-main-->
                                             </div><!--/widget-body-->
                                         </div><!--/widget-box-->
+                                        
+                                        <div id="help" class="modal hide fade" tabindex="-1">
+                                            <div class="modal-header no-padding">
+                                                <div class="table-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <dd>&nbsp;</dd>
+                                                    <dd align="center">Latitude dan Longitude</dd>
+                                                    <dd>&nbsp;</dd>
+                                                </div>
+                                            </div>
 
+                                            <div class="modal-body no-padding">
+                                                <div class="row-fluid">
+                                                    <p>
+                                                        <dd><b>Contoh : </b></dd>
+                                                    </p>
+                                                    <p align="center">
+                                                        Koordinat:&nbsp;-7.413861041296166, 112.73011093392938
+                                                    </p>
+                                                    <p>
+                                                        <dd>Latitude : &nbsp;-7.413861041296166</dd>
+                                                        <dd>Longitude : &nbsp;112.73011093392938 </dd>
+                                                    </p>
+                                                    <br/>
+                                                    <p align="left">
+                                                    <blockquote>
+                                                        <small>
+                                                            Google Maps Api v3
+                                                        </small>
+                                                    </blockquote>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                    <i class="icon-ok"></i>
+                                                    Ok
+                                                </button>
+                                            </div>
+                                        </div>
                                         <!--PAGE CONTENT ENDS-->
                                     </div><!--/.span-->
                                 </div><!--/.row-fluid-->
@@ -411,27 +558,28 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <script src="../assets/js-ace/ace-elements.min.js"></script>
                     <script src="../assets/js-ace/ace.min.js"></script>
 
-                    <script>
-                        $('#zoom_01').elevateZoom({
-                            scrollZoom: true,
-                            zoomWindowWidth: 300,
-                            zoomWindowHeight: 300
-                        });
+                    <script type="text/javascript">
+                        
+                        /*$('#zoom_01').elevateZoom({
+                         scrollZoom: true,
+                         zoomWindowWidth: 300,
+                         zoomWindowHeight: 300
+                         });*/
                     </script>
                     <script type="text/javascript">
-                        $(document).ready(function() {
-                            $("#lokasi_sumber").change(function() {
+                        $(document).ready(function () {
+                            $("#lokasi_sumber").change(function () {
                                 $(this).after('<span class="help-inline pull-right"><i class="icon-spinner icon-spin blue bigger-300" id="loader"></i></span>');
-                                $.get('akec.php?kecamatan=' + $(this).val(), function(data) {
+                                $.get('akec.php?kecamatan=' + $(this).val(), function (data) {
                                     $("#desa").html(data);
-                                    $('#loader').slideUp(200, function() {
+                                    $('#loader').slideUp(200, function () {
                                         $(this).remove();
                                     });
                                 });
                             });
                         });
 
-                        < !--
+                        <!--
                                 function showTime() {
                                     var a_p = "";
                                     var today = new Date();
@@ -462,10 +610,10 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                             return i;
                         }
                         setInterval(showTime, 500);
-            //-->
+                        //-->
                     </script>
                     <script type="text/javascript">
-                        $(function() {
+                        $(function () {
                             $('#validation-form').show();
                             //documentation : http://docs.jquery.com/Plugins/Validation/validate
                             $('#validation-form').validate({
@@ -473,6 +621,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 errorClass: 'help-inline',
                                 focusInvalid: false,
                                 rules: {
+                                    lat: {
+                                        required: true
+                                    },
+                                    long_: {
+                                        required: true
+                                    },
                                     keterangan: {
                                         required: true
                                     },
@@ -486,19 +640,21 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 messages: {
                                     desa: "Mohon untuk memilih lokasi desa.",
                                     nama_sumber: "Mohon untuk mengisi field nama sumber.",
+                                    lat: "Mohon untuk mengisi field Latitude.",
+                                    long_: "Mohon untuk mengisi field Longitude.",
                                     keterangan: "Mohon untuk mengisi field keterangan."
                                 },
-                                invalidHandler: function(event, validator) { //display error alert on form submit   
+                                invalidHandler: function (event, validator) { //display error alert on form submit   
                                     $('.alert-error', $('.login-form')).show();
                                 },
-                                highlight: function(e) {
+                                highlight: function (e) {
                                     $(e).closest('.control-group').removeClass('info').addClass('error');
                                 },
-                                success: function(e) {
+                                success: function (e) {
                                     $(e).closest('.control-group').removeClass('error').addClass('info');
                                     $(e).remove();
                                 },
-                                errorPlacement: function(error, element) {
+                                errorPlacement: function (error, element) {
                                     if (element.is(':checkbox') || element.is(':radio')) {
                                         var controls = element.closest('.controls');
                                         if (controls.find(':checkbox,:radio').length > 1)
@@ -515,7 +671,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     else
                                         error.insertAfter(element);
                                 },
-                                submitHandler: function(form) {
+                                submitHandler: function (form) {
                                     var url = "Fsumber/prosesAdd.php";
 
                                     // mengambil nilai dari inputbox, textbox dan select
@@ -530,22 +686,22 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     var v_pass1 = $('input:password[name=pass1]').val();
                                     var v_jabatan = $('select[name=jabatan]').val();
 
-                                    $.post(url, {nama_sumber: v_nSumber, lokasi_sumber: v_lSumber, tempat: v_tempat, ttl: v_ttl, keterangan: v_keterangan, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, jabatan: v_jabatan}, function() {
+                                    $.post(url, {nama_sumber: v_nSumber, lokasi_sumber: v_lSumber, tempat: v_tempat, ttl: v_ttl, keterangan: v_keterangan, phone: v_phone, gender: v_gender, email: v_email, pass1: v_pass1, jabatan: v_jabatan}, function () {
 
                                     })
                                 },
-                                invalidHandler: function(form) {
+                                invalidHandler: function (form) {
                                 }
                             });
                         });
 
-                        $(function() {
+                        $(function () {
                             $(".chzn-select").chosen();
                         });
 
-                        $(function() {
+                        $(function () {
                             ///////////////////////////////////////////
-                            $('#user-profile-3').end().find('button[type=reset]').on(ace.click_event, function() {
+                            $('#user-profile-3').end().find('button[type=reset]').on(ace.click_event, function () {
                                 $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
                             })
                         });

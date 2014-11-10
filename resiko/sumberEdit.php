@@ -20,6 +20,14 @@ if($_SESSION['level']!=1 && $_COOKIE['level'] != 1){
 if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($_COOKIE['level']) && isset($_COOKIE['pegawai_nomor']))) {
     $sql = mysql_query("SELECT * FROM pegawai WHERE (pegawai_nip='" . $_SESSION['pegawai_nomor'] . "' AND id_level_user='".$_SESSION['level']."') 
                         OR (pegawai_nip='" . $_COOKIE['pegawai_nomor'] . "' AND id_level_user='".$_COOKIE['level']."')") or die("Query : ".mysql_error());
+    $edit = mysql_query("SELECT a.NAMA_SUMBER, a.KET_SUMBER, a.ID_SUMBER, b.Lat, b.Long_,
+                        GROUP_CONCAT(kecamatan.KECAMATAN_ID SEPARATOR ', ') AS id
+                        FROM sumber_air a 
+                        JOIN sumber_air_kecamatan b ON a.ID_SUMBER=b.ID_SUMBER
+                        JOIN kecamatan ON b.KECAMATAN_ID=kecamatan.KECAMATAN_ID
+                        WHERE a.ID_SUMBER = '" . $_GET['id'] . "'");
+    $d = mysql_fetch_array($edit);
+    $lat = $d['Lat'];$long=$d['Long_'];
     if ($sql == false) {
         die(mysql_error());
         header('Location: ../login/login.php');
@@ -46,7 +54,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <link rel="stylesheet" href="../assets/css-ace/chosen.css" />
                     <link rel="shortcut icon" href="../assets/img/favicon.png">
                     <script src='../assets/js-zoom/jquery-1.8.3.min.js'></script>
-                    <script src='../assets/js-zoom/jquery.elevatezoom.js'></script>
                     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
                     <!--ace styles-->
@@ -57,6 +64,82 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
 
                     <!--inline styles related to this page-->
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                    <style>
+                        #map-canvas {
+                            position:absolute;
+                            width:50%;height: 30%;                            
+                            margin-top:10px;
+                            margin-left:245px;
+                        }
+                    </style>
+                    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+                    <script type="text/javascript">
+                        var geocoder = new google.maps.Geocoder();
+
+                        function geocodePosition(pos) {
+                            geocoder.geocode({
+                                latLng: pos
+                            }, function (responses) {
+                                if (responses && responses.length > 0) {
+                                    updateMarkerAddress(responses[0].formatted_address);
+                                } else {
+                                    updateMarkerAddress('Cannot determine address at this location.');
+                                }
+                            });
+                        }
+
+                        function updateMarkerStatus(str) {
+                            document.getElementById('markerStatus').innerHTML = str;
+                        }
+
+                        function updateMarkerPosition(latLng) {
+                            document.getElementById('info').innerHTML = [
+                                latLng.lat(),
+                                latLng.lng()
+                            ].join(', ');
+                        }
+
+                        function updateMarkerAddress(str) {
+                            document.getElementById('address').innerHTML = str;
+                        }
+
+                        function initialize() {
+                            var latLng = new google.maps.LatLng(<?php echo $lat;?>, <?php echo $long;?>);
+                            var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                                zoom: 11,
+                                center: latLng,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            });
+                            var marker = new google.maps.Marker({
+                                position: latLng,
+                                title: '<?php echo $d['NAMA_SUMBER'];?>',
+                                map: map,
+                                draggable: true
+                            });
+
+                            // Update current position info.
+                            updateMarkerPosition(latLng);
+                            geocodePosition(latLng);
+
+                            // Add dragging event listeners.
+                            google.maps.event.addListener(marker, 'dragstart', function () {
+                                updateMarkerAddress('Dragging...');
+                            });
+
+                            google.maps.event.addListener(marker, 'drag', function () {
+                                updateMarkerStatus('Dragging...');
+                                updateMarkerPosition(marker.getPosition());
+                            });
+
+                            google.maps.event.addListener(marker, 'dragend', function () {
+                                updateMarkerStatus('Drag ended');
+                                geocodePosition(marker.getPosition());
+                            });
+                        }
+
+            // Onload handler to fire off the app.
+                        google.maps.event.addDomListener(window, 'load', initialize);
+                    </script>
                 </head>
                 <body>
                     <div class="navbar">
@@ -247,7 +330,23 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <!--PAGE CONTENT BEGINS-->
+                                        <?php
+                                            if (isset($_GET['msg'])) {
+                                                if ($_GET['msg'] == 'error_edit') {
+                                                    ?>
+                                                    <div class="alert alert-block alert-error">
+                                                        <button type="button" class="close" data-dismiss="alert">
+                                                            <i class="icon-remove"></i>
+                                                        </button>
 
+                                                        <i class="icon-remove"></i>
+                                                       Maaf Latitude dan Longitude tidak sesuai.
+                                                    </div>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+    
                                         <div class="widget-box">
                                             <div class="widget-header widget-header-blue widget-header-flat">
                                                 <h4 class="lighter">Form Sumber Air di Kebupaten Sidoarjo</h4>
@@ -261,8 +360,14 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                 <div class="row-fluid">
 
                                                                     <p align="center">
-                                                                        <img id="zoom_01" src='../assets/img/sda/small/potensi.png' data-zoom-image="../assets/img/sda/large/kec.png"/>
+                                                                        <div id="map-canvas"></div>
                                                                     </p>
+
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
+                                                                    <div class="space-32"></div><div class="space-32"></div>
 
                                                                     <?php
                                                                     if (isset($_GET['msg'])) {
@@ -305,14 +410,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                     ?>
 
                                                                     <?php
-                                                                    $edit = mysql_query("SELECT a.NAMA_SUMBER, a.KET_SUMBER, a.ID_SUMBER
-                                                                        ,GROUP_CONCAT(kecamatan.KECAMATAN_ID SEPARATOR ', ') AS id
-                                                                                    FROM sumber_air a 
-                                                                                    JOIN sumber_air_kecamatan ON a.ID_SUMBER=sumber_air_kecamatan.ID_SUMBER
-                                                                                    JOIN kecamatan ON sumber_air_kecamatan.KECAMATAN_ID=kecamatan.KECAMATAN_ID
-                                                                                    WHERE a.ID_SUMBER = '" . $_GET['id'] . "'");
-
-                                                                    $d = mysql_fetch_assoc($edit)
+                                                                    
                                                                     ?>
 
                                                                     <div class="vspace"></div>
@@ -406,6 +504,33 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                         </div>
 
                                                                         <div class="control-group">
+                                                                            <label class="control-label" for="nama_sumber">Koordinat : </label>
+
+                                                                            <div class="controls">
+                                                                                <b>Marker status:</b>
+                                                                                <div id="markerStatus"><i>Click and drag the marker.</i></div>
+                                                                                <b>Current position:</b>
+                                                                                <div id="info"></div>
+                                                                                <b>Closest matching address:</b>
+                                                                                <div id="address"></div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="control-group">
+                                                                            <label class="control-label" for=""></label>
+
+                                                                            <div class="controls">
+                                                                                <input type="text" name="lat" id="lat" placeholder="Copy Latitude..." value="<?php echo $lat ?>"/>
+                                                                                <input type="text" name="long_" id="long_" placeholder="Copy Longitude..." value="<?php echo $long ?>"/>
+                                                                                 <span class="lbl">
+                                                                                    <a href="#help" role="button" class="green" data-toggle="modal">
+                                                                                        <span class="help-button" data-rel="tooltip" data-placement="top" title="Help">?</span>
+                                                                                    </a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="control-group">
                                                                             <label class="control-label" for="lokasi_sumber">Lokasi Sumber:</label>
                                                                             <div class="controls">
                                                                                 <select class="chzn-select" id="lSumber" name="kec_nama1" data-placeholder="Pilih Lokasi Baru...">
@@ -487,6 +612,47 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             </div><!--/widget-body-->
                                         </div><!--/widget-box-->
 
+                                        <div id="help" class="modal hide fade" tabindex="-1">
+                                            <div class="modal-header no-padding">
+                                                <div class="table-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <dd>&nbsp;</dd>
+                                                    <dd align="center">Latitude dan Longitude</dd>
+                                                    <dd>&nbsp;</dd>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-body no-padding">
+                                                <div class="row-fluid">
+                                                    <p>
+                                                        <dd><b>Contoh : </b></dd>
+                                                    </p>
+                                                    <p align="center">
+                                                        Koordinat:&nbsp;-7.413861041296166, 112.73011093392938
+                                                    </p>
+                                                    <p>
+                                                        <dd>Latitude : &nbsp;-7.413861041296166</dd>
+                                                        <dd>Longitude : &nbsp;112.73011093392938 </dd>
+                                                    </p>
+                                                    <br/>
+                                                    <p align="left">
+                                                    <blockquote>
+                                                        <small>
+                                                            Google Maps Api v3
+                                                        </small>
+                                                    </blockquote>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-small btn-success pull-right" data-dismiss="modal">
+                                                    <i class="icon-ok"></i>
+                                                    Ok
+                                                </button>
+                                            </div>
+                                        </div>
+
                                         <!--PAGE CONTENT ENDS-->
                                     </div><!--/.span-->
                                 </div><!--/.row-fluid-->
@@ -552,18 +718,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                     <script src="../assets/js-ace/ace.min.js"></script>
 
                     <script type="text/javascript">
-                        var tag_input = $('#form-field-tags');
-                        if (!(/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase())))
-                            tag_input.tag({placeholder: tag_input.attr('placeholder')});
-                        else {                             //display a textarea for old IE, because it doesn't support this plugin or another one I tried!
-                            tag_input.after('<textarea id="' + tag_input.attr('id') + '" name="' + tag_input.attr('name') + '" rows="3">' + tag_input.val() + '</textarea>').remove();
-                            //$('#form-field-tags').autosize({append: "\n"});
-                        }
-
-                        $('#zoom_01').elevateZoom({scrollZoom: true,
-                            zoomWindowWidth: 300,
-                            zoomWindowHeight: 300
-                        });
+                        
                     </script>
                     <script type="text/javascript">
                         <!--
@@ -621,6 +776,12 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 errorClass: 'help-inline',
                                 focusInvalid: false,
                                 rules: {
+                                    lat: {
+                                        required: true
+                                    },
+                                    long_: {
+                                        required: true
+                                    },
                                     keterangan: {
                                         required: true
                                     },
@@ -635,6 +796,8 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     }
                                 },
                                 messages: {
+                                    lat: "Mohon untuk mengisi field Latitude.",
+                                    long_: "Mohon untuk mengisi field Longitude.",
                                     kec_nama1: "Mohon untuk memilih lokasi.",
                                     desa: "Mohon untuk memilih lokasi."
                                 },

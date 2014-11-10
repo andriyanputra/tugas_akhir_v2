@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/xampp/htdocs/SIM_Proteksi/beranda/proses/data.php</file>
-            <file>file:/D:/xampp/htdocs/SIM_Proteksi/template/sidebar.php</file>
-            <file>file:/D:/xampp/htdocs/SIM_Proteksi/beranda/index.php</file>
+            <file>file:/D:/xampp/htdocs/SIM_Proteksi/resiko/sumber.php</file>
+            <file>file:/D:/xampp/htdocs/SIM_Proteksi/resiko/kebAir1.php</file>
+            <file>file:/D:/xampp/htdocs/SIM_Proteksi/resiko/google/toxml.php</file>
+            <file>file:/D:/xampp/htdocs/SIM_Proteksi/resiko/sumberTambah.php</file>
+            <file>file:/D:/xampp/htdocs/SIM_Proteksi/resiko/toxml.php</file>
         </group>
     </open-files>
 </project-private>
