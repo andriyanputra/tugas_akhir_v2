@@ -32,12 +32,15 @@ if ($sql == false) {
                             </a><!--/.brand-->
 
                             <ul class="nav ace-nav pull-right">
+                                <?php
+                                    $level = $row['id_level_user'];
+                                    $jabatan = $row['jabatan_id'];
+                                    if($level == 1 || $level == 3){
+                                ?>
                                 <li class="green">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="icon-envelope icon-animated-vertical"></i>
                                         <?php
-                                        $level = $row['id_level_user'];
-                                        $jabatan = $row['jabatan_id'];
                                         $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
                                         $jml_pesan = mysql_num_rows($cek_pesan);
                                         if($jml_pesan > 0){
@@ -61,7 +64,7 @@ if ($sql == false) {
                                         </li>
                                         
                                         <?php
-                                            $q_pesan = mysql_query("SELECT b.id,  b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
                                                                     FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
                                                                     INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
                                                                     WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
@@ -107,7 +110,6 @@ if ($sql == false) {
                                         </li>
                                     </ul>
                                 </li>
-
                                 <li class="light-blue">
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                         <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
@@ -144,6 +146,44 @@ if ($sql == false) {
                                         </li>
                                     </ul>
                                 </li>
+                                <?php }else{ ?>
+                                <li class="light-blue">
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                        <span class="user-info">
+                                            <small>Welcome,</small>
+                                            <?php echo $row['pegawai_nama']; ?>    
+                                        </span>
+
+                                        <i class="icon-caret-down"></i>
+                                    </a>
+
+                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+
+                                        <li>
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-user"></i>
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <li>
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-off"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <?php } ?>
                             </ul><!--/.ace-nav-->
                         </div><!--/.cont
                         ainer-fluid-->

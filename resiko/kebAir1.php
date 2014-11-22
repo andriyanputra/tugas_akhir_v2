@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+//error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include ("../config/koneksi.php");
 include '../config/functions.php'; //include function.php - very important
 
@@ -229,7 +229,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                             // For each route, display summary information.
                             for (var i = 0; i < route.legs.length; i++) {
                               var routeSegment = i + 1;
-                              summaryPanel.innerHTML += "<b>Route Segment: " + routeSegment + "</b><br />";
+                              summaryPanel.innerHTML += "<b>Alternatif " + routeSegment + "</b> : <br />";
                               summaryPanel.innerHTML += route.legs[i].start_address + " to ";
                               summaryPanel.innerHTML += route.legs[i].end_address + "<br />";
                               summaryPanel.innerHTML += route.legs[i].distance.text + "<br /><br />";
@@ -250,7 +250,7 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                         totalTime += myroute.legs[i].duration.value;      
                       }
                       totalDist = totalDist / 1000.
-                      document.getElementById("total").innerHTML = "total distance is: "+ totalDist + " km<br>total time is: " + (totalTime / 60).toFixed(2) + " minutes";
+                      document.getElementById("total").innerHTML = "Jarak lokasi kebakaran: "+ totalDist + " km<br>Perkiraan waktu yang dibutuhkan: " + (totalTime / 60).toFixed(2) + " minutes";
                       }
                 </script>
             </head>
@@ -266,17 +266,20 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                             </a><!--/.brand-->
 
                             <ul class="nav ace-nav pull-right">
+                                <?php
+                                    $level = $row['id_level_user'];
+                                    $jabatan = $row['jabatan_id'];
+                                    if($level == 1 || $level == 3){
+                                ?>
                                 <li class="green">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="icon-envelope icon-animated-vertical"></i>
                                         <?php
-                                        $level = $row['id_level_user'];
-                                        $jabatan = $row['jabatan_id'];
-                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : " . mysql_error());
+                                        $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
                                         $jml_pesan = mysql_num_rows($cek_pesan);
-                                        if ($jml_pesan > 0) {
+                                        if($jml_pesan > 0){
                                             echo "<span class='badge badge-success'>$jml_pesan</span>";
-                                        } else {
+                                        }else{
                                             echo "<span class='badge badge-success'>0</span>";
                                         }
                                         ?>
@@ -285,53 +288,53 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                     <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
                                         <li class="nav-header">
                                             <i class="icon-envelope-alt"></i>
-                                            <?php
-                                            if ($jml_pesan > 0) {
+                                            <?php 
+                                            if($jml_pesan > 0){
                                                 echo "$jml_pesan Pesan";
-                                            } else {
+                                            }else{
                                                 echo "0 Pesan";
                                             }
                                             ?>
                                         </li>
-
+                                        
                                         <?php
-                                        $q_pesan = mysql_query("SELECT b.id, b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
-                                                                        FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
-                                                                        INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
-                                                                        WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
-                                                                        GROUP BY b.id ORDER BY b.id ASC
-                                                                        LIMIT 3") or die("Query : " . mysql_error());
-                                        while ($pesan = mysql_fetch_array($q_pesan)) {
-                                            $nama = $pesan['pegawai_nama'];
-                                            $first_nama = explode(' ', trim($nama));
-                                            //echo $first_nama[0];
-                                            ?>
-                                            <li>
-                                                <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'] . '&no=' . $pesan['id']; ?>">
-                                                    <span class="msg-body">
-                                                        <span class="msg-title">
-                                                            <span class="blue"><?php echo $first_nama[0] . ': ' ?></span>
-                                                            <?php
+                                            $q_pesan = mysql_query("SELECT b.id, b.pesan_id, b.pesan_dari, b.pesan_isi, a.resiko_tanggal_start, c.pegawai_nama
+                                                                    FROM resiko AS a INNER JOIN pesan AS b ON (a.resiko_id = b.resiko_id)
+                                                                    INNER JOIN pegawai AS c ON (c.pegawai_nip = b.pegawai_nip)
+                                                                    WHERE b.pesan_status = 0 AND b.pesan_untuk='$jabatan'
+                                                                    GROUP BY b.id ORDER BY b.id ASC
+                                                                    LIMIT 3") or die("Query : ".mysql_error());
+                                            while($pesan = mysql_fetch_array($q_pesan)){
+                                                $nama = $pesan['pegawai_nama'];
+                                                $first_nama = explode(' ',trim($nama));
+                                                //echo $first_nama[0];
+                                        ?>
+                                        <li>
+                                            <a href="../pesan/detail?id=<?php echo $pesan['pesan_id'].'&no='.$pesan['id'];?>">
+                                                <span class="msg-body">
+                                                    <span class="msg-title">
+                                                        <span class="blue"><?php echo $first_nama[0].': ' ?></span>
+                                                        <?php
                                                             $isi = $pesan['pesan_isi'];
-                                                            $potong_isi = substr($isi, 0, 50);
-                                                            echo $potong_isi . '...';
-                                                            ?>
-                                                        </span>
+                                                            $potong_isi = substr($isi,0,50);
+                                                            echo $potong_isi.'...';
+                                                        ?>
+                                                    </span>
 
-                                                        <span class="msg-time">
-                                                            <i class="icon-time"></i>
-                                                            <span>
-                                                                <?php
+                                                    <span class="msg-time">
+                                                        <i class="icon-time"></i>
+                                                        <span>
+                                                            <?php
                                                                 $p_tgl = date('H:i:s A', strtotime($pesan['resiko_tanggal_start']));
                                                                 echo $p_tgl;
-                                                                ?>
-                                                            </span>
+                                                            ?>
                                                         </span>
                                                     </span>
-                                                </a>
-                                            </li>
-                                            <?php
-                                        }
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <?php
+                                            }
                                         ?>
                                         <li>
                                             <a href="../pesan/">
@@ -341,7 +344,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         </li>
                                     </ul>
                                 </li>
-
                                 <li class="light-blue">
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                         <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
@@ -378,6 +380,44 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                         </li>
                                     </ul>
                                 </li>
+                                <?php }else{ ?>
+                                <li class="light-blue">
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                        <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                        <span class="user-info">
+                                            <small>Welcome,</small>
+                                            <?php echo $row['pegawai_nama']; ?>    
+                                        </span>
+
+                                        <i class="icon-caret-down"></i>
+                                    </a>
+
+                                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+
+                                        <li>
+                                            <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-user"></i>
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-cog"></i>
+                                                Log User
+                                            </a>
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <li>
+                                            <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
+                                                <i class="icon-off"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <?php } ?>
                             </ul><!--/.ace-nav-->
                         </div><!--/.cont
                         ainer-fluid-->
@@ -583,9 +623,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                                         <img src="../assets/img/pengirimanAir.JPG" width="" height="" >
                                                                                     </div>
                                                                                     <div class="span6 form-horizontal">
-                                                                                    <?php echo $result[resiko_lat]; ?>, <?php echo $result[resiko_long]; ?>
-                                                                                        <div id="directions_panel1" style="margin:20px;background-color:#FFEE77;"></div>
-                                                                                        <div id="total"></div>
                                                                                         <div class="space-6"></div>
                                                                                         <div class="control-group">
                                                                                             <label class="control-label" for="volume">Volume Bangunan :</label>
@@ -842,6 +879,14 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                                                                                         <label for="lokasi">
                                                                                                             Lokasi : 
                                                                                                             <?php echo $result['alamat_pelapor'] . ' Ds. ' . $result['DESA_NAMA'] . ', Kec. ' . $result['KECAMATAN_NAMA'] . ', Kab. Sidoarjo'; ?>
+                                                                                                        </label>
+                                                                                                    </div>
+
+                                                                                                    <div class="control-group">
+                                                                                                        <label for="lokasi">
+                                                                                                            Perkiraan Jarak dan Waktu Tempuh : 
+                                                                                                            <div id="directions_panel1"></div>
+                                                                                                            <div id="total"></div>
                                                                                                         </label>
                                                                                                     </div>
 

@@ -33,12 +33,15 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                 </a><!--/.brand-->
 
                                 <ul class="nav ace-nav pull-right">
+                                    <?php
+                                        $level = $row['id_level_user'];
+                                        $jabatan = $row['jabatan_id'];
+                                        if($level == 1 || $level == 3){
+                                    ?>
                                     <li class="green">
                                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                             <i class="icon-envelope icon-animated-vertical"></i>
                                             <?php
-                                            $level = $row['id_level_user'];
-                                            $jabatan = $row['jabatan_id'];
                                             $cek_pesan = mysql_query("SELECT * FROM pesan WHERE pesan_status = 0 AND pesan_untuk='$jabatan'") or die("Query : ".mysql_error());
                                             $jml_pesan = mysql_num_rows($cek_pesan);
                                             if($jml_pesan > 0){
@@ -108,7 +111,6 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             </li>
                                         </ul>
                                     </li>
-
                                     <li class="light-blue">
                                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                             <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
@@ -145,6 +147,44 @@ if ((isset($_SESSION['pegawai_nomor']) && isset($_SESSION['level'])) || (isset($
                                             </li>
                                         </ul>
                                     </li>
+                                    <?php }else{ ?>
+                                    <li class="light-blue">
+                                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                            <img class="nav-user-photo" src="../assets/img/img-anggota/<?= $row['pegawai_foto']; ?>" alt="<?php echo $hasil['pegawai_nama']; ?>" />
+                                            <span class="user-info">
+                                                <small>Welcome,</small>
+                                                <?php echo $row['pegawai_nama']; ?>    
+                                            </span>
+
+                                            <i class="icon-caret-down"></i>
+                                        </a>
+
+                                        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+
+                                            <li>
+                                                <a href="../anggota/profile?nip=<?= $row['pegawai_nip']; ?>">
+                                                    <i class="icon-user"></i>
+                                                    Profile
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="../log_user/index?nip=<?= $row['pegawai_nip']; ?>">
+                                                    <i class="icon-cog"></i>
+                                                    Log User
+                                                </a>
+                                            </li>
+
+                                            <li class="divider"></li>
+
+                                            <li>
+                                                <a href="../login/logout?nip=<?= $row['pegawai_nip']; ?>">
+                                                    <i class="icon-off"></i>
+                                                    Logout
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <?php } ?>
                                 </ul><!--/.ace-nav-->
                             </div><!--/.cont
                             ainer-fluid-->
